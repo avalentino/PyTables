@@ -582,7 +582,9 @@ int is_complex(hid_t type_id) {
     if (nfields == 2) {
       colname1 = H5Tget_member_name(type_id, 0);
       colname2 = H5Tget_member_name(type_id, 1);
-      if ((strcmp(colname1, "r") == 0) && (strcmp(colname2, "i") == 0)) {
+      if (((strcmp(colname1, "r") == 0) && (strcmp(colname2, "i") == 0)) ||
+          ((strcmp(colname1, "real") == 0) && (strcmp(colname2, "imag") == 0)))
+      {
         class1 = H5Tget_member_class(type_id, 0);
         class2 = H5Tget_member_class(type_id, 1);
         if (class1 == H5T_FLOAT && class2 == H5T_FLOAT)
