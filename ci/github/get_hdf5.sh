@@ -13,6 +13,7 @@ else
     echo "Building with MPI"
     EXTRA_MPI_FLAGS="--enable-parallel --enable-shared"
 fi
+echo "MACOSX_DEPLOYMENT_TARGET: ${MACOSX_DEPLOYMENT_TARGET}"
 
 export LD_LIBRARY_PATH="$HDF5_DIR/lib:${LD_LIBRARY_PATH}"
 export PKG_CONFIG_PATH="$HDF5_DIR/lib/pkgconfig:${PKG_CONFIG_PATH}"
