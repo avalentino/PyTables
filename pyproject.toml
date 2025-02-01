@@ -143,7 +143,7 @@ before-build = "python -m pip install -q --require-hashes -r .github/workflows/r
 [tool.cibuildwheel.linux]
 before-all = [
     "cp -r `pwd`/hdf5_build /tmp/hdf5",
-    "rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux",
+    # "rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux",
     "yum -y install epel-release",
     "yum -y update",
     "yum install -y zlib-devel bzip2-devel",
