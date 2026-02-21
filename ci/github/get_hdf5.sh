@@ -8,10 +8,10 @@ EXTRA_MPI_FLAGS=''
 EXTRA_SERIAL_FLAGS=""
 if [ -z ${HDF5_MPI+x} ]; then
     echo "Building serial"
-    EXTRA_SERIAL_FLAGS="--enable-threadsafe --enable-unsupported"
+    EXTRA_SERIAL_FLAGS=(-D "HDF5_ENABLE_THREADSAFE=ON" -D "HDF5_ALLOW_UNSUPPORTED=ON")
 else
     echo "Building with MPI"
-    EXTRA_MPI_FLAGS="--enable-parallel --enable-shared"
+    EXTRA_MPI_FLAGS=(-D "HDF5_ENABLE_PARALLEL=ON")
 fi
 
 mkdir -p $HDF5_DIR
@@ -20,10 +20,10 @@ export PKG_CONFIG_PATH="$HDF5_DIR/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
 # Keep in sync with "Prerequisites" in User's Guide (whenever mentioned).
 LZO_VERSION="2.10"
-ZSTD_VERSION="1.5.2"
-LZ4_VERSION="1.9.4"
+ZSTD_VERSION="1.5.7"
+LZ4_VERSION="1.10.0"
 BZIP_VERSION="1.0.8"
-ZLIB_VERSION="1.3.1"
+ZLIB_VERSION="1.3.2"
 
 
 echo "building HDF5"
@@ -109,13 +109,26 @@ fi
 
 pushd /tmp
 
-#                                   Remove trailing .*, to get e.g. '1.12' ↓
-curl -fsSLO "https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_${HDF5_VERSION}.tar.gz"
+url_base="https://github.com/HDFGroup/hdf5/archive/refs/tags"
+curl -fsSLO "${url_base}/hdf5_${HDF5_VERSION}.tar.gz"
 tar -xzvf "hdf5_$HDF5_VERSION.tar.gz"
 pushd "hdf5-hdf5_$HDF5_VERSION"
-./configure --prefix="$HDF5_DIR" --with-zlib="$HDF5_DIR" $EXTRA_SERIAL_FLAGS $EXTRA_MPI_FLAGS --enable-build-mode=production
-make -j "$NPROC"
-make install
+
+cmake -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX="$HDF5_DIR" \
+    -D BUILD_TESTING=OFF \
+    -D BUILD_STATIC_LIBS=OFF \
+    -D HDF5_BUILD_EXAMPLES=OFF \
+    -D HDF5_BUILD_TOOLS=OFF \
+    -D HDF5_BUILD_UTILS=OFF \
+    -D HDF5_ENABLE_ZLIB_SUPPORT=ON \
+    -D ZLIB_ROOT="$HDF5_DIR" \
+    "${EXTRA_MPI_FLAGS[@]}" \
+    "${ENABLE_DIRECT_VFD[@]}"
+
+make -C build -j "$NPROC"
+make -C build install
 
 file "$HDF5_DIR"/lib/*
 

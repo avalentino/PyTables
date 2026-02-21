@@ -74,7 +74,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       # Keep in sync with "Prerequisites" in User's Guide.
-      HDF5_VERSION: 1.14.6  # H5Dchunk_iter needs at least 1.14.1
+      HDF5_VERSION: 2.0.0  # H5Dchunk_iter needs at least 1.14.1
       MACOSX_DEPLOYMENT_TARGET: "10.9"
     strategy:
       fail-fast: false
