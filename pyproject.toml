@@ -17,6 +17,7 @@ requires = [
     # Packagers can choose to replace it by externally provided
     # c-blosc2 library and headers
     "blosc2 >= 2.3.0",
+    "blosc2 < 2.4.0; platform_system == 'Windows'",
 ]
 build-backend = "setuptools.build_meta"
 # build-backend = "mesonpy"  # and replace ``setuptools`` above
@@ -77,6 +78,7 @@ dependencies = [
     "packaging",
     "py-cpuinfo",
     "blosc2 >= 2.3.0",
+    "blosc2 < 2.4.0; platform_system == 'Windows'",
 ]
 
 

@@ -2,6 +2,7 @@
 # Keep list in sync with ``project.dependencies`` in ``pyproject.toml``.
 
 blosc2>=2.3.0
+blosc2 < 2.4.0; platform_system == 'Windows'"
 numexpr>=2.6.2
 numpy>=1.25
 packaging
