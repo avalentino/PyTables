@@ -332,7 +332,7 @@ class Description:
 
     An instance of this class is automatically bound to Table (see
     :ref:`TableClassDescr`) objects when they are created.  It provides a
-    browseable representation of the structure of the table, made of non-nested
+    browsable representation of the structure of the table, made of non-nested
     (Col - see :ref:`ColClassDescr`) and nested (Description) columns.
 
     Column definitions under a description can be accessed as attributes of it
@@ -489,7 +489,7 @@ class Description:
         if not hasattr(newdict, "_v_nestedlvl"):
             newdict["_v_nestedlvl"] = nestedlvl + 1
 
-        cols_with_pos = []  # colum (position, name) pairs
+        cols_with_pos = []  # column (position, name) pairs
         cols_no_pos = []  # just column names
         cols_offsets = []  # the offsets of the columns
         valid_offsets = False  # by default there a no valid offsets

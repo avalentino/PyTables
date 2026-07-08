@@ -818,8 +818,8 @@ class File(hdf5extension.File):
             """The PyTables version number of this file."""
 
         # The node manager must be initialized before the root group
-        # initialization but the node_factory attribute is set onl later
-        # because it is a bound method of the root grop itself.
+        # initialization but the node_factory attribute is set only later
+        # because it is a bound method of the root group itself.
         node_cache_slots = params["NODE_CACHE_SLOTS"]
         self._node_manager = NodeManager(nslots=node_cache_slots)
 
@@ -1091,7 +1091,7 @@ class File(hdf5extension.File):
                 != obj.dtype
             ):
                 raise TypeError(
-                    "the desctiption parameter is not consistent "
+                    "the description parameter is not consistent "
                     "with the data type of the obj parameter"
                 )
             elif description is None:
@@ -1198,7 +1198,7 @@ class File(hdf5extension.File):
                 raise TypeError(
                     "if the obj parameter is not specified "
                     "(or None) then both the atom and shape "
-                    "parametes should be provided."
+                    "parameters should be provided."
                 )
             else:
                 # Making strides=(0,...) below is a trick to create the

@@ -398,7 +398,7 @@ class NailedDict:
     # the set of usable indexes.
 
     def clear(self) -> None:
-        """Clear teh dictionsry."""
+        """Clear the dictionary."""
         self._cache.clear()
 
     def nail(self) -> None:

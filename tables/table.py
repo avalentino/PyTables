@@ -923,7 +923,7 @@ class Table(tableextension.Table, Leaf):
                     column = self.cols._g_col(colname)
                     indexobj = column.index
                     if isinstance(indexobj, OldIndex):
-                        indexed = False  # Not a vaild index
+                        indexed = False  # Not a valid index
                         oldindexes = True
                         self._listoldindexes.append(colname)
                     else:
@@ -1734,7 +1734,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
         if not hasattr(sequence, "__getitem__"):
             raise TypeError(
                 "Wrong 'sequence' parameter type. Only sequences "
-                "are suported."
+                "are supported."
             )
         # start, stop and step are necessary for the new iterator for
         # coordinates, and perhaps it would be useful to add them as
@@ -3177,7 +3177,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 f"table ``{self._v_pathname}`` is being preempted from "
                 f"alive nodes without its buffers being flushed or with some "
                 f"index being dirty.  This may lead to very "
-                f"ineficient use of resources and even to fatal "
+                f"inefficient use of resources and even to fatal "
                 f"errors in certain situations.  Please do a call "
                 f"to the .flush() or .reindex_dirty() methods on "
                 f"this table before start using other nodes.",
