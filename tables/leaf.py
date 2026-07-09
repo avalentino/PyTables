@@ -683,7 +683,7 @@ class Leaf(Node):
             if isinstance(key, tuple) and len(key) > len(self.shape):
                 raise IndexError(f"Invalid index or slice: {key!r}")
             # Try to convert key to a numpy array.  If not possible,
-            # a TypeError will be issued (to be catched later on).
+            # a TypeError will be issued (to be caught later on).
             try:
                 key = toarray(key)
             except ValueError:
@@ -924,7 +924,7 @@ class Leaf(Node):
 
         Return a :class:`ChunkInfo` instance with the information.
 
-        The coordinates need not be aligined with chunk boundaries.  This
+        The coordinates need not be aligned with chunk boundaries.  This
         means that this method may be used to get the start coordinates of the
         chunk that contains the item at the given coordinates, for use with
         other direct chunking operations (see :attr:`ChunkInfo.start`).

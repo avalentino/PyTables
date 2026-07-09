@@ -644,7 +644,7 @@ class StringAtom(Atom):  # type: ignore[misc]
 
     @property  # type: ignore[misc]
     def itemsize(self) -> int:  # type: ignore[override]
-        """Size in bytes of a sigle item in the atom."""
+        """Size in bytes of a single item in the atom."""
         return self.dtype.base.itemsize
 
     def __init__(
@@ -864,7 +864,7 @@ class ComplexAtom(Atom):
 
     @property  # type: ignore[misc]
     def itemsize(self) -> int:  # type: ignore[override]
-        """Size in bytes of a sigle item in the atom."""
+        """Size in bytes of a single item in the atom."""
         return self.dtype.base.itemsize
 
     # Only instances have a `type` attribute, so complex types must be

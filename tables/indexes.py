@@ -180,7 +180,7 @@ class IndexArray(indexesextension.IndexArray, NotLoggedMixin, EArray):
         return f"IndexArray(path={self._v_pathname})"
 
     def __repr__(self) -> str:
-        """Retunr the string representation of the IndexArray object."""
+        """Return the string representation of the IndexArray object."""
         return f"""{self}
   atom = {self.atom!r}
   shape = {self.shape}

@@ -163,7 +163,7 @@ class HDF5ExtError(RuntimeError):
             self.h5backtrace = None
 
     def __str__(self) -> str:
-        """Return a sting representation of the exception.
+        """Return a string representation of the exception.
 
         The actual result depends on policy set in the initializer
         :meth:`HDF5ExtError.__init__`.
