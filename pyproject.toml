@@ -12,7 +12,7 @@ requires = [
     "numpy >= 2",
     "packaging",
     "py-cpuinfo",
-    "Cython >= 3.1",
+    "Cython >= 3.2",
     # Included here for seamless wheel builds.
     # Packagers can choose to replace it by externally provided
     # c-blosc2 library and headers
