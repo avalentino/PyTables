@@ -11,6 +11,7 @@ PYVER = $(shell $(PYTHON) -c "import sys; print(sys.implementation.cache_tag)")
 PYBUILDDIR = $(PWD)/build/lib.$(PYPLATFORM)-$(PYVER)
 OPT = PYTHONPATH="$(PYBUILDDIR)"
 MD5SUM = md5sum
+CYTHONIZED = tables/_comp_*.c tables/*extension.c
 
 
 .PHONY: default dist sdist build check heavycheck parallelcheck clean distclean html latex requirements lint clean-requirements
@@ -29,9 +30,10 @@ dist: sdist html latex
 
 sdist: $(GENERATED)
 	# $(RM) -r MANIFEST tables/__pycache__ tables/*/__pycache__
-	# $(RM) tables/_comp_*.c tables/*extension.c
 	# $(RM) tables/*.so
 	$(PYTHON) -m build --sdist
+	# Cython output is tied to the NumPy of the isolated build env, so don't let the in-tree build reuse it.
+	$(RM) $(CYTHONIZED)
 
 clean:
 	$(RM) -r MANIFEST build dist tmp tables/__pycache__ doc/_build
@@ -43,7 +45,7 @@ clean:
 	for srcdir in $(SRCDIRS) ; do $(MAKE) $(OPT) -C $$srcdir $@ ; done
 
 distclean: clean
-	$(RM) tables/_comp_*.c tables/*extension.c
+	$(RM) $(CYTHONIZED)
 	$(RM) doc/usersguide-*.pdf
 	$(RM) -r doc/html
 	$(RM) -r .pytest_cache .mypy_cache
