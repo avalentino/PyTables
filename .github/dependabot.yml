@@ -20,6 +20,8 @@ updates:
       - ".github/workflows/requirements"
     schedule:
       interval: "monthly"
+    # The default raises the ``.in`` floors even when they already allow the new pin.
+    versioning-strategy: "increase-if-necessary"
     groups:
       pip:
         patterns:
