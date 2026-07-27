@@ -90,8 +90,11 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade pip
-          python -m pip install flake8 isort black
+          python -m pip install flake8 isort black packaging
           if [ -f requirements-lint.txt ]; then pip install -r requirements-lint.txt; fi
+
+      - name: Check dependency constraints are in sync
+        run: python ci/check_requirements_sync.py
 
       - name: Lint (flake8)
         run: |
