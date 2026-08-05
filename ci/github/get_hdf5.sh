@@ -4,14 +4,14 @@
 set -xeo pipefail
 
 PROJECT_DIR="$(pwd)"
-EXTRA_MPI_FLAGS=''
-EXTRA_SERIAL_FLAGS=""
+EXTRA_MPI_FLAGS=()
+EXTRA_SERIAL_FLAGS=()
 if [ -z ${HDF5_MPI+x} ]; then
     echo "Building serial"
-    EXTRA_SERIAL_FLAGS="--enable-threadsafe --enable-unsupported"
+    EXTRA_SERIAL_FLAGS=(-D "HDF5_ENABLE_THREADSAFE=ON" -D "HDF5_ALLOW_UNSUPPORTED=ON")
 else
     echo "Building with MPI"
-    EXTRA_MPI_FLAGS="--enable-parallel --enable-shared"
+    EXTRA_MPI_FLAGS=(-D "HDF5_ENABLE_PARALLEL=ON")
 fi
 
 mkdir -p $HDF5_DIR
@@ -34,11 +34,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     pushd /tmp
 
     brew install automake pkg-config
-    brew tap-new local/cmake
-    brew extract --version=3.31.6 cmake local/cmake
-    brew unlink cmake
-    brew update
-    brew install cmake@3.31.6
+    # Some of the dependencies built below (e.g. LZO) declare CMake minimums
+    # older than 3.5, which CMake >= 4 refuses to configure.  This is the
+    # supported escape hatch (the previous approach of pinning an old CMake
+    # via "brew extract" into a local tap is now rejected by Homebrew).
+    export CMAKE_POLICY_VERSION_MINIMUM=3.5
 
     # lzo
     curl -sLO https://www.oberhumer.com/opensource/lzo/download/lzo-$LZO_VERSION.tar.gz
@@ -109,13 +109,29 @@ fi
 
 pushd /tmp
 
-#                                   Remove trailing .*, to get e.g. '1.12' ↓
-curl -fsSLO "https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_${HDF5_VERSION}.tar.gz"
-tar -xzvf "hdf5_$HDF5_VERSION.tar.gz"
-pushd "hdf5-hdf5_$HDF5_VERSION"
-./configure --prefix="$HDF5_DIR" --with-zlib="$HDF5_DIR" $EXTRA_SERIAL_FLAGS $EXTRA_MPI_FLAGS --enable-build-mode=production
-make -j "$NPROC"
-make install
+# Releases after 2.1.0 are tagged with the plain version only (e.g. "2.2.0");
+# older releases use the "hdf5_X.Y.Z" tag convention.
+curl -fsSL -o "hdf5-$HDF5_VERSION.tar.gz" "https://github.com/HDFGroup/hdf5/archive/refs/tags/${HDF5_VERSION}.tar.gz" \
+    || curl -fsSL -o "hdf5-$HDF5_VERSION.tar.gz" "https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_${HDF5_VERSION}.tar.gz"
+mkdir -p "hdf5-$HDF5_VERSION"
+tar -xzf "hdf5-$HDF5_VERSION.tar.gz" --strip-components=1 -C "hdf5-$HDF5_VERSION"
+pushd "hdf5-$HDF5_VERSION"
+# HDF5 2.x dropped the Autotools build system, so build with CMake.
+cmake -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX="$HDF5_DIR" \
+    -D BUILD_TESTING=OFF \
+    -D BUILD_STATIC_LIBS=OFF \
+    -D HDF5_BUILD_EXAMPLES=OFF \
+    -D HDF5_BUILD_TOOLS=OFF \
+    -D HDF5_BUILD_UTILS=OFF \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D HDF5_ENABLE_ZLIB_SUPPORT=ON \
+    -D ZLIB_ROOT="$HDF5_DIR" \
+    "${EXTRA_SERIAL_FLAGS[@]}" \
+    "${EXTRA_MPI_FLAGS[@]}"
+make -C build -j "$NPROC"
+make -C build install
 
 file "$HDF5_DIR"/lib/*
 
