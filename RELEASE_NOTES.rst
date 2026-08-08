@@ -10,7 +10,11 @@
 Changes from 3.11.1 to 3.11.2
 =============================
 
-* TBW
+* :meth:`Table.where` (and hence :meth:`Table.read_where`,
+  :meth:`Table.get_where_list` and :meth:`Table.append_where`) now treats a
+  *start* with no *stop* like a Python slice, i.e. the rows from *start* to
+  the last one are considered.  Previously only one row was considered
+  (:issue:`797`).
 
 
 Changes from 3.11.0 to 3.11.1

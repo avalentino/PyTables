@@ -1571,6 +1571,11 @@ very small/large chunksize, you may want to increase/decrease it.""",
         .. versionchanged:: 3.0
            The start, stop and step parameters now behave like in slice.
 
+        .. versionchanged:: 3.11.2
+           If the *start* parameter is provided and *stop* is None then the
+           rows from *start* to the last one are considered.
+           In PyTables < 3.11.2 only one row was considered.
+
         """
         return self._where(condition, condvars, start, stop, step)
 
@@ -1588,7 +1593,10 @@ very small/large chunksize, you may want to increase/decrease it.""",
         if profile:
             show_stats("Entering table._where", tref)
         # Adjust the slice to be used.
-        start, stop, step = self._process_range_read(start, stop, step)
+        # NOTE: `_process_range` (and not `_process_range_read`) is used here
+        # on purpose, so that the range is interpreted like a Python slice,
+        # i.e. a `start` with no `stop` means "up to the last row".
+        start, stop, step = self._process_range(start, stop, step)
         if start >= stop:  # empty range, reset conditions
             self._use_index = False
             self._where_condition = None
