@@ -7135,6 +7135,90 @@ class Issue262TestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(len(data), 0)
 
 
+class Issue797TestCase(common.TempFileMixin, common.PyTablesTestCase):
+    nrows = 20
+
+    def setUp(self):
+        super().setUp()
+
+        class IRecord(tb.IsDescription):
+            c1 = tb.Int32Col(pos=1)
+
+        table = self.h5file.create_table("/", "table", IRecord)
+        table.nrowsinbuf = 3
+
+        for i in range(self.nrows):
+            table.row["c1"] = i
+            table.row.append()
+
+        table.flush()
+
+    def test_gh797_where(self):
+        """Regression test for gh-797 (where with start and no stop)"""
+
+        table = self.h5file.root.table
+        rows = [row.nrow for row in table.where("c1 >= 0", start=10)]
+
+        if common.verbose:
+            print()
+            print("Selected rows -->", rows)
+        self.assertEqual(rows, list(range(10, self.nrows)))
+
+    def test_gh797_where_negative_start(self):
+        """Regression test for gh-797 (where with a negative start)"""
+
+        table = self.h5file.root.table
+        rows = [row.nrow for row in table.where("c1 >= 0", start=-5)]
+
+        if common.verbose:
+            print()
+            print("Selected rows -->", rows)
+        self.assertEqual(rows, list(range(self.nrows - 5, self.nrows)))
+
+    def test_gh797_where_start_beyond_end(self):
+        """Regression test for gh-797 (where with start >= nrows)"""
+
+        table = self.h5file.root.table
+        rows = [row.nrow for row in table.where("c1 >= 0", start=self.nrows)]
+
+        if common.verbose:
+            print()
+            print("Selected rows -->", rows)
+        self.assertEqual(rows, [])
+
+    def test_gh797_read_where(self):
+        """Regression test for gh-797 (read_where with start and no stop)"""
+
+        table = self.h5file.root.table
+        data = table.read_where("c1 >= 0", field="c1", start=10)
+
+        if common.verbose:
+            print()
+            print("data -->", data)
+        self.assertEqual(list(data), list(range(10, self.nrows)))
+
+    def test_gh797_get_where_list(self):
+        """Regression test for gh-797 (get_where_list, start and no stop)"""
+
+        table = self.h5file.root.table
+        coords = table.get_where_list("c1 >= 0", start=10)
+
+        if common.verbose:
+            print()
+            print("Selected coords -->", coords)
+        self.assertEqual(list(coords), list(range(10, self.nrows)))
+
+    def test_gh797_read_is_unchanged(self):
+        """Checking that Leaf.read() keeps its own single row semantics"""
+
+        array = self.h5file.create_array("/", "array", np.arange(self.nrows))
+
+        if common.verbose:
+            print()
+            print("data -->", array.read(start=10))
+        self.assertEqual(list(array.read(start=10)), [10])
+
+
 class TruncateTestCase(common.TempFileMixin, common.PyTablesTestCase):
     def setUp(self):
         super().setUp()
@@ -8033,6 +8117,7 @@ def suite():
         theSuite.addTest(common.make_suite(ZeroSizedTestCase))
         theSuite.addTest(common.make_suite(IrregularStrideTestCase))
         theSuite.addTest(common.make_suite(Issue262TestCase))
+        theSuite.addTest(common.make_suite(Issue797TestCase))
         theSuite.addTest(common.make_suite(TruncateOpen1))
         theSuite.addTest(common.make_suite(TruncateOpen2))
         theSuite.addTest(common.make_suite(TruncateClose1))
