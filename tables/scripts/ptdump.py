@@ -4,6 +4,7 @@ Pass the flag -h to this for help on usage.
 
 """
 
+import ast
 import argparse
 import operator
 
@@ -162,7 +163,7 @@ def main():
     # Get the options
     if isinstance(args.rng, str):
         try:
-            options.rng = eval("slice(" + args.rng + ")")
+            options.rng = slice(*ast.literal_eval(args.rng))
         except Exception:
             parser.error("Error when getting the range parameter.")
         else:

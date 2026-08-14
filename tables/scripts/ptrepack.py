@@ -4,6 +4,7 @@ Pass the flag -h to this for help on usage.
 
 """
 
+import ast
 import sys
 import argparse
 import warnings
@@ -581,12 +582,12 @@ def main():
     # check arguments
     if args.rng:
         try:
-            args.rng = eval("slice(" + args.rng + ")")
+            args.rng = slice(*ast.literal_eval(args.rng))
         except Exception:
             parser.error("Error when getting the range parameter.")
 
     if args.chunkshape.isdigit() or args.chunkshape.startswith("("):
-        args.chunkshape = eval(args.chunkshape)
+        args.chunkshape = ast.literal_eval(args.chunkshape)
 
     if args.complevel < 0 or args.complevel > 9:
         parser.error(
