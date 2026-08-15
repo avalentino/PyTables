@@ -1,10 +1,32 @@
-.. When releasing a new major or minor (not patch) version,
-.. copy this file to ``RELEASE_NOTES_v<NEW-MAJOR>.<NEW-MINOR>.x.rst``,
-.. and replace the contents of the old file
-.. with those of the file mentioned below,
-.. for the entries covering the releases matching the old minor version.
-..
-.. E.g. if X.Y+1 is released,
-.. copy this file to ``RELEASE_NOTES_vX.Y+1.x.rst``,
-.. then replace current content with entries from ``RELEASE_NOTES.txt`` for X.Y releases.
-.. include:: ../../../RELEASE_NOTES.rst
+========================================
+ Release notes for PyTables 3.11 series
+========================================
+
+:Author: PyTables Developers
+:Contact: pytables-dev@googlegroups.com
+
+.. py:currentmodule:: tables
+
+
+Changes from 3.11.0 to 3.11.1
+=============================
+
+* Fix blosc2 loading (:issue:`1305`, :issue:`1306`).
+
+
+Changes from 3.10.2 to 3.11.0
+=============================
+
+* Add support for Python 3.14.
+* Set Cython "freethreading_compatible" directive.
+  Please refer to https://www.pytables.org/cookbook/threading.html
+  for details about threading support.
+* Python wheel packages are now generated exploiting limited API and
+  stable ABI (`abi3`).
+
+
+Thanks to:
+
+* Rene Leonhardt
+* Neil Schemenauer
+* Eric Larson

@@ -1571,10 +1571,10 @@ very small/large chunksize, you may want to increase/decrease it.""",
         .. versionchanged:: 3.0
            The start, stop and step parameters now behave like in slice.
 
-        .. versionchanged:: 3.11.2
+        .. versionchanged:: 3.12.0
            If the *start* parameter is provided and *stop* is None then the
            rows from *start* to the last one are considered.
-           In PyTables < 3.11.2 only one row was considered.
+           In PyTables < 3.12.0 only one row was considered.
 
         """
         return self._where(condition, condvars, start, stop, step)
