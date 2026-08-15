@@ -152,8 +152,29 @@ jobs:
             ./wheelhouse/*.txt
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
 
-  # TODO someday add a run that downloads the artifact and tests them (e.g., on a new
-  # 3.13 or 3.14 install), but abi3audit should in theory be sufficient
+  test_wheels:
+    needs: [ build_wheels ]
+    name: Build ${{ matrix.os }} wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', 'ubuntu-24.04-arm', 'macos-latest', 'windows-latest', 'macos-15-intel']
+
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: '*'
+          merge-multiple: true
+          path: wheelhouse
+
+      - name: Install PyTables
+        run: |
+          python -m pip install --only-binary tables --find-links wheelhouse tables
+
+      - name: Install PyTables
+        run: |
+          python -m tables.tests.test_all -v
 
   twine_check:
     needs: [ build_sdist, build_wheels ]
