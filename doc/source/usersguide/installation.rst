@@ -60,8 +60,8 @@ If you don't, fetch and install them before proceeding.
 .. Keep system packages in sync with build jobs in `.github/workflows/*.yml`.
 
 * Python_ >= 3.11
-* HDF5_ >= 1.10.5 (although 1.14.0 or later is strongly recommended)
-* Cython_ >= 3.0.11
+* HDF5_ >= 1.10.5 (although 2.1 or later is strongly recommended)
+* Cython_ >= 3.2
 * NumPy_ >= 1.25
 * Numexpr_ >= 2.6.2
 * packaging_
@@ -87,6 +87,12 @@ If you don't, fetch and install them before proceeding.
 .. _c-blosc: https://github.com/Blosc/c-blosc
 .. _python-blosc2: https://github.com/Blosc/python-blosc2
 .. _c-blosc2: https://github.com/Blosc/c-blosc2
+
+Moreover, hdf5-blosc_ and hdf5-blosc2_ are vendored with the PyTables source
+code.
+
+.. _hdf5-blosc:: https://github.com/Blosc/hdf5-blosc
+.. _hdf5-blosc2:: https://github.com/Blosc/HDF5-Blosc2
 
 Compile and install these packages (but see :ref:`prerequisitesBinInst` for
 instructions on how to install pre-compiled binaries if you are not willing

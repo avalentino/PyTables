@@ -105,7 +105,7 @@ installed in your system, you don't absolutely need to install it
 separately. LZO and bzip2 compression libraries are, however,
 optional.
 
-Make sure you have HDF5 version 1.10.5 or above. On Debian-based Linux
+Make sure you have HDF5 version 2.1 or above. On Debian-based Linux
 distributions, you can install it with::
 
    $ sudo apt install libhdf5-serial-dev
