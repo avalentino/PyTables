@@ -65,10 +65,6 @@ class VLArray(hdf5extension.VLArray, Leaf):
           length data. Data itself (the raw data) are not compressed
           or filtered.
 
-          Please refer to the `VLTypes Technical Note
-          <https://support.hdfgroup.org/HDF5/doc/TechNotes/VLTypes.html>`_
-          for more details on the topic.
-
     Parameters
     ----------
     parentnode
@@ -250,10 +246,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
             it is first serialized using pickle, and then converted to
             a NumPy array suitable for storage in an HDF5 file.
             This attribute will return the size of that NumPy
-            representation.  If you wish to know the size of the Python
-            objects after they are loaded from disk, you can use this
-            `ActiveState recipe
-            <http://code.activestate.com/recipes/577504/>`_.
+            representation.
         """
         return self._get_memory_size()
 

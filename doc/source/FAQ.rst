@@ -495,7 +495,7 @@ don't need to re-install PyTables).
 .. _`archives of the user's list`: https://sourceforge.net/p/pytables/mailman/pytables-users/
 .. _`Gmane archives`: http://www.mail-archive.com/pytables-users@lists.sourceforge.net/
 .. _`R&D 100 Award`: http://www.hdfgroup.org/HDF5/RD100-2002/
-.. _ViTables: http://vitables.org
+.. _ViTables: https://github.com/uvemas/ViTables
 .. _Cython: http://www.cython.org
 .. _`Francesc Alted`: https://github.com/FrancescAlted
 .. _netCDF3: http://www.unidata.ucar.edu/software/netcdf
@@ -511,7 +511,7 @@ don't need to re-install PyTables).
 .. _`FAQ of h5py`: http://docs.h5py.org/en/latest/faq.html#what-s-the-difference-between-h5py-and-pytables
 .. _`issue tracker`: https://github.com/PyTables/PyTables/issues
 .. _GitHub: https://github.com
-.. _`HDF5 manual`: https://portal.hdfgroup.org/display/HDF5/Datatypes
+.. _`HDF5 manual`: https://support.hdfgroup.org/documentation/hdf5/latest/_l_b_datatypes.html
 .. _SQLObject: http://sqlobject.org
 .. _`PEP 335`: http://www.python.org/dev/peps/pep-0335
 

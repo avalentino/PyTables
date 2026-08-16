@@ -134,6 +134,6 @@ new HDF5 file descriptor::
 
 .. target-notes::
 
-.. _`HDF5 drivers`: http://www.hdfgroup.org/HDF5/doc/UG/08_TheFile.html#Drivers
-.. _`HDF5 User's Guide`: https://portal.hdfgroup.org/display/HDF5/HDF5+User+Guides
+.. _`HDF5 drivers`: https://support.hdfgroup.org/documentation/hdf5/latest/_h5_f_d__u_g.html#subsec_vfd_drivers
+.. _`HDF5 User's Guide`: https://support.hdfgroup.org/documentation/hdf5/latest/_u_g.html
 .. _`HDF5 File Image Operations`: http://www.hdfgroup.org/HDF5/doc/Advanced/FileImageOperations/HDF5FileImageOperations.pdf

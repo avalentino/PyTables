@@ -287,7 +287,7 @@ Bugs fixed
 .. _Cython: http://www.cython.org
 .. _Numexpr: http://code.google.com/p/numexpr
 .. _numpy: http://www.numpy.org
-.. _`download area`: http://sourceforge.net/projects/pytables/files/pytables
+.. _`download area`: https://sourceforge.net/projects/pytables/files/pytables/
 .. _`Travis-CI`: https://travis-ci.org
 
 

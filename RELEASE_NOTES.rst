@@ -30,7 +30,7 @@ Changes from 3.11.1 to 3.12.0
 
 * Fix typos in docstrings, comments and error messages.
 * Fix issue with non-zero direct-chunk filter mask (:issue:`1325`).
-* Fix infinite busy loop in ObjectCache.updateslot_ (:issue:`1254`).
+* Fix infinite busy loop in ``ObjectCache.updateslot`` (:issue:`1254`).
 
 
 .. _Cython: https://cython.org

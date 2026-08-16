@@ -140,7 +140,7 @@ been fixed. Here is the (non-exhaustive) list:
 
 - And last, but definitely not least, a new donations section
   has been added to the PyTables web site
-  (http://sourceforge.net/projects/pytables, then follow the
+  (https://sourceforge.net/projects/pytables, then follow the
   "Donations" tag). If you like PyTables and want this effort
   to continue, please, donate!
 

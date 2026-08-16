@@ -574,7 +574,7 @@ willQueryUseIndexing             will_query_use_indexing
 .. End:
 
 
-.. _by popular demand: http://sourceforge.net/mailarchive/message.php?msg_id=29584752
+.. _by popular demand: https://sourceforge.net/mailarchive/message.php?msg_id=29584752
 
 .. _PEP 8: http://www.python.org/dev/peps/pep-0008/
 

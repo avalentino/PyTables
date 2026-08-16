@@ -35,7 +35,7 @@ Bugfixes
 - Fixed blosc2 search paths.
 - Fixed the copy of tables with `createparents=True` (:issue:`1208`).
 - Fixed links in `README.rst` (:issue:`1218`). Thanks to David Poznik.
-- Fixed the function for writing cpu info to cache file (:issue:`#1222`).
+- Fixed the function for writing cpu info to cache file (:issue:`1222`).
   Thanks to Adrian Altenhoff.
 - Fixed an incorrect access to the obsolete `sys.maxint` in `pttree`
   (:issue:`1224`).

@@ -436,8 +436,8 @@ You can pass the `-v` or `-d` options to ptdump if you want
 more verbosity. Try them out!
 
 Also, in :ref:`Figure 1 <tutorial1-1-tableview>`, you can admire how the
-tutorial1.h5 looks like using the `ViTables <http://vitables.org>`_ graphical
-interface.
+tutorial1.h5 looks like using the
+`ViTables <https://github.com/uvemas/ViTables>`_ graphical interface.
 
 .. _tutorial1-1-tableview:
 

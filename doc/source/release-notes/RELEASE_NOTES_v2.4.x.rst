@@ -55,7 +55,7 @@ Other improvements
 
 - The Blosc_ compression library is now automatically disabled on platforms
   that do not support unaligned memory access (see also
-  https://github.com/FrancescAlted/blosc/issues/3 and
+  https://github.com/Blosc/c-blosc/issues/3 and
   http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=661286).
 
 - Improved bzip2 detection on Windows (:issue:`116`).  Thanks to cgohlke.

@@ -48,10 +48,7 @@ Other changes
   `AttributeSet` class so as to keep track of such attributes.  Closes
   #240.
 
-- LZO binaries have disappeared from the GnuWin32 repository.  Until
-  they come eventually back, they have been put at
-  http://www.pytables.org/download/lzo-win. This has been documented
-  in the install chapter.
+- LZO binaries have disappeared from the GnuWin32 repository.
 
 
 Changes from 2.1 to 2.1.1

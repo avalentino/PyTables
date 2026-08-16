@@ -25,11 +25,7 @@ using :program:`pip`. For example, for the stable 3.1 series, you can do::
     $ pip install --install-option='--prefix=<PREFIX>' \
     -e git+https://github.com/PyTables/PyTables.git@v.3.1#egg=tables
 
-.. _`download area`: http://sourceforge.net/projects/pytables/files/pytables
 .. _`tags page`: https://github.com/PyTables/PyTables/tags
-.. _`Python(x,y)`: http://code.google.com/p/pythonxy
-.. _ActiveState: http://www.activestate.com/activepython
-.. _Enthought: https://www.enthought.com/products/epd
 
 
 Bleeding Edge Versions

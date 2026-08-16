@@ -1711,7 +1711,7 @@ class File(hdf5extension.File):
 
         Create an external link to a *target* node with the given *name*
         in *where* location.  *target* can be a node object in another
-        file or a path string in the form 'file:/path/to/node'.  If
+        file or a path string in the form ``file:/path/to/node``.  If
         *createparents* is true, the intermediate groups required for
         reaching *where* are created (the default is not doing so).
 

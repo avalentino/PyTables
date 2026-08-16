@@ -68,7 +68,7 @@ Bibliography
     Markus F Oberhumer. LZO. A data compression library which is suitable for
     data de-/compression in real-time. It offers pretty fast compression and
     decompression with reasonable compression ratio.
-    `<http://www.oberhumer.com/opensource/>`_.
+    `<https://www.oberhumer.com/opensource/>`_.
 
 .. _BZIP2:
 
@@ -100,7 +100,7 @@ Bibliography
     GnuWin32. GNU (and other) tools ported to Win32.
     GnuWin32 provides native Win32-versions of GNU tools, or tools with a
     similar open source licence.
-    `<http://gnuwin32.sourceforge.net/>`_.
+    `<https://gnuwin32.sourceforge.net/>`_.
 
 .. _SCIPY1:
 
@@ -141,7 +141,7 @@ Bibliography
     Vicent Mas. ViTables. A GUI for PyTables/HDF5 files.
     It is a graphical tool for browsing and editing files in both PyTables
     and HDF5 formats.
-    `<http://vitables.org>`_.
+    `<https://github.com/uvemas/ViTables>`_.
 
 .. _GIT:
 

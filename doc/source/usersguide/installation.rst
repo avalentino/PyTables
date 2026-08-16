@@ -8,22 +8,19 @@ Installation
     -- Albert Einstein
 
 
-The Python Distutils are used to build and install PyTables, so it is fairly
+The Python setuptools are used to build and install PyTables, so it is fairly
 simple to get the application up and running. If you want to install the
 package from sources you can go on reading to the next section.
 
 However, if you want to go straight to binaries that 'just work' for the main
 platforms (Linux, Mac OSX and Windows), you might want to use the excellent
-Anaconda_, ActivePython_, Canopy_ distributions.  PyTables usually distributes
-its own Windows binaries too; go :ref:`binaryInstallationDescr` for
-instructions.
-Finally `Christoph Gohlke`_ also maintains an excellent suite of a variety of
-binary packages for Windows at his site.
+conda_, mamba_, pixi_ package/environment managers.
+PyTables usually distributes its own binary wheel packages too; see
+:ref:`binaryInstallationDescr` for instructions.
 
-.. _Anaconda: https://store.continuum.io/cshop/anaconda/
-.. _Canopy: https://www.enthought.com/products/canopy/
-.. _ActivePython: https://www.activestate.com/activepython/downloads
-.. _`Christoph Gohlke`: http://www.lfd.uci.edu/~gohlke/pythonlibs/
+.. _conda: https://docs.conda.io
+.. _mamba: https://mamba.readthedocs.io
+.. _pixi: https://pixi.prefix.dev
 
 
 Installation from source
@@ -94,9 +91,7 @@ code.
 .. _hdf5-blosc: https://github.com/Blosc/hdf5-blosc
 .. _hdf5-blosc2: https://github.com/Blosc/HDF5-Blosc2
 
-Compile and install these packages (but see :ref:`prerequisitesBinInst` for
-instructions on how to install pre-compiled binaries if you are not willing
-to compile the prerequisites on Windows systems).
+Compile and install these packages.
 
 For compression (and possibly improved performance), you will need to install
 the Zlib (see :ref:`[ZLIB] <ZLIB>`), which is also required by HDF5 as well.
@@ -202,7 +197,7 @@ the relevant header files and libraries.
     most of the following libraries from the GnuWin32 project (see
     :ref:`[GNUWIN32] <GNUWIN32>`).  In case you cannot find the LZO binaries
     in the GnuWin32 repository, you can find them at
-    http://sourceforge.net/projects/pytables/files/lzo-win.
+    https://sourceforge.net/projects/pytables/files/lzo-win.
     Once you have installed the prerequisites, setup.py needs to know where
     the necessary library *stub* (.lib) and *header* (.h) files are installed.
     You can set the path to the include and dll directories for the HDF5
@@ -520,39 +515,12 @@ be installed by the user.
 
 .. _binaryInstallationDescr:
 
-Binary installation (Windows)
------------------------------
+Binary installation
+-------------------
 
-This section is intended for installing precompiled binaries on Windows
-platforms. Binaries are distribution in wheel format, which can be downloaded
-and installed using pip as described above. You may also find it useful for
-instructions on how to install *binary prerequisites* even if you want to
-compile PyTables itself on Windows.
-
-.. _prerequisitesBinInst:
-
-Windows prerequisites
-~~~~~~~~~~~~~~~~~~~~~
-
-First, make sure that you have Python 3, NumPy 1.8.0 and Numexpr 2.5.2 or
-higher installed.
-
-To enable compression with the optional LZO library (see the
-:ref:`compressionIssues` for hints about how it may be used to improve
-performance), fetch and install the LZO from
-http://sourceforge.net/projects/pytables/files/lzo-win (choose v1.x for
-Windows 32-bit and v2.x for Windows 64-bit).
-Normally, you will only need to fetch that package and copy the included
-lzo1.dll/lzo2.dll file in a directory in the PATH environment variable
-(for example C:\\WINDOWS\\SYSTEM) or
-python_installation_path\\Lib\\site-packages\\tables (the last directory may
-not exist yet, so if you want to install the DLL there, you should do so
-*after* installing the PyTables package), so that it can be found by the
-PyTables extensions.
-
-Please note that PyTables has internal machinery for dealing with uninstalled
-optional compression libraries, so, you don't need to install the LZO or bzip2
-dynamic libraries if you don't want to.
+This section is intended for installing precompiled binaries.
+Binaries are distribution in wheel format, which can be downloaded and
+installed using pip as described above.
 
 
 PyTables package installation
@@ -564,10 +532,10 @@ are automatically found and installed using pip::
     $ python3 -m pip install tables
 
 If a matching wheel cannot be found for your installation, third party built wheels
-can be found e.g. at the `Unofficial Windows Binaries for Python Extension Packages
-<http://www.lfd.uci.edu/~gohlke/pythonlibs/#pytables>`_ page. Download the wheel
-matching the version of python and either the 32 or 64-bit version and install
-using pip::
+can be found e.g. at the
+`Unofficial Windows Binaries for Python Extension Packages <https://www.cgohlke.com/>`_
+page. Download the wheel matching the version of python and either the 32 or
+64-bit version and install using pip::
 
     # python 3.6 64-bit:
     $ python3 -m pip install tables-3.6.1-2-cp36-cp36m-win_amd64.whl
