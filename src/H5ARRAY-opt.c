@@ -211,10 +211,10 @@ herr_t get_blosc2_slice(char *filename,
 
     /* Copy from temp chunk slice to slice data */
     const int64_t zero_coords[B2ND_MAX_DIM] = {0};
-    b2nd_copy_buffer(rank, typesize,
-                     chunk_slice_data, chunk_slice_shape,
-                     zero_coords, chunk_slice_shape,
-                     slice_data, slice_shape, chunk_slice_start);
+    b2nd_copy_buffer2(rank, typesize,
+                      chunk_slice_data, chunk_slice_shape,
+                      zero_coords, chunk_slice_shape,
+                      slice_data, slice_shape, chunk_slice_start);
 
     assert(chunk_slice_data);
     free(chunk_slice_data);
