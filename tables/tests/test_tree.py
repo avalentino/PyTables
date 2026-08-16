@@ -133,7 +133,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             except LookupError:
                 if common.verbose:
                     type, value, traceback = sys.exc_info()
-                    print("\nGreat!, the next LookupError was catched!")
+                    print("\nGreat!, the next LookupError was caught!")
                     print(value)
             else:
                 nodenames.append(object._v_pathname)
@@ -286,7 +286,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             except TypeError:
                 if common.verbose:
                     type, value, traceback = sys.exc_info()
-                    print("\nGreat!, the next TypeError was catched!")
+                    print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
                 for object in objectlist:
@@ -314,7 +314,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             except TypeError:
                 if common.verbose:
                     type, value, traceback = sys.exc_info()
-                    print("\nGreat!, the next TypeError was catched!")
+                    print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
                 for object in objectlist:
@@ -412,7 +412,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             except TypeError:
                 if common.verbose:
                     type, value, traceback = sys.exc_info()
-                    print("\nGreat!, the next TypeError was catched!")
+                    print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
                 for object in objectlist:
@@ -440,7 +440,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             except TypeError:
                 if common.verbose:
                     type, value, traceback = sys.exc_info()
-                    print("\nGreat!, the next TypeError was catched!")
+                    print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
                 for object in objectlist:
@@ -735,7 +735,7 @@ class DeepTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             if common.verbose:
                 print("\nDepth reading progress: ", end=" ")
 
-            # Get the metadata on the previosly saved arrays
+            # Get the metadata on the previously saved arrays
             for depth in range(self.maxdepth):
                 if common.verbose:
                     print("%3d," % (depth), end=" ")
@@ -894,7 +894,7 @@ class WideTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
             print("\nChildren reading progress: ", end=" ")
 
-        # Get the metadata on the previosly saved arrays
+        # Get the metadata on the previously saved arrays
         for child in range(maxchildren):
             if common.verbose:
                 print("%3d," % (child), end=" ")
@@ -954,7 +954,7 @@ class WideTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
             print("\nChildren reading progress: ", end=" ")
 
-        # Get the metadata on the previosly saved arrays
+        # Get the metadata on the previously saved arrays
         for child in range(maxchildren):
             if common.verbose:
                 print("%3d," % (child), end=" ")

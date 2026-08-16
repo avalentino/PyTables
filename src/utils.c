@@ -193,7 +193,7 @@ int get_objinfo(hid_t loc_id, const char *name) {
   H5G_stat_t oinfo;
   /* H5O_info_t oinfo; H5Oget_info_by_name seems to have performance issues (see gh-402) */
 
-  /* Get type of the object, without emiting an error in case the
+  /* Get type of the object, without emitting an error in case the
      node does not exist. */
   H5E_BEGIN_TRY {
     ret = H5Gget_objinfo(loc_id, name, FALSE, &oinfo);
@@ -214,7 +214,7 @@ int get_linkinfo(hid_t loc_id, const char *name) {
   herr_t     ret;            /* Generic return value         */
   H5L_info_t linfo;
 
-  /* Get type of the link, without emiting an error in case the
+  /* Get type of the link, without emitting an error in case the
      node does not exist. */
   H5E_BEGIN_TRY {
     ret = H5Lget_info(loc_id, name, &linfo, H5P_DEFAULT);
@@ -324,7 +324,7 @@ PyObject *Giterate(hid_t parent_id, hid_t loc_id, const char *name) {
   info[2] = tlink = PyList_New(0);
   info[3] = tunknown = PyList_New(0);
 
-  /* Iterate over all the childs behind loc_id (parent_id+loc_id).
+  /* Iterate over all the children behind loc_id (parent_id+loc_id).
    * NOTE: using H5_INDEX_CRT_ORDER instead of H5_INDEX_NAME causes failures
    * in the test suite */
   H5Literate_by_name(parent_id, name, H5_INDEX_NAME, H5_ITER_NATIVE,
@@ -626,7 +626,7 @@ herr_t set_order(hid_t type_id, const char *byteorder) {
       status = H5Tset_order(type_id, H5T_ORDER_BE);
     else if (strcmp(byteorder, "irrelevant") == 0) {
       /* Do nothing because 'irrelevant' doesn't require setting the
-         byteorder explicitely */
+         byteorder explicitly */
 /*       status = H5Tset_order(type_id, H5T_ORDER_NONE ); */
     }
     else {

@@ -4,7 +4,7 @@
  *      Created: December 21, 2004
  *      Author:  Ivan Vilata i Balaguer - reverse:net.selidor@ivan
  *      Modified:
- *        Function inlining and some castings for 64-bit adressing
+ *        Function inlining and some castings for 64-bit addressing
  *        Francesc Alted 2004-12-27
  *
  *      $Source: /cvsroot/pytables/pytables/src/typeconv.c,v $

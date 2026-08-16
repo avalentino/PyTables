@@ -18,13 +18,13 @@
 # - ``/data_part`` has chunks with the shape of actual data, as listed above.
 #
 # Direct chunking is used in h5py to control the exact storage format for each
-# chunk, using a Blosc2 ND container.  Then PyTables is used to read both
-# datasets and compare them against the original array, so as to test whether
-# there are problems in loading partial chunks.
+# chunk, using a Blosc2 N-Dimensional container.  Then PyTables is used to read
+# both datasets and compare them against the original array, so as to test
+# whether there are problems in loading partial chunks.
 #
-# Since PyTables has an optimized path for uncompressing Blosc2 ND data that
-# does not use the HDF5 filter pipeline, you may force it to only use the
-# latter by setting ``BLOSC2_FILTER=1`` in the environment.
+# Since PyTables has an optimized path for uncompressing Blosc2 N-Dimansional
+# data that does not use the HDF5 filter pipeline, you may force it to only
+# use the latter by setting ``BLOSC2_FILTER=1`` in the environment.
 
 import os
 import tempfile
@@ -87,7 +87,7 @@ b2chunk = np2b2(achunk[:, :])  # need to keep the ref or cframe becomes bogus
 b2frame = b2chunk._schunk.to_cframe()
 dataset.id.write_direct_chunk((0, 0), b2frame)
 b2chunk = np2b2(achunk[:, 0:2])
-# Uncomment to introduce a bogus partial chunk in the midle of data,
+# Uncomment to introduce a bogus partial chunk in the middle of data,
 # too small even for a margin chunk.
 # b2chunk = np2b2(achunk[0:2, 0:2])
 b2frame = b2chunk._schunk.to_cframe()

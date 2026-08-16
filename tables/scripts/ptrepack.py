@@ -591,7 +591,7 @@ def main():
 
     if args.complevel < 0 or args.complevel > 9:
         parser.error(
-            'invalid "complevel" value, it sould be in te range [0, 9]'
+            'invalid "complevel" value, it should be in the range [0, 9]'
         )
 
     # Catch the files passed as the last arguments

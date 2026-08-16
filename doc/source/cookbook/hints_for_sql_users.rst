@@ -214,7 +214,7 @@ Indexing is supported in the versions of PyTables >= 2.3 (and in PyTablesPro).
 However, indexes don't have names and they are bound to single columns.
 Following the object-oriented philosophy of PyTables, index creation is a
 method (:meth:`tables.Column.create_index`) of a :class:`tables.Column` object
-of a table, which you can access trough its ``cols`` accessor.
+of a table, which you can access through its ``cols`` accessor.
 
 ::
     tbl.cols.column_name.create_index()

@@ -170,7 +170,7 @@ Improvements
   for IDEs and static analysis tool to handle them (closes :issue:`345`).
 
 - The keysort functions in idx-opt.c have been cythonised using fused types.
-  The perfomance is mostly unchanged, but the code is much more simpler now.
+  The performance is mostly unchanged, but the code is much more simpler now.
   Thanks to Andrea Bedini.
 
 - Small unit tests re-factoring:
@@ -199,7 +199,7 @@ Improvements
 
   * use the :func:`unittest.skipIf` decorator when appropriate
 
-  * new :class:tests.comon.TestFileMixin: class
+  * new :class:tests.common.TestFileMixin: class
 
 
 .. _unittest2: https://pypi.python.org/pypi/unittest2

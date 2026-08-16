@@ -277,7 +277,7 @@ def open_file(
 
         If you need to deal with a large number of nodes in an
         efficient way, please see :ref:`LRUOptim` for more info and
-        advices about the integrated node cache engine.
+        advice about the integrated node cache engine.
 
     """
     filename = os.fspath(filename)

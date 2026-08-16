@@ -115,7 +115,7 @@ def read_and_send_memmap(send_type, array_size):
         start_timestamp = clock()
         # memmap a file as a NumPy array in 'overwrite' mode
         output = np.memmap("/tmp/array1", "i8", "w+", shape=(array_size,))
-        # read an array from a PyTables file into the memmory mapped array
+        # read an array from a PyTables file into the memory mapped array
         array.read(0, array_size, 1, out=output)
         # use a multiprocessing.Pipe to send the file's path to the receiving
         # process

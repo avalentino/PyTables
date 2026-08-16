@@ -3130,7 +3130,7 @@ class SV10bTestCase(SV10aTestCase):
 
 class SV11aTestCase(SelectValuesTestCase):
     # This checks a special case that failed. It was discovered in a
-    # random test above (SV10a). It is explicitely put here as a way
+    # random test above (SV10a). It is explicitly put here as a way
     # to always check that specific case.
     values = [1, 7, 6, 7, 0, 7, 4, 4, 9, 5]
     blocksizes = small_blocksizes
@@ -3146,7 +3146,7 @@ class SV11aTestCase(SelectValuesTestCase):
 
 class SV11bTestCase(SelectValuesTestCase):
     # This checks a special case that failed. It was discovered in a
-    # random test above (SV10a). It is explicitely put here as a way
+    # random test above (SV10a). It is explicitly put here as a way
     # to always check that specific case.
     values = [1, 7, 6, 7, 0, 7, 4, 4, 9, 5]
     chunkshape = 2
@@ -3162,7 +3162,7 @@ class SV11bTestCase(SelectValuesTestCase):
 
 class SV12aTestCase(SelectValuesTestCase):
     # This checks a special case that failed. It was discovered in a
-    # random test above (SV10b). It is explicitely put here as a way
+    # random test above (SV10b). It is explicitly put here as a way
     # to always check that specific case.
     # values = [0, 7, 0, 6, 5, 1, 6, 7, 0, 0]
     values = [4, 4, 1, 5, 2, 0, 1, 4, 3, 9]
@@ -3179,7 +3179,7 @@ class SV12aTestCase(SelectValuesTestCase):
 
 class SV12bTestCase(SelectValuesTestCase):
     # This checks a special case that failed. It was discovered in a
-    # random test above (SV10b). It is explicitely put here as a way
+    # random test above (SV10b). It is explicitly put here as a way
     # to always check that specific case.
     # values = [0, 7, 0, 6, 5, 1, 6, 7, 0, 0]
     values = [4, 4, 1, 5, 2, 0, 1, 4, 3, 9]

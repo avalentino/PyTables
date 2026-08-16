@@ -913,8 +913,8 @@ See :meth:`File.create_array` for a complete list of supported objects for the
 Array object class.
 
 
-Commiting data to tables and arrays
------------------------------------
+Committing data to tables and arrays
+------------------------------------
 We have seen how to create tables and arrays and how to browse both data and
 metadata in the object tree. Let's examine more closely now one of the most
 powerful capabilities of PyTables, namely, how to modify already created
@@ -2226,7 +2226,7 @@ Regardless of which level of the structure is accessed, the output of _v_nested_
 the same kind of information. This is because even for nested structures, a Description
 object is returned.
 
-It is possible to create arrays that immitate nested table-like structure with _v_nested_descr attribute::
+It is possible to create arrays that imitate nested table-like structure with _v_nested_descr attribute::
 
     >>> import numpy as np
     >>> table.description._v_nested_descr

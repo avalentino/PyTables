@@ -11,7 +11,7 @@ create_nested_type(void) {
     size_t offset, offset2;
 
     offset = 1;  offset2 = 2;
-    // Create a coumpound type large enough (>= 20)
+    // Create a compound type large enough (>= 20)
     tid = H5Tcreate(H5T_COMPOUND, 21);
     // Insert an atomic type
     tid2 = H5Tcopy(H5T_NATIVE_FLOAT);

@@ -641,7 +641,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
 
         # The starts and lengths initialization
         self.starts = np.empty(shape=self.nrows, dtype=np.int32)
-        """Where the values fulfiling conditions starts for every slice."""
+        """Where the values fulfilling conditions starts for every slice."""
         self.lengths = np.empty(shape=self.nrows, dtype=np.int32)
         """Lengths of the values fulfilling conditions for every slice."""
 
@@ -682,7 +682,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             # be a big limitation, as probably fully indexes are much
             # more suitable for producing completely sorted indexes
             # because in this case the indices part is usable for
-            # getting the reverse indices of the index, and I forsee
+            # getting the reverse indices of the index, and I foresee
             # this to be a common requirement in many operations (for
             # example, in table sorts).
             #
@@ -967,7 +967,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         starts = np.zeros(shape=nslices, dtype=np.int_)
         for i in range(nslices):
             # Find the overlapping elements for slice i
-            sover = np.array([], dtype=self.dtype)
+            sorted_ver = np.array([], dtype=self.dtype)
             iover = np.array([], dtype="u%d" % self.indsize)
             prev_end = ranges[i, 1]
             for j in range(i + 1, nslices):
@@ -991,34 +991,42 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                 if prev_end > next_end:
                     # Complete overlapping case
                     if j < self.nslices:
-                        sover = np.concatenate((sover, sorted_[j, stj:]))
+                        sorted_ver = np.concatenate(
+                            (sorted_ver, sorted_[j, stj:])
+                        )
                         iover = np.concatenate((iover, indices[j, stj:]))
                         starts[j] = ss
                     else:
                         n = nelements_lr
-                        sover = np.concatenate((sover, sorted_lr[stj:n]))
+                        sorted_ver = np.concatenate(
+                            (sorted_ver, sorted_lr[stj:n])
+                        )
                         iover = np.concatenate((iover, indices_lr[stj:n]))
                         starts[j] = nelements_lr
                 elif prev_end > next_beg:
                     idx = self.search_item_lt(tmp, prev_end, j, ranges[j], stj)
                     if j < self.nslices:
-                        sover = np.concatenate((sover, sorted_[j, stj:idx]))
+                        sorted_ver = np.concatenate(
+                            (sorted_ver, sorted_[j, stj:idx])
+                        )
                         iover = np.concatenate((iover, indices[j, stj:idx]))
                     else:
-                        sover = np.concatenate((sover, sorted_lr[stj:idx]))
+                        sorted_ver = np.concatenate(
+                            (sorted_ver, sorted_lr[stj:idx])
+                        )
                         iover = np.concatenate((iover, indices_lr[stj:idx]))
                     starts[j] = idx
             # Build the extended slices to sort out
             if i < self.nslices:
                 ssorted = np.concatenate(
-                    (sremain, sorted_[i, starts[i] :], sover)
+                    (sremain, sorted_[i, starts[i] :], sorted_ver)
                 )
                 sindices = np.concatenate(
                     (iremain, indices[i, starts[i] :], iover)
                 )
             else:
                 ssorted = np.concatenate(
-                    (sremain, sorted_lr[starts[i] : nelements_lr], sover)
+                    (sremain, sorted_lr[starts[i] : nelements_lr], sorted_ver)
                 )
                 sindices = np.concatenate(
                     (iremain, indices_lr[starts[i] : nelements_lr], iover)
@@ -1032,7 +1040,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                 # Update caches for this slice
                 self.update_caches(i, ssorted[:ss])
                 # Save the remaining values in a separate array
-                send = len(sover) + len(sremain)
+                send = len(sorted_ver) + len(sremain)
                 sremain = ssorted[ss : ss + send]
                 iremain = sindices[ss : ss + send]
             else:
@@ -1073,7 +1081,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         #                               # elements
         thnover = 40
         thmult = 0.1  # minimum ratio of multiplicity (a 10%)
-        thtover = 0.01  # minimum overlaping index for slices (a 1%)
+        thtover = 0.01  # minimum overlapping index for slices (a 1%)
 
         if self.verbose:
             t1 = clock()
@@ -1819,7 +1827,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
     def compute_overlaps_finegrain(
         self, where: RootGroup, message: str, verbose: bool
     ) -> tuple[int, np.ndarray, float]:
-        """Compute some statistics about overlaping of slices in index.
+        """Compute some statistics about overlapping of slices in index.
 
         Returns
         -------
@@ -1828,7 +1836,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         multiplicity : array of int
             The number of times that a concrete slice overlaps with any other.
         toverlap : float
-            An ovelap index: the sum of the values in segment slices that
+            An overlap index: the sum of the values in segment slices that
             overlaps divided by the entire range of values.  This index is only
             computed for numerical types.
 
@@ -1914,7 +1922,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
     def compute_overlaps(
         self, where: RootGroup, message: str, verbose: bool
     ) -> tuple[int, np.ndarray, float]:
-        """Compute some statistics about overlaping of slices in index.
+        """Compute some statistics about overlapping of slices in index.
 
         Returns
         -------
@@ -1923,7 +1931,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         multiplicity : array of int
             The number of times that a concrete slice overlaps with any other.
         toverlap : float
-            An ovelap index: the sum of the values in segment slices that
+            An overlap index: the sum of the values in segment slices that
             overlaps divided by the entire range of values.  This index is only
             computed for numerical types.
 
@@ -2223,7 +2231,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             for nrow, length in enumerate(self.lengths):
                 if length > 0:
                     startlengths.append((nrow, self.starts[nrow], length))
-            # Compute the size of the recarray (aproximately)
+            # Compute the size of the recarray (approximately)
             # The +1 at the end is important to avoid 0 lengths
             # (remember, the object headers take some space)
             size = len(startlengths) * 8 * 2 + 1

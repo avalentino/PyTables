@@ -92,7 +92,7 @@ NumPy_ is a Python package to efficiently deal with large datasets
 **in-memory**, providing containers for homogeneous data, heterogeneous data,
 and string arrays.
 PyTables uses these NumPy containers as *in-memory buffers* to push the I/O
-bandwith towards the platform limits.
+bandwidth towards the platform limits.
 
 
 Where can PyTables be applied?

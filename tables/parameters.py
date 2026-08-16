@@ -71,7 +71,7 @@ efficient or not."""
 
 ENABLE_EVERY_CYCLES = 50
 """The number of cycles in which a cache will be forced to be
-(re-)enabled, irregardless of the hit ratio. This will provide a chance
+(re-)enabled, regardless of the hit ratio. This will provide a chance
 for checking if we are in a better scenario for doing caching again."""
 
 LOWEST_HIT_RATIO = 0.6
@@ -137,7 +137,7 @@ METADATA_CACHE_SIZE = 1 * _MB  # 1 MB is the default for HDF5
 # NODE_CACHE_SLOTS tells the number of nodes that fits in the cache.
 #
 # There are several forces driving the election of this number:
-# 1.- As more nodes, better chances to re-use nodes
+# 1.- As more nodes, better chances to reuse nodes
 #     --> better performance
 # 2.- As more nodes, the re-ordering of the LRU cache takes more time
 #     --> less performance

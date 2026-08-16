@@ -435,7 +435,7 @@ class PrettyTree:
             self.children.append(child)
 
     def tree_lines(self):
-        """Generate lines of teh string representation of a tree."""
+        """Generate lines of the string representation of a tree."""
         yield self.name
         for label in self.labels:
             yield "   " + label

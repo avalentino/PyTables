@@ -1,4 +1,4 @@
-# Example to show how nested types can be dealed with PyTables
+# Example to show how nested types can be dealt with PyTables
 # F. Alted 2005/05/27
 
 import random

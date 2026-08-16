@@ -211,7 +211,7 @@ cdef class BaseCache:
     return self.nslots
 
   # Machinery for determining whether the hit ratio is being effective
-  # or not.  If not, the cache will be disabled. The efficency will be
+  # or not.  If not, the cache will be disabled. The efficiency will be
   # checked every cycle (the time that the cache would be refilled
   # completely).  In situations where the cache is not being re-filled
   # (i.e. it is not enabled) for a long time, it is forced to be

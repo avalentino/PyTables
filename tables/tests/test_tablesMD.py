@@ -458,7 +458,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
     # CAVEAT: The next test only works for tables with rows < 2**15
     def test03_endianess(self):
-        """Checking if table is endianess aware."""
+        """Checking if table is endianness aware."""
 
         if common.verbose:
             print("\n", "-=" * 30)
@@ -1017,7 +1017,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         except ValueError:
             if common.verbose:
                 type, value, traceback = sys.exc_info()
-                print("\nGreat!, the next ValueError was catched!")
+                print("\nGreat!, the next ValueError was caught!")
             self.h5file.close()
         # else:
         #     self.fail("expected a ValueError")
@@ -1029,7 +1029,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         except ValueError:
             if common.verbose:
                 type, value, traceback = sys.exc_info()
-                print("\nGreat!, the next ValueError was catched!")
+                print("\nGreat!, the next ValueError was caught!")
             self.h5file.close()
         # else:
         #     self.fail("expected a ValueError")

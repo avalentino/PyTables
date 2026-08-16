@@ -371,7 +371,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
         elemsize = self._basesize
 
         # AV 2013-05-03
-        # This is just a quick workaround tha allows to change the API for
+        # This is just a quick workaround that allows to change the API for
         # PyTables 3.0 release and remove the expected_mb parameter.
         # The algorithm for computing the chunkshape should be rewritten as
         # requested by gh-35.
@@ -871,7 +871,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
         )
 
         # Now, fill the new vlarray with values from the old one
-        # This is not buffered because we cannot forsee the length
+        # This is not buffered because we cannot foresee the length
         # of each record. So, the safest would be a copy row by row.
         # In the future, some analysis can be done in order to buffer
         # the copy process.

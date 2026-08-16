@@ -1134,7 +1134,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             vlarray.append([1.3, 2.2, 3.3])
             vlarray.append([5.96, 0.597])
 
-            # Modifiy some rows
+            # Modify some rows
             vlarray[0] = (4.3, 2.2, 4.3)
             vlarray[1] = (1.123, 1.1e-3)
 

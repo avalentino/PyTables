@@ -62,13 +62,13 @@ hid_t H5VLARRAYmake(  hid_t loc_id,
    /* if data, one row will be filled initially */
    dataset_dims[0] = 1;
  else
-   /* no data, so no rows on dataset initally */
+   /* no data, so no rows on dataset initially */
    dataset_dims[0] = 0;
 
  dims_chunk[0] = chunk_size;
 
- /* Fill the vldata estructure with the data to write */
- /* This is currectly not used */
+ /* Fill the vldata structure with the data to write */
+ /* This is correctly not used */
  vldata.p = (void *)data;
  vldata.len = 1;        /* Only one array type to save */
 

@@ -626,7 +626,7 @@ cdef hid_t get_native_type(hid_t type_id) noexcept nogil:
   else:
     # Fixing the byteorder for other types shouldn't be needed.
     # More in particular, H5T_TIME is not managed yet by HDF5 and so this
-    # has to be managed explicitely inside the PyTables extensions.
+    # has to be managed explicitly inside the PyTables extensions.
     # Regarding H5T_BITFIELD, well, I'm not sure if changing the byteorder
     # of this is a good idea at all.
     native_type_id = H5Tcopy(type_id)

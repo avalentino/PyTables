@@ -65,7 +65,7 @@ root = fileh.root
 a = root.array_c.read()
 print("Character array -->", repr(a), a.shape)
 a = root.array_e.read()
-print("Empty array (yes, this is suported) -->", repr(a), a.shape)
+print("Empty array (yes, this is supported) -->", repr(a), a.shape)
 a = root.array_b.read(step=2)
 print("Int8 array, even rows (step = 2) -->", repr(a), a.shape)
 

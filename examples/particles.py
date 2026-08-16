@@ -28,7 +28,7 @@ class Particle(tb.IsDescription):
 t1 = clock()
 print(
     f"Creating a table with {NEVENTS * MAX_PARTICLES_PER_EVENT // 2} "
-    f"entries aprox.. Wait please..."
+    f"entries approx.. Wait please..."
 )
 fileh = tb.open_file("particles-pro.h5", mode="w")
 group = fileh.create_group(fileh.root, "events")

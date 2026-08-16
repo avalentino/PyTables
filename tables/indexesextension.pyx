@@ -516,7 +516,7 @@ cdef void _keysort_string(char* start1, size_t ss, char* start2, size_t ts, size
 
 # This has been copied from the standard module bisect.
 # Checks for the values out of limits has been added at the beginning
-# because I forsee that this should be a very common case.
+# because I foresee that this should be a very common case.
 # 2004-05-20
 def _bisect_left(a, x, int hi):
   """Return the index where to insert item x in list a, assuming a is sorted.

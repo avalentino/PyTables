@@ -263,7 +263,7 @@ def dump_refs(preheat=10, iter1=10, iter2=10, *testargs):
 
 
 def dump_garbage():
-    """show us waht the garbage is about."""
+    """show us what the garbage is about."""
     # Force collection
     print("\nGARBAGE:")
     gc.collect()

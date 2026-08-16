@@ -261,7 +261,7 @@ def read_file(filename, atom, riter, indexmode, dselect, verbose):
     random.seed(19)
     np.random.seed(19)
     for i in range(riter):
-        # The interval for look values at. This is aproximately equivalent to
+        # The interval for look values at. This is approximately equivalent to
         # the number of elements to select
         rnd = np.random.randint(table.nrows)
         cpu1 = cpuclock()
@@ -320,7 +320,7 @@ def read_file(filename, atom, riter, indexmode, dselect, verbose):
         time2 = time2 / (riter - correction)
         tcpu2 = tcpu2 / (riter - correction)
     if verbose and 1:
-        print("Values that fullfill the conditions:")
+        print("Values that fulfill the conditions:")
         print(results)
 
     # rowsread = table.nrows * riter

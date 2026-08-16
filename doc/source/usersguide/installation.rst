@@ -71,7 +71,7 @@ If you don't, fetch and install them before proceeding.
      C-Blosc2 libs and headers (>= 2.11.0), as well as the Python wrapper for
      Blosc2 (not currently used, but it might be in the future), or
    * A standalone installation of the c-blosc2_ library (>= 2.11.0) including
-     the headers.  The latter are usually provided by Linux distribtions in a
+     the headers.  The latter are usually provided by Linux distributions in a
      package named `blosc2-devel`, `libblosc2-dev`, or similar.
 
 .. _Python: http://www.python.org

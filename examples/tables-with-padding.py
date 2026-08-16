@@ -24,8 +24,8 @@ table = fileh.create_table(
 )
 print("table *with* padding -->", table)
 print("table.description --> ", table.description)
-print("table.descrition._v_offsets-->", table.description._v_offsets)
-print("table.descrition._v_itemsize-->", table.description._v_itemsize)
+print("table.description._v_offsets-->", table.description._v_offsets)
+print("table.description._v_itemsize-->", table.description._v_itemsize)
 
 fileh.close()
 
@@ -41,8 +41,8 @@ table = fileh.create_table(
 )
 print("\ntable *without* padding -->", table)
 print("table.description --> ", table.description)
-print("table.descrition._v_offsets-->", table.description._v_offsets)
-print("table.descrition._v_itemsize-->", table.description._v_itemsize)
+print("table.description._v_offsets-->", table.description._v_offsets)
+print("table.description._v_itemsize-->", table.description._v_itemsize)
 
 fileh.close()
 
@@ -52,8 +52,8 @@ fileh = tb.open_file("tables-with-padding.h5", mode="r")
 table = fileh.root.table
 print("table *with* padding -->", table)
 print("table.description --> ", table.description)
-print("table.descrition._v_offsets-->", table.description._v_offsets)
-print("table.descrition._v_itemsize-->", table.description._v_itemsize)
+print("table.description._v_offsets-->", table.description._v_offsets)
+print("table.description._v_itemsize-->", table.description._v_itemsize)
 
 fileh.close()
 
@@ -61,7 +61,7 @@ fileh = tb.open_file("tables-without-padding.h5", mode="r")
 table = fileh.root.table
 print("\ntable *without* padding -->", table)
 print("table.description --> ", table.description)
-print("table.descrition._v_offsets-->", table.description._v_offsets)
-print("table.descrition._v_itemsize-->", table.description._v_itemsize)
+print("table.description._v_offsets-->", table.description._v_offsets)
+print("table.description._v_itemsize-->", table.description._v_itemsize)
 
 fileh.close()

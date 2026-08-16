@@ -84,7 +84,7 @@ def move_to_shadow(file_: "File", path: str) -> None:
 
 
 def move_from_shadow(file_: "File", path: str) -> None:
-    """Move a node fro the set of shadowe dones back to foreground."""
+    """Move a node for the set of shadowe dones back to foreground."""
     shparent, shname = file_._shadow_name()
     node = shparent._f_get_child(shname)
 

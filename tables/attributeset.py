@@ -731,7 +731,7 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
 
 
 class NotLoggedAttributeSet(AttributeSet):
-    """Attribut set without automatic logging."""
+    """Attribute set without automatic logging."""
 
     def _g_log_add(self, name: str) -> None:
         pass

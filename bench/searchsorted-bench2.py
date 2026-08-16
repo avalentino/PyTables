@@ -145,9 +145,9 @@ def read_file(filename, atom, niter, verbose):
             #                         if (1000.-i <= p["var3"] < 1000.+i) ]
             rowselected += len(results)
         else:
-            raise ValueError("Unsuported atom value")
+            raise ValueError("Unsupported atom value")
     if verbose and 1:
-        print("Values that fullfill the conditions:")
+        print("Values that fulfill the conditions:")
         print(results)
 
     rowsread = table.nrows * niter
@@ -171,7 +171,7 @@ def search_file(filename, atom, verbose, item):
     elif atom == "float":
         idxcol = table.cols.var3.index
     else:
-        raise ValueError("Unsuported atom value")
+        raise ValueError("Unsupported atom value")
     print("Searching", table, "...")
     if verbose:
         print("Chunk size:", idxcol.sorted.chunksize)
@@ -189,7 +189,7 @@ def search_file(filename, atom, verbose, item):
     results = table.read(coords=positions)
     print("results length:", len(results))
     if verbose:
-        print("Values that fullfill the conditions:")
+        print("Values that fulfill the conditions:")
         print(results)
 
     # Close the file (eventually destroy the extended type)

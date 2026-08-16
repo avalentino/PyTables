@@ -113,8 +113,8 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         idxcol1 = table.cols.var1.index
         idxcol3 = table.cols.var3.index
         if common.verbose:
-            print("Dirtyness of var1 col:", idxcol1.dirty)
-            print("Dirtyness of var3 col:", idxcol3.dirty)
+            print("Dirtiness of var1 col:", idxcol1.dirty)
+            print("Dirtiness of var3 col:", idxcol3.dirty)
         self.assertEqual(idxcol1.dirty, False)
         self.assertEqual(idxcol3.dirty, False)
 

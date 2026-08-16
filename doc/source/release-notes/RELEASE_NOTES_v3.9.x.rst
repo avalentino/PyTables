@@ -17,7 +17,7 @@ Bugfixes
 - Fix the assembly of returned slice data in Blosc2 NDim optimized slice reads
   by using Blosc2's `b2nd_copy_buffer` (:PR:`1078`).  The bug only showed up
   when the chunk did not fully cover the innermost dimension.  Add unit tests
-  to ckeck for regressions, along with foreign-generated files, and enable and
+  to check for regressions, along with foreign-generated files, and enable and
   fix Blosc2 NDim tests which were not being run.  Thanks to Ivan Vilata.
 
 Improvements

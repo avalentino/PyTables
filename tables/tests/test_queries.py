@@ -278,8 +278,8 @@ class BaseTableQueryTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     _testmode=True,
                 )
 
-        except TypeError as te:
-            if self.colNotIndexable_re.search(str(te)):
+        except TypeError as terr:
+            if self.colNotIndexable_re.search(str(terr)):
                 raise SilentlySkipTest(
                     "Columns of this type can not be indexed."
                 )
@@ -484,7 +484,7 @@ def create_test_method(type_, op, extracond, func=None):
                     )
                     for _ in range(2)
                 ]
-            except TypeError as te:
+            except TypeError as terr:
                 raise SilentlySkipTest("The condition is not boolean.")
             except NotImplementedError:
                 raise SilentlySkipTest(

@@ -2,7 +2,7 @@ Introduction
 ============
 .. epigraph::
 
-    La sabiduría no vale la pena si no es posible servirse de ella para
+    La sabiduría no vale la pena si no es possible servirse de ella para
     inventar una nueva manera de preparar los garbanzos.
 
     [Wisdom isn't worth anything if you can't use it to come up with a new

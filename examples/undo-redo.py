@@ -1,4 +1,4 @@
-"""Yet another couple of examples on do/undo feauture."""
+"""Yet another couple of examples on do/undo feature."""
 
 import tables as tb
 

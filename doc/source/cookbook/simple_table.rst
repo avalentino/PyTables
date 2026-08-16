@@ -41,7 +41,7 @@ https://pypi.python.org/pypi/simpletable).
       >>> tbl.flush()
 
       # there is also insert_many() method() with takes an iterable
-      # of dicts with keys matching the colunns (x, y, name) in this
+      # of dicts with keys matching the columns (x, y, name) in this
       # case.
 
       # query the data (query() alias of tables' readWhere()
@@ -105,7 +105,7 @@ https://pypi.python.org/pypi/simpletable).
 
         query = tables.Table.readWhere
 
-    # convience sublcass that i use a lot.
+    # convenience subclass that I use a lot.
     class BlastTable(SimpleTable):
           query      = tables.StringCol(5)
           subject    = tables.StringCol(5)

@@ -417,7 +417,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.h5file.root.anarray
 
     def test07b_renameLeaf(self):
-        """Checking renaming Leaves and accesing them immediately."""
+        """Checking renaming Leaves and accessing them immediately."""
 
         self._reopen(mode="r+", node_cache_slots=self.node_cache_slots)
         self.h5file.rename_node(self.h5file.root.anarray, "anarray2")
@@ -2529,8 +2529,8 @@ class TestDescription(common.PyTablesTestCase):
             col2 = tb.FloatCol()
 
         dtype = np.dtype([("col1", "int16"), ("col2", float)])
-        desctiption = tb.Description(TestDescParent().columns)
-        t = tb.description.dtype_from_descr(desctiption)
+        description = tb.Description(TestDescParent().columns)
+        t = tb.description.dtype_from_descr(description)
 
         self.assertEqual(t, dtype)
 

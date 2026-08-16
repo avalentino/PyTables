@@ -1657,7 +1657,7 @@ class VeryLargeInputsTestCase(common.TempFileMixin, common.PyTablesTestCase):
         r1 = sum(expr)  # Should give 0
         if common.verbose:
             print("Tested shape:", shape)
-            print("Cummulated sum:", r1)
+            print("Cumulated sum:", r1)
             print("Should look like:", 0)
         self.assertEqual(r1, 0, "Evaluate is returning a wrong value.")
 

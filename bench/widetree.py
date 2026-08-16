@@ -12,15 +12,15 @@ verbose = 0
 
 
 class WideTreeTestCase(unittest.TestCase):
-    """Checks for maximum number of childs for a Group."""
+    """Checks for maximum number of children for a Group."""
 
     def test00_leafs(self):
         """Checking creation of large number of leafs (1024) per group.
 
         Variable 'maxchilds' controls this check. PyTables support up to
-        4096 childs per group, but this would take too much memory (up
+        4096 children per group, but this would take too much memory (up
         to 64 MB) for testing purposes (may be we can add a test for big
-        platforms). A 1024 childs run takes up to 30 MB. A 512 childs
+        platforms). A 1024 children run takes up to 30 MB. A 512 children
         test takes around 25 MB.
 
         """
@@ -29,7 +29,7 @@ class WideTreeTestCase(unittest.TestCase):
         if verbose:
             print("\n", "-=" * 30)
             print("Running %s.test00_wideTree..." % self.__class__.__name__)
-            print("Maximum number of childs tested :", maxchilds)
+            print("Maximum number of children tested :", maxchilds)
         # Open a new empty HDF5 file
         # file = tempfile.mktemp(".h5")
         file = "test_widetree.h5"
@@ -73,9 +73,9 @@ class WideTreeTestCase(unittest.TestCase):
         """Checking creation of large number of groups (1024) per group.
 
         Variable 'maxchilds' controls this check. PyTables support up to
-        4096 childs per group, but this would take too much memory (up
+        4096 children per group, but this would take too much memory (up
         to 64 MB) for testing purposes (may be we can add a test for big
-        platforms). A 1024 childs run takes up to 30 MB. A 512 childs
+        platforms). A 1024 children run takes up to 30 MB. A 512 children
         test takes around 25 MB.
 
         """
@@ -84,7 +84,7 @@ class WideTreeTestCase(unittest.TestCase):
         if verbose:
             print("\n", "-=" * 30)
             print("Running %s.test00_wideTree..." % self.__class__.__name__)
-            print("Maximum number of childs tested :", maxchilds)
+            print("Maximum number of children tested :", maxchilds)
         # Open a new empty HDF5 file
         file = tempfile.mktemp(".h5")
         # file = "test_widetree.h5"

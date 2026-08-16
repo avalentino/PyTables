@@ -27,11 +27,11 @@ fileh.close()
 fileh = tb.open_file(file, mode="r")
 # Get the root group
 group = fileh.root
-# Get the metadata on the previosly saved arrays
+# Get the metadata on the previously saved arrays
 for i, dtype in enumerate(dtypes, 1):
     # Create an array for later comparison
     a = np.ones((basedim,) * i, dtype)
-    # Get the dset object hangin from group
+    # Get the dset object hanging from group
     dset = getattr(group, "array_" + a.dtype.char)
     print(f"Info from dataset: {dset!r}")
     # Read the actual data in array

@@ -14,7 +14,7 @@ development) from the master branch of the project repository using git::
 
 It is recommended to setup the `pre-commit`_ hooks::
 
-    pre-commit instal
+    pre-commit install
 
 To test the SW, the following command can be used::
 

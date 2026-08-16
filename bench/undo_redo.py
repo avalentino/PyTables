@@ -77,7 +77,7 @@ class BasicBenchmark:
         for i in range(10):
             # Create a new array
             self.fileh.create_array("/agroup", "array" + str(i), self.a1)
-        # Excercise copy_children
+        # Exercise copy_children
         for i in range(self.nobjects):
             # Create another group for destination
             self.fileh.create_group("/", "anothergroup" + str(i))

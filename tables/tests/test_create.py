@@ -74,7 +74,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
         except tb.NodeError:
             if common.verbose:
                 type, value, traceback = sys.exc_info()
-                print("\nGreat!, the next NameError was catched!")
+                print("\nGreat!, the next NameError was caught!")
                 print(value)
         else:
             self.fail("expected a tables.NodeError")
@@ -211,7 +211,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
         except tb.PerformanceWarning:
             if common.verbose:
                 type, value, traceback = sys.exc_info()
-                print("\nGreat!, the next PerformanceWarning was catched!")
+                print("\nGreat!, the next PerformanceWarning was caught!")
                 print(value)
         else:
             self.fail("expected an tables.PerformanceWarning")
@@ -985,7 +985,7 @@ class CopyGroupTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(nodelist1, nodelist2)
 
     def test03_RecursiveFilters(self):
-        """Checking recursive copy of a Group (cheking Filters)"""
+        """Checking recursive copy of a Group (checking Filters)"""
 
         if common.verbose:
             print("\n", "-=" * 30)
@@ -2630,7 +2630,7 @@ class InMemoryCoreDriverTestCase(common.PyTablesTestCase):
         )
         self.h5file.root._v_attrs.testattr = 41
 
-        # ensure that the __str__ method works even if there is no phisical
+        # ensure that the __str__ method works even if there is no physical
         # file on disk (in which case the os.stat operation for date retrieval
         # fails)
         self.assertIsNotNone(str(self.h5file))

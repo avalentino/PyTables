@@ -104,7 +104,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # default options
-    tit = "Comparison of differents PyTables versions"
+    tit = "Comparison of different PyTables versions"
     gtotal = 0
     show_memory = 0
     outfile = None

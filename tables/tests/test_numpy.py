@@ -259,7 +259,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Get the root group
         group = self.h5file.root
 
-        # Get the metadata on the previosly saved arrays
+        # Get the metadata on the previously saved arrays
         for i in range(1, len(typecodes)):
             # Create an array for later comparison
             a = np.ones((2,) * i, typecodes[i - 1])
@@ -279,12 +279,12 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.assertEqual(a.shape, b.shape)
             if np.dtype("l").itemsize == 4:
                 if a.dtype.char == "i" or a.dtype.char == "l":
-                    # Special expection. We have no way to distinguish between
+                    # Special exception. We have no way to distinguish between
                     # "l" and "i" typecode, and we can consider them the same
                     # to all practical effects
                     self.assertIn(b.dtype.char, ("l", "i"))
                 elif a.dtype.char == "I" or a.dtype.char == "L":
-                    # Special expection. We have no way to distinguish between
+                    # Special exception. We have no way to distinguish between
                     # "L" and "I" typecode, and we can consider them the same
                     # to all practical effects
                     self.assertIn(b.dtype.char, ("L", "I"))
@@ -292,12 +292,12 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     self.assertTrue(common.allequal(a, b, "numpy"))
             elif np.dtype("l").itemsize == 8:
                 if a.dtype.char == "q" or a.dtype.char == "l":
-                    # Special expection. We have no way to distinguish between
+                    # Special exception. We have no way to distinguish between
                     # "q" and "l" typecode in 64-bit platforms, and we can
                     # consider them the same to all practical effects
                     self.assertIn(b.dtype.char, ("l", "q"))
                 elif a.dtype.char == "Q" or a.dtype.char == "L":
-                    # Special expection. We have no way to distinguish between
+                    # Special exception. We have no way to distinguish between
                     # "Q" and "L" typecode in 64-bit platforms, and we can
                     # consider them the same to all practical effects
                     self.assertIn(b.dtype.char, ("L", "Q"))
@@ -365,7 +365,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 print(". Type ==> %c" % b.dtype.char)
             self.assertEqual(a.shape, b.shape)
             if a.dtype.char == "i":
-                # Special expection. We have no way to distinguish between
+                # Special exception. We have no way to distinguish between
                 # "l" and "i" typecode, and we can consider them the same
                 # to all practical effects
                 self.assertIn(b.dtype.char, ("l", "i"))

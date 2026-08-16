@@ -659,7 +659,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # in order to get a contiguous array.
         # Unfortunately array with swapped axis are copied as they are so
         # they are stored in to HDF5 attributes without being actually
-        # contiguous and ths causes an error whn they are restored.
+        # contiguous and this causes an error when they are restored.
 
         data = np.array([[0, 1], [2, 3]])
 
@@ -1917,7 +1917,7 @@ class SegFaultPythonTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class EmbeddedNullsTestCase(common.TempFileMixin, common.PyTablesTestCase):
-    # See laso gh-371 (https://github.com/PyTables/PyTables/issues/371)
+    # See also gh-371 (https://github.com/PyTables/PyTables/issues/371)
 
     def test_unicode(self):
         value = "string with a null byte \x00 in it"

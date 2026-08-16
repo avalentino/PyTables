@@ -902,7 +902,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(len(result), 20 + add)  # because we appended new rows
 
     # This test has been commented out because appending records without
-    # flushing them explicitely is being warned from now on.
+    # flushing them explicitly is being warned from now on.
     # F. Alted 2006-08-03
     def _test02a_AppendRows(self):
         """Checking appending records without flushing explicitly."""
@@ -1710,7 +1710,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
     # CAVEAT: The next test only works for tables with rows < 2**15
     def test03_endianess(self):
-        """Checking if table is endianess aware."""
+        """Checking if table is endianness aware."""
 
         if common.verbose:
             print("\n", "-=" * 30)
@@ -3489,7 +3489,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         except ValueError:
             if common.verbose:
                 type, value, traceback = sys.exc_info()
-                print("\nGreat!, the next ValueError was catched!")
+                print("\nGreat!, the next ValueError was caught!")
                 print(value)
             self.h5file.close()
         # else:
@@ -3503,7 +3503,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         except ValueError:
             if common.verbose:
                 type, value, traceback = sys.exc_info()
-                print("\nGreat!, the next ValueError was catched!")
+                print("\nGreat!, the next ValueError was caught!")
                 print(value)
             self.h5file.close()
         # else:
@@ -7015,7 +7015,7 @@ class ZeroSizedTestCase(common.TempFileMixin, common.PyTablesTestCase):
 # length of the record.  This exposes the problem only in 32-bit
 # machines, because in 64-bit machine, 'c2' is unaligned.  However,
 # this should check most platforms where, while not unaligned,
-# len(datatype) > boundary_alignment is fullfilled.
+# len(datatype) > boundary_alignment is fulfilled.
 class IrregularStrideTestCase(common.TempFileMixin, common.PyTablesTestCase):
     def setUp(self):
         super().setUp()

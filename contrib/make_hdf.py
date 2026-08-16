@@ -309,7 +309,7 @@ class HdfDict(dict):
         raise NotImplementedError
 
     def __hash__(self):
-        raise TypeError("Hdf dict bjects are unhashable")
+        raise TypeError("Hdf dict objects are unhashable")
 
 
 if __name__ == "__main__":

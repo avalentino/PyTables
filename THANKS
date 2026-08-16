@@ -67,7 +67,7 @@ Enric Cervera for testing the binaries for MacOSX/Intel.
 Daniel Bungert, Steve Langasek and Alexandre Fayolle for their support
 in creating Debian packages for PyTables.
 
-Greg Ewing for writing the excelent Pyrex tool and allowing to beginners
+Greg Ewing for writing the excellent Pyrex tool and allowing to beginners
 like me to quickly and safely start writing Python extensions. He was
 also very responsive about questions on Pyrex.
 

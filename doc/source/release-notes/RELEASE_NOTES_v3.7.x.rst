@@ -48,5 +48,5 @@ Other changes
 -------------
 - Drop the deprecated `hdf5Version` and `File.open_count`.
 - the :func:`get_tables_version` and :func:`get_hdf5_version` functions are
-  now deprecated please use the coresponding :data:`tables.__version__` and
+  now deprecated please use the corresponding :data:`tables.__version__` and
   :data:`tables.hdf5_version` instead.

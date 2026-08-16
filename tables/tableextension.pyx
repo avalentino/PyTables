@@ -416,11 +416,11 @@ cdef class Table(Leaf):
           atom = atom_from_hdf5_type(native_member_type_id)
           colobj = Col.from_atom(atom, pos=pos, _offset=member_offset)
           itemsize = H5Tget_size(native_member_type_id)
-        except TypeError, te:
+        except TypeError as terr:
           # Re-raise TypeError again with more info
           raise TypeError(
             ("table ``%s``, column ``%s``: %%s" % (self.name, colname))
-            % te.args[0])
+            % terr.args[0])
         desc[colname] = colobj
         # For time kinds, save the byteorder of the column
         # (useful for conversion of time datatypes later on)
@@ -515,7 +515,7 @@ cdef class Table(Leaf):
     desc, offset = self.get_nested_type(self.disk_type_id, self.type_id, "", [])
 
     if desc == {}:
-      raise HDF5ExtError("Problems getting desciption for table %s", self.name)
+      raise HDF5ExtError("Problems getting description for table %s", self.name)
 
     if offset < type_size:
       # Trailing padding, set the itemsize to the correct type_size (see #765)

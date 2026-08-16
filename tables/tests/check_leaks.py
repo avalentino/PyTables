@@ -320,7 +320,7 @@ if __name__ == "__main__":
     parser = _get_parser()
     args = parser.parse_args()
 
-    # set 'array' as default value if no ather option has been specified
+    # set 'array' as default value if no other option has been specified
     for name in ("carray", "earray", "vlarray", "table", "xtable", "group"):
         if getattr(args, name):
             break

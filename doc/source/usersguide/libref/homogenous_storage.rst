@@ -1,7 +1,7 @@
 .. currentmodule:: tables
 
-Homogenous storage classes
-==========================
+Homogeneous storage classes
+===========================
 
 .. _ArrayClassDescr:
 

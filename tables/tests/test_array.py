@@ -964,7 +964,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Get the root group
         group = self.h5file.root
 
-        # Get the metadata on the previosly saved arrays
+        # Get the metadata on the previously saved arrays
         for i, typecode in enumerate(typecodes):
             # Create an array for later comparison
             a = np.ones((3,), typecode)

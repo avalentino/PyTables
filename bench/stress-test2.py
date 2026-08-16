@@ -120,7 +120,7 @@ def read_file(filename, ngroups, recsize, verbose):
 
 
 def dump_garbage():
-    """show us waht the garbage is about."""
+    """show us what the garbage is about."""
     # Force collection
     print("\nGARBAGE:")
     gc.collect()

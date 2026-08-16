@@ -101,7 +101,7 @@ Bugs fixed
   an :class:`Atom` (closes :issue:`209` and :issue:`296`).
 - Prevent creation of a table with no columns (closes :issue:`18` and
   :issue:`299`).
-- Fixed a memory leak that occured when iterating over
+- Fixed a memory leak that occurred when iterating over
   :class:`CArray`/:class:`EArray` objects (closes :issue:`308`,
   see also :issue:`309`).
   Many thanks to Alistair Muldal.
@@ -138,7 +138,7 @@ Backward incompatible changes
 -----------------------------
 
 In PyTables <= 3.0 file handles (objects that are returned by the
-:func:`open_file` function) were stored in an internal registry and re-used
+:func:`open_file` function) were stored in an internal registry and reused
 when possible.
 
 Two subsequent attempts to open the same file (with compatible open mode)
@@ -172,7 +172,7 @@ and about patterns that should be used for the I/O in concurrent programs
 PyTables developers decided to remove the *black magic under the hood* and
 allow the users to implement the patterns they want.
 
-Starting from PyTables 3.1 file handles are no more re-used (*shared*) and
+Starting from PyTables 3.1 file handles are no more reused (*shared*) and
 each call to the :func:`open_file` function returns a new file handle::
 
     In [1]: import tables

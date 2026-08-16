@@ -14,7 +14,7 @@ gl = f1.create_group("/", "gl")
 ht = f1.create_hard_link(gl, "ht", "/g1/g2/t1")  # ht points to t1
 print(f"``{ht}`` is a hard link to: ``{t1}``")
 
-# Remove the orginal link to the t1 table
+# Remove the original link to the t1 table
 t1.remove()
 print("table continues to be accessible in: ``%s``" % f1.get_node("/gl/ht"))
 

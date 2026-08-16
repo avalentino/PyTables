@@ -795,7 +795,7 @@ def read_from_filenode(
       *filename* shall be overwritten.
 
     create_target
-      Whether or not the folder hierarchy needed to accomodate the
+      Whether or not the folder hierarchy needed to accommodate the
       given target ``filename`` will be created.
 
     """

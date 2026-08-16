@@ -99,7 +99,7 @@ class ClosedFileTestCase(TempFileMixin, TestCase):
         self.fnode = None
         super().tearDown()
 
-    # All these tests mey seem odd, but Python (2.3) files
+    # All these tests may seem odd, but Python (2.3) files
     # do test whether the file is not closed regardless of their mode.
     def test00_Close(self):
         """Closing a closed file."""
@@ -607,7 +607,7 @@ class ReadlineTestCase(TempFileMixin, TestCase):
         # self.assertEqual(line, b' line' + linesep)
 
         # NOTE: the test is relaxed because the *hint* parameter of
-        # io.BaseIO.readlines controls the amout of read data in a coarse way
+        # io.BaseIO.readlines controls the amount of read data in a coarse way
         self.assertEqual(len(lines), len(data.split(b"\n")))
         self.assertEqual(lines[:-1], [linesep, b"short line" + linesep])
         self.assertTrue(lines[-1].startswith(b"short"))

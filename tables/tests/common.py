@@ -132,7 +132,7 @@ def print_versions():
     print("Default locale:      (%s, %s)" % locale.getdefaultlocale())
     print("-=" * 38)
 
-    # This should improve readability whan tests are run by CI tools
+    # This should improve readability when tests are run by CI tools
     sys.stdout.flush()
 
 

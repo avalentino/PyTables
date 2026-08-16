@@ -509,13 +509,13 @@ cdef class File:
 
     user_block_size = params.get("USER_BLOCK_SIZE", 0)
     if user_block_size and not self._v_new:
-        warnings.warn("The HDF5 file already esists: the USER_BLOCK_SIZE "
+        warnings.warn("The HDF5 file already exists: the USER_BLOCK_SIZE "
                       "will be ignored")
     elif user_block_size:
       user_block_size = int(user_block_size)
       is_pow_of_2 = ((user_block_size & (user_block_size - 1)) == 0)
       if user_block_size < 512 or not is_pow_of_2:
-        raise ValueError("The USER_BLOCK_SIZE must be a power od 2 greather "
+        raise ValueError("The USER_BLOCK_SIZE must be a power od 2 greater "
                          "than 512 or zero")
 
       # File creation property list
@@ -645,7 +645,7 @@ cdef class File:
     size = H5Fget_file_image(self.file_id, NULL, buf_len)
     if size < 0:
       raise HDF5ExtError("Unable to retrieve the size of the buffer for the "
-                         "file image.  Plese note that not all drivers "
+                         "file image.  Please note that not all drivers "
                          "provide support for image files.")
 
     # allocate the memory buffer
@@ -658,7 +658,7 @@ cdef class File:
     size = H5Fget_file_image(self.file_id, <void*>cimage, buf_len)
     if size < 0:
       raise HDF5ExtError("Unable to retrieve the file image. "
-                         "Plese note that not all drivers provide support "
+                         "Please note that not all drivers provide support "
                          "for image files.")
 
     return image
@@ -900,8 +900,8 @@ cdef class AttributeSet:
         # trailing zeros used for padding.
         # The entire process is quite odd but due to a bug (??) in the way
         # numpy arrays are pickled in python 3 we can't assume that
-        # strlen(attr_value) is the actual length of the attibute
-        # and np.bytes_(attr_value) can give a truncated pickle sting
+        # strlen(attr_value) is the actual length of the attribute
+        # and np.bytes_(attr_value) can give a truncated pickle string
         retvalue = retvalue.rstrip(b'\x00')
         retvalue = np.bytes_(retvalue)     # bytes
       # Important to release attr_value, because it has been malloc'ed!
@@ -2384,7 +2384,7 @@ cdef class VLArray(Leaf):
         buf = PyByteArray_FromStringAndSize(<char *>rdata[i].p,
                                             vllen*self._atomicsize)
       else:
-        # Case where there is info with zero lentgh
+        # Case where there is info with zero length
         buf = None
       # Compute the shape for the read array
       shape = list(self._atomicshape)

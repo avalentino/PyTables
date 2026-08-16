@@ -841,7 +841,7 @@ if __name__ == "__main__":
     )
 
     # H5Oget_info_by_name seems to have performance issues (see gh-402), so we
-    # need to use teh deprecated H5Gget_objinfo function
+    # need to use the deprecated H5Gget_objinfo function
     # CFLAGS.append("-DH5_NO_DEPRECATED_SYMBOLS")
 
     # Do not use numpy deprecated API
