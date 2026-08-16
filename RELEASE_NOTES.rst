@@ -33,10 +33,10 @@ Changes from 3.11.1 to 3.12.0
 * Fix infinite busy loop in ObjectCache.updateslot_ (:issue:`1254`).
 
 
-.. _Cython:: https://cython.org
-.. _GHSA-54cf-28h8-9p23::
+.. _Cython: https://cython.org
+.. _GHSA-54cf-28h8-9p23:
     https://github.com/PyTables/PyTables/security/advisories/GHSA-54cf-28h8-9p23
-.. _GHSA-6mmx-p77c-4hmr::
+.. _GHSA-6mmx-p77c-4hmr:
     https://github.com/PyTables/PyTables/security/advisories/GHSA-6mmx-p77c-4hmr
 
 
