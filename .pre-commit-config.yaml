@@ -85,8 +85,12 @@ repos:
 #     hooks:
 #     -   id: mypy
 
-# -   repo: https://github.com/codespell-project/codespell
-#     rev: v2.4.3
-#     hooks:
-#     -   id: codespell
-#         additional_dependencies: [tomli]
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.4.3
+    hooks:
+    -   id: codespell
+        additional_dependencies: [tomli]
+#         exclude: |
+#             (?x)^(
+#                 doc/source/spelling_wordlist.txt
+#             )
