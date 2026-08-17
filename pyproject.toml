@@ -200,6 +200,12 @@ DISABLE_AVX2 = "TRUE"
 
 [tool.black]
 line-length = 79
+# preview = true
+# enable-unstable-feature = [
+#     "hug_parens_with_braces_and_square_brackets",
+#     "string_processing",
+#     "wrap_long_dict_values_in_parens",
+# ]
 target-version = ['py311']
 extend-exclude = "(^/c-blosc|^/hdf5-blosc|^/hdf5-blosc2)"
 
@@ -245,3 +251,40 @@ ignore-words-list = [
 [tool.cython-lint]
 max-line-length = 80
 ignore = ["E111", "E114", "E221", "E222", "E266"]
+
+
+[tool.ruff]
+line-length = 79
+# indent-width = 4
+target-version = "py311"
+extend-exclude = ["docs/conf.py", "c-blosc", "hdf5-blosc", "hdf5-blosc2"]
+
+
+[tool.ruff.lint]
+extend-ignore = [
+    "BLE001",  # Do not catch blind exception: `Exception`
+    "EXE001",  # Shebang is present but file is not executable
+    "RUF100",  # Unused `noqa` directive (non-enabled: ...)
+]
+
+
+[tool.ruff.format]
+# preview = true
+docstring-code-format = true
+
+
+[tool.ruff.lint.per-file-ignores]
+"**/{tests}/*" = ["D", "RUF012"]
+"**/{notebooks}/*.ipynb" = ["D","T201"]
+"docs/conf.py" = ["D"]
+"setup.py" = ["RUF012"]  # RUF012: Mutable default value for class attribute
+"tables/__init__.py" = ["RUF022"]  # unsorted-dunder-all
+"tables/idxutils.py" = ["PYI041"]  # redundant-numeric-union
+"tables/utils.py" = ["PYI041"]     # redundant-numeric-union
+# F811: redefined-while-unused
+"examples/Single_Table-vs-EArray_Table.ipynb" = ["F811"]
+
+
+[tool.ruff.lint.isort]
+length-sort = true
+known-first-party = ["tables", "tables.nodes"]
