@@ -531,18 +531,16 @@ class Slices3CArrayTestCase(BasicTestCase):
     type = "int32"
     shape = (2, 3, 4, 2)
     chunkshape = (5, 5, 5, 5)
-    slices = (
-        slice(1, 2, 1),
-        slice(0, None, None),
-        slice(1, 4, 2),
-    )  # Don't work
+    # slices = (
+    #     slice(1, 2, 1), slice(0, None, None), slice(1, 4, 2)
+    # )  # Don't work
     # slices = (slice(None, None, None), slice(0, None, None),
     #           slice(1,4,1))  # W
     # slices = (slice(None, None, None), slice(None, None, None),
     #           slice(1,4,2))  # N
     # slices = (slice(1,2,1), slice(None, None, None), slice(1,4,2))  # N
     # Disable the failing test temporarily with a working test case
-    slices = (slice(1, 2, 1), slice(1, 4, None), slice(1, 4, 2))  # Y
+    # slices = (slice(1, 2, 1), slice(1, 4, None), slice(1, 4, 2))  # Y
     # slices = (slice(1,2,1), slice(0, 4, None), slice(1,4,1))  # Y
     slices = (slice(1, 2, 1), slice(0, 4, None), slice(1, 4, 2))  # N
     # slices = (slice(1,2,1), slice(0, 4, None), slice(1,4,2),
@@ -567,7 +565,7 @@ class Ellipsis3CArrayTestCase(BasicTestCase):
     type = "int32"
     shape = (2, 3, 4, 2)
     chunkshape = (5, 5, 5, 5)
-    slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
+    # slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
     slices = (slice(1, 2, 1), slice(0, 4, None), slice(1, 4, 2), Ellipsis)
 
 
@@ -575,7 +573,7 @@ class Ellipsis4CArrayTestCase(BasicTestCase):
     type = "int32"
     shape = (2, 3, 4, 5)
     chunkshape = (5, 5, 5, 5)
-    slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
+    # slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
     slices = (slice(1, 2, 1), Ellipsis, slice(1, 4, 2))
 
 
@@ -1334,7 +1332,7 @@ class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
         np.testing.assert_equal(out_buffer, array)
 
     def test_read_non_contiguous_buffer(self):
-        array, disk_array = self.create_array()
+        _, disk_array = self.create_array()
         out_buffer = np.empty((self.size,), "i8")
         out_buffer_slice = out_buffer[0 : self.size : 2]
 
@@ -1344,7 +1342,7 @@ class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
             disk_array.read(0, self.size, 2, out_buffer_slice)
 
     def test_buffer_too_small(self):
-        array, disk_array = self.create_array()
+        _, disk_array = self.create_array()
         out_buffer = np.empty((self.size // 2,), "i8")
         self.assertRaises(
             ValueError, disk_array.read, 0, self.size, 1, out_buffer

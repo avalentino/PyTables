@@ -887,7 +887,7 @@ class ComplexAtom(Atom):
         Atom.__init__(self, self.type, shape, dflt)
 
 
-class _ComplexErrorAtom(ComplexAtom, metaclass=type):
+class _ComplexErrorAtom(ComplexAtom):
     """Reminds the user to stop using the old complex atom names."""
 
     def __init__(
@@ -1146,12 +1146,7 @@ class EnumAtom(Atom):
         Atom.__init__(self, basedtype, shape, default)
 
     def __repr__(self) -> str:
-        return "EnumAtom(enum={!r}, dflt={!r}, base={!r}, shape={!r})".format(
-            self.enum,
-            self._defname,
-            self.base,
-            self.shape,
-        )
+        return f"EnumAtom(enum={self.enum!r}, dflt={self._defname!r}, base={self.base!r}, shape={self.shape!r})"
 
     __eq__ = _cmp_dispatcher("_is_equal_to_enumatom")
 

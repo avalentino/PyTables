@@ -182,7 +182,8 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
             object = object__[chunk]
             # The next adds much more verbosity
-            if common.verbose and 0:
+            # if common.verbose:
+            if False:
                 print("number of row ==>", earray.nrow)
                 if hasattr(object, "shape"):
                     print("shape should look as:", object.shape)
@@ -284,7 +285,8 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             object = object__[index]
 
             # The next adds much more verbosity
-            if common.verbose and 0:
+            # if common.verbose:
+            if False:
                 print("number of row ==>", earray.nrow)
                 if hasattr(object, "shape"):
                     print("shape should look as:", object.shape)
@@ -378,10 +380,8 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     stop = self.start + 1
             # Protection against number of elements less than existing
             # if rowshape[self.extdim] < self.stop or self.stop == 0:
-            if rowshape[self.extdim] < stop:
-                # self.stop == 0 means last row only in read()
-                # and not in [::] slicing notation
-                stop = rowshape[self.extdim]
+            stop = min(stop, rowshape[self.extdim])
+
             # do a copy() in order to ensure that len(object._data)
             # actually do a measure of its length
             # object = object__[self.start:stop:self.step].copy()
@@ -486,10 +486,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     stop = self.start + 1
             # Protection against number of elements less than existing
             # if rowshape[self.extdim] < self.stop or self.stop == 0:
-            if rowshape[self.extdim] < stop:
-                # self.stop == 0 means last row only in read()
-                # and not in [::] slicing notation
-                stop = rowshape[self.extdim]
+            stop = min(stop, rowshape[self.extdim])
             # do a copy() in order to ensure that len(object._data)
             # actually do a measure of its length
             # object = object__[self.start:stop:self.step].copy()
@@ -1025,18 +1022,16 @@ class Slices3EArrayTestCase(BasicTestCase):
     shape = (2, 3, 4, 0)
     chunksize = 5
     nappends = 20
-    slices = (
-        slice(1, 2, 1),
-        slice(0, None, None),
-        slice(1, 4, 2),
-    )  # Don't work
+    # slices = (
+    #     slice(1, 2, 1), slice(0, None, None), slice(1, 4, 2),
+    # )  # Don't work
     # slices = (slice(None, None, None), slice(0, None, None),
     #           slice(1,4,1)) # W
     # slices = (slice(None, None, None), slice(None, None, None),
     #           slice(1,4,2)) # N
     # slices = (slice(1,2,1), slice(None, None, None), slice(1,4,2)) # N
     # Disable the failing test temporarily with a working test case
-    slices = (slice(1, 2, 1), slice(1, 4, None), slice(1, 4, 2))  # Y
+    # slices = (slice(1, 2, 1), slice(1, 4, None), slice(1, 4, 2))  # Y
     # slices = (slice(1,2,1), slice(0, 4, None), slice(1,4,1)) # Y
     slices = (slice(1, 2, 1), slice(0, 4, None), slice(1, 4, 2))  # N
     # slices = (slice(1,2,1), slice(0, 4, None), slice(1,4,2),
@@ -1063,7 +1058,7 @@ class Ellipsis3EArrayTestCase(BasicTestCase):
     shape = (2, 3, 4, 0)
     chunksize = 5
     nappends = 20
-    slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
+    # slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
     slices = (slice(1, 2, 1), slice(0, 4, None), slice(1, 4, 2), Ellipsis)
 
 
@@ -1072,7 +1067,7 @@ class Ellipsis4EArrayTestCase(BasicTestCase):
     shape = (2, 3, 4, 0)
     chunksize = 5
     nappends = 20
-    slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
+    # slices = (Ellipsis, slice(0, 4, None), slice(1, 4, 2))
     slices = (slice(1, 2, 1), Ellipsis, slice(1, 4, 2))
 
 

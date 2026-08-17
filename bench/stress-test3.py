@@ -84,10 +84,10 @@ def read_file(filename, ngroups, recsize, verbose):
         fileh = tb.open_file(filename, mode="r")
         # Get the group
         group = fileh.get_node(fileh.root, "group%04d" % ngroup)
-        ntable = 0
+
         if verbose:
             print("Group ==>", group)
-        for table in fileh.list_nodes(group, "Leaf"):
+        for ntable, table in enumerate(fileh.list_nodes(group, "Leaf")):
             rowsize = table.rowsize
             buffersize = table.rowsize * table.nrowsinbuf
             if verbose > 1:
@@ -97,8 +97,7 @@ def read_file(filename, ngroups, recsize, verbose):
                 print("Buffersize:", table.rowsize * table.nrowsinbuf)
                 print("MaxTuples:", table.nrowsinbuf)
 
-            nrow = 0
-            for row in table:
+            for nrow, row in enumerate(table):
                 try:
                     assert row["ngroup"] == ngroup
                     assert row["ntable"] == ntable
@@ -109,11 +108,9 @@ def read_file(filename, ngroups, recsize, verbose):
                         % (ngroup, ntable, nrow)
                     )
                     print("Record ==>", row)
-                nrow += 1
 
             assert nrow == table.nrows
             rowsread += table.nrows
-            ntable += 1
 
         # Close the file (eventually destroy the extended type)
         fileh.close()

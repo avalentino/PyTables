@@ -118,7 +118,7 @@ def print_versions():
         from Cython import __version__ as cython_version
 
         print("Cython version:      %s" % cython_version)
-    except Exception:
+    except ImportError:
         pass
     print("Python version:      %s" % sys.version)
     print("Platform:            %s" % platform.platform())
@@ -391,3 +391,17 @@ except ImportError:
         if prefix:
             loader.testMethodPrefix = prefix
         return loader.loadTestsFromTestCase(test_case_class)
+
+
+_FIRST_MARKER = object()
+
+
+def first(iterable, default=_FIRST_MARKER):
+    for item in iterable:
+        return item
+    if default is _FIRST_MARKER:
+        raise ValueError(
+            "first() was called on an empty iterable, "
+            "and no default value was provided."
+        )
+    return default

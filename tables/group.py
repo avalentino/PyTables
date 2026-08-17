@@ -5,14 +5,14 @@ from __future__ import annotations
 import os
 import weakref
 import warnings
-from typing import Any, Literal, NoReturn, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal, NoReturn
 from collections.abc import Iterator
 
 from . import hdf5extension, utilsextension
 from .leaf import Leaf
 from .link import Link, SoftLink, ExternalLink
 from .node import Node, NotLoggedMixin
-from .path import check_name_validity, join_path, isvisiblename
+from .path import join_path, isvisiblename, check_name_validity
 from .filters import Filters
 from .registry import class_id_dict, get_class_by_name
 from .exceptions import (
@@ -21,7 +21,7 @@ from .exceptions import (
     NaturalNameWarning,
     PerformanceWarning,
 )
-from .unimplemented import UnImplemented, Unknown
+from .unimplemented import Unknown, UnImplemented
 from .misc.proxydict import ProxyDict
 
 if TYPE_CHECKING:

@@ -84,7 +84,6 @@ class UnImplemented(hdf5extension.UnImplemented, Leaf):
             f"UnImplemented node {self._v_pathname!r} does not know how "
             f"to copy itself; skipping"
         )
-        return None  # Can you see it?
 
     def _f_copy(
         self,
@@ -104,10 +103,9 @@ class UnImplemented(hdf5extension.UnImplemented, Leaf):
         """
         # This also does nothing but warn.
         self._g_copy(newparent, newname, recursive, **kwargs)
-        return None  # Can you see it?
 
     def __repr__(self) -> str:
-        return f"""{str(self)}
+        return f"""{self}
   NOTE: <The UnImplemented object represents a PyTables unimplemented
          dataset present in the '{self._v_file.filename}' HDF5 file.
          If you want to see this kind of HDF5 dataset implemented in

@@ -717,37 +717,37 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 class NotCloseCreate(CreateTestCase):
     close = False
     node_cache_slots = tb.parameters.NODE_CACHE_SLOTS
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class CloseCreate(CreateTestCase):
     close = True
     node_cache_slots = tb.parameters.NODE_CACHE_SLOTS
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class NoCacheNotCloseCreate(CreateTestCase):
     close = False
     node_cache_slots = 0
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class NoCacheCloseCreate(CreateTestCase):
     close = True
     node_cache_slots = 0
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class DictCacheNotCloseCreate(CreateTestCase):
     close = False
     node_cache_slots = -tb.parameters.NODE_CACHE_SLOTS
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class DictCacheCloseCreate(CreateTestCase):
     close = True
     node_cache_slots = -tb.parameters.NODE_CACHE_SLOTS
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
@@ -1772,7 +1772,7 @@ class CloseAlignedPaddedTypesTestCase(TypesTestCase):
 
 
 class NoSysAttrsTestCase(common.TempFileMixin, common.PyTablesTestCase):
-    open_kwargs = dict(pytables_sys_attrs=False)
+    open_kwargs = {"pytables_sys_attrs": False}
 
     def setUp(self):
         super().setUp()

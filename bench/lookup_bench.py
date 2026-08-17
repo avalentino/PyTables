@@ -105,15 +105,12 @@ class DB:
     def fill_array(self):
         "Fills the array"
         earray = self.con.root.earray
-        j = 0
         arr = self.get_array(0, self.step)
-        for i in range(0, self.nrows, self.step):
+        for j, i in enumerate(range(0, self.nrows, self.step)):
             stop = (j + 1) * self.step
-            if stop > self.nrows:
-                stop = self.nrows
+            stop = min(stop, self.nrows)
             # ##arr = self.get_array(i, stop, dtype)
             earray.append(arr)
-            j += 1
         earray.flush()
 
     def get_array(self, start, stop):
@@ -241,9 +238,8 @@ if __name__ == "__main__":
         # in order to always generate the same random sequence
         np.random.seed(20)
 
-    if verbose:
-        if userandom:
-            print("using random values")
+    if verbose and userandom:
+        print("using random values")
 
     db = DB(krows, dtype, chunksize, userandom, datadir, docompress, complib)
 

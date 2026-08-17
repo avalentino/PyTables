@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 import pickle
 import warnings
-from typing import Any, Literal, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal
 from collections.abc import Callable
 
 import numpy as np
@@ -16,7 +16,7 @@ from .utils import SizeType
 from .filters import Filters
 from .registry import class_name_dict
 from .undoredo import attr_to_shadow
-from .exceptions import ClosedNodeError, FiltersWarning, PerformanceWarning
+from .exceptions import FiltersWarning, ClosedNodeError, PerformanceWarning
 
 if TYPE_CHECKING:
     from .node import Node

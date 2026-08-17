@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Literal, TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 from packaging.version import Version
@@ -411,7 +411,7 @@ bitshuffle=False, fletcher32=True, least_significant_digit=None)
     def __str__(self) -> str:
         return repr(self)
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, self.__class__):
             return False
         for attr in self.__dict__:

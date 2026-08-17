@@ -5,22 +5,22 @@ from __future__ import annotations
 import json
 import math
 import warnings
-from typing import Any, Literal, NamedTuple, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal, NamedTuple
 from pathlib import Path
 from functools import lru_cache
 
 import numpy as np
 
 from .node import Node
-from .utils import byteorders, lazyattr, SizeType
-from .flavor import check_flavor, internal_flavor, toarray
+from .utils import SizeType, lazyattr, byteorders
+from .flavor import toarray, check_flavor, internal_flavor
 from .flavor import alias_map as flavor_alias_map
 from .filters import Filters
 from .exceptions import (
-    NoSuchChunkError,
-    NotChunkAlignedError,
     NotChunkedError,
+    NoSuchChunkError,
     PerformanceWarning,
+    NotChunkAlignedError,
 )
 
 if TYPE_CHECKING:
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 NPByteArray = np.ndarray[tuple[int], np.dtype[np.uint8]]
 
 # ``Buffer`` requires Python >= 3.12.
-BufferLike = Union[bytes, bytearray, memoryview, NPByteArray]
+BufferLike = bytes | bytearray | memoryview | NPByteArray
 
 
 def read_cached_cpu_info() -> dict[str, Any]:
@@ -330,7 +330,7 @@ class Leaf(Node):
         name: str,
         new: bool = False,
         filters: Filters | None = None,
-        byteorder: Literal["little", "big", None] = None,
+        byteorder: Literal["little", "big"] | None = None,
         _log: bool = True,
         track_times: bool = True,
     ) -> None:
@@ -343,7 +343,7 @@ class Leaf(Node):
         You can change this to fine-tune the speed or memory
         requirements of your application.
         """
-        self._flavor: Literal["numpy", "python", None] = None
+        self._flavor: Literal["numpy", "python"] | None = None
         """Private storage for the `flavor` property."""
 
         if new:
@@ -461,16 +461,18 @@ class Leaf(Node):
                     chunksize = l3_cache_size
             # In Blosc2, the chunksize cannot be larger than 2 GB
             # BLOSC2_MAX_BUFFERSIZE
-            if chunksize > 2**31 - 32:
-                chunksize = 2**31 - 32
+            chunksize = min(chunksize, 2**31 - 32)
 
         maindim = self.maindim
+
         # Compute the chunknitems
         chunknitems = chunksize // itemsize
+
         # Safeguard against itemsizes being extremely large
         if chunknitems == 0:
             chunknitems = 1
         chunkshape = list(self.shape)
+
         # Check whether trimming the main dimension is enough
         chunkshape[maindim] = 1
         newchunknitems = np.prod(chunkshape, dtype=SizeType)
@@ -616,9 +618,11 @@ class Leaf(Node):
         # Copy user attributes if requested (or the flavor at least).
         if copyuserattrs:
             self._v_attrs._g_copy(new_node._v_attrs, copyclass=True)
-        elif "FLAVOR" in self._v_attrs:
-            if self._v_file.params["PYTABLES_SYS_ATTRS"]:
-                new_node._v_attrs._g__setattr("FLAVOR", self._flavor)
+        elif (
+            "FLAVOR" in self._v_attrs
+            and self._v_file.params["PYTABLES_SYS_ATTRS"]
+        ):
+            new_node._v_attrs._g__setattr("FLAVOR", self._flavor)
         new_node._flavor = self._flavor  # update cached value
 
         # Update statistics if needed.

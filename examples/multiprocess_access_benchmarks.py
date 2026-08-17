@@ -147,7 +147,7 @@ class SocketReceive(multiprocessing.Process):
         sock = socket.socket(self.socket_family, socket.SOCK_STREAM)
         sock.bind(self.address)
         sock.listen(1)
-        readable, _, _ = select.select([sock], [], [])
+        select.select([sock], [], [])
         # accept the connection and read the sent data into a bytearray
         connection = sock.accept()[0]
         recv_buffer = bytearray(self.array_nbytes)

@@ -68,10 +68,9 @@ class RangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             rec.append()
         except ValueError:
             if common.verbose:
-                type, value, traceback = sys.exc_info()
+                _, value, _ = sys.exc_info()
                 print("\nGreat!, the next ValueError was caught!")
                 print(value)
-            pass
         else:
             if common.verbose:
                 print(

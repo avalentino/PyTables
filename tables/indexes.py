@@ -133,12 +133,10 @@ class IndexArray(indexesextension.IndexArray, NotLoggedMixin, EArray):
             return (result1, result2)
         # Then, look for items at the end of the sorted slice
         end = ranges[nrow, 1]
-        if result1 < 0:
-            if item1 > end:
-                result1 = hi
-        if result2 < 0:
-            if item2 >= end:
-                result2 = hi
+        if result1 < 0 and item1 > end:
+            result1 = hi
+        if result2 < 0 and item2 >= end:
+            result2 = hi
         if result1 >= 0 and result2 >= 0:
             return (result1, result2)
         # Finally, do a lookup for item1 and item2 if they were not found

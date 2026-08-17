@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from typing import Literal, TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 
@@ -70,8 +70,7 @@ def computeslicesize(expectedrows: int, memlevel: int) -> int:
     # (in idx-opt.c, the line ``mid = lo + (hi-lo)/2;`` will overflow
     # for values of ``lo`` and ``hi`` >= 2**30).  Finally, ss must be a
     # multiple of 4, so 2**30 must definitely be an upper limit.
-    if ss > 2**30:
-        ss = 2**30
+    ss = min(ss, 2**30)
     return ss
 
 
@@ -85,9 +84,8 @@ def computeblocksize(
 
     """
     nlowerblocks = (expectedrows // lowercompoundsize) + 1
-    if nlowerblocks > 2**20:
-        # Protection against too large number of compound blocks
-        nlowerblocks = 2**20
+    # Protection against too large number of compound blocks
+    nlowerblocks = min(nlowerblocks, 2**20)
     size = int(lowercompoundsize * nlowerblocks)
     # We *need* superblocksize to be an exact multiple of the actual
     # compoundblock size (a ceil must be performed here!)
@@ -149,11 +147,7 @@ def ccs_ultralight(
     if optlevel in (0, 1, 2):
         slicesize //= 2
         slicesize += optlevel * slicesize
-    elif optlevel in (3, 4, 5):
-        slicesize *= optlevel - 1
-    elif optlevel in (6, 7, 8):
-        slicesize *= optlevel - 1
-    elif optlevel == 9:
+    elif optlevel in (3, 4, 5, 6, 7, 8, 9):
         slicesize *= optlevel - 1
     return chunksize, slicesize
 
@@ -459,10 +453,7 @@ def bool_type_next_after(
     assert direction in [-1, +1]
 
     # x is guaranteed to be either a boolean
-    if direction < 0:
-        return False
-    else:
-        return True
+    return bool(direction >= 0)
 
 
 def nextafter(

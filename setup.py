@@ -17,7 +17,7 @@ from typing import NamedTuple
 from pathlib import Path
 
 # Using ``setuptools`` enables lots of goodies
-from setuptools import setup, Extension
+from setuptools import Extension, setup
 from packaging.version import Version
 from setuptools.command.build_ext import build_ext
 from setuptools.command.bdist_wheel import bdist_wheel
@@ -110,34 +110,35 @@ def get_blosc2_directories():
     basepath = Path(os.path.dirname(blosc2.__file__))
     recinfo = basepath.parent / f"blosc2-{version}.dist-info" / "RECORD"
     include_path = library_path = runtime_path = None
-    for line in open(recinfo):
-        path, _ = line.split(",", 1)
-        if fnmatch.fnmatch(path, "**/bin/libblosc2*") or (
-            sys.platform.startswith("win")
-            and fnmatch.fnmatch(path, "**/lib/libblosc2*")
-        ):
-            runtime_path = basepath.parent.joinpath(path).resolve()
-            if not runtime_path.is_file():
-                raise FileNotFoundError(
-                    f"File does not exists: {runtime_path}"
-                )
-            runtime_path = runtime_path.parent.resolve()
-        if fnmatch.fnmatch(path, "**/libblosc2*"):
-            library_path = basepath.parent.joinpath(path).resolve()
-            if not library_path.is_file():
-                raise FileNotFoundError(
-                    f"File does not exists: {library_path}"
-                )
-            library_path = library_path.parent.resolve()
-        elif fnmatch.fnmatch(path, "**/include/blosc2.h") or fnmatch.fnmatch(
-            path, "include/blosc2.h"
-        ):
-            include_path = basepath.parent.joinpath(path).resolve()
-            if not include_path.is_file():
-                raise FileNotFoundError(
-                    f"File does not exists: {include_path}"
-                )
-            include_path = include_path.parent.resolve()
+    with open(recinfo) as recinfo_file:
+        for line in recinfo_file:
+            path, _ = line.split(",", 1)
+            if fnmatch.fnmatch(path, "**/bin/libblosc2*") or (
+                sys.platform.startswith("win")
+                and fnmatch.fnmatch(path, "**/lib/libblosc2*")
+            ):
+                runtime_path = basepath.parent.joinpath(path).resolve()
+                if not runtime_path.is_file():
+                    raise FileNotFoundError(
+                        f"File does not exists: {runtime_path}"
+                    )
+                runtime_path = runtime_path.parent.resolve()
+            if fnmatch.fnmatch(path, "**/libblosc2*"):
+                library_path = basepath.parent.joinpath(path).resolve()
+                if not library_path.is_file():
+                    raise FileNotFoundError(
+                        f"File does not exists: {library_path}"
+                    )
+                library_path = library_path.parent.resolve()
+            elif fnmatch.fnmatch(
+                path, "**/include/blosc2.h"
+            ) or fnmatch.fnmatch(path, "include/blosc2.h"):
+                include_path = basepath.parent.joinpath(path).resolve()
+                if not include_path.is_file():
+                    raise FileNotFoundError(
+                        f"File does not exists: {include_path}"
+                    )
+                include_path = include_path.parent.resolve()
 
     if not library_path:
         raise NotADirectoryError("Library directory not found for blosc2!")
@@ -514,7 +515,7 @@ class BasePackage:
             ):
                 use_locations = list(use_locations)
                 use_locations[0] = use_locations[0].parent / "bin"
-                print(f"Patching runtime dir: {str(use_locations[0])}")
+                print(f"Patching runtime dir: {use_locations[0]}")
             path = find_path(use_locations)
             if path:
                 if path is True:
@@ -599,7 +600,10 @@ if __name__ == "__main__":
 
     # Minimum required versions for numpy, numexpr and HDF5
     _min_versions = {}
-    exec((ROOT / "tables" / "req_versions.py").read_text(), _min_versions)
+    exec(  # noqa: S102
+        (ROOT / "tables" / "req_versions.py").read_text(),
+        _min_versions,
+    )
     min_hdf5_version = _min_versions["min_hdf5_version"]
     min_blosc_version = _min_versions["min_blosc_version"]
     min_blosc2_version = _min_versions["min_blosc2_version"]
@@ -1033,7 +1037,7 @@ if __name__ == "__main__":
                     f"remember to install it.",
                 )
 
-        if os.name == "nt":
+        if os.name == "nt":  # noqa: SIM102
             # LZO DLLs cannot be copied to the binary package for license
             # reasons
             if package.tag not in ["LZO", "LZO2"]:

@@ -29,7 +29,7 @@ def WriteRead(filename, testTuple):
     try:
         b = root.somearray.read()
         # Compare them. They should be equal.
-        if not a == b and common.verbose:
+        if a != b and common.verbose:
             print("Write and read lists/tuples differ!")
             print("Object written:", a)
             print("Object read:", b)

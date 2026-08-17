@@ -54,10 +54,9 @@ def read_file_arr(filename, ngroups, recsize, verbose):
         fileh = tb.open_file(filename, mode="r", root_uep="group%04d" % ngroup)
         # Get the group
         group = fileh.root
-        narrai = 0
         if verbose:
             print("Group ==>", group)
-        for arrai in fileh.list_nodes(group, "Array"):
+        for narrai, arrai in enumerate(fileh.list_nodes(group, "Array")):
             if verbose > 1:
                 print("Array ==>", arrai)
                 print("Rows in", arrai._v_pathname, ":", arrai.shape)
@@ -65,7 +64,6 @@ def read_file_arr(filename, ngroups, recsize, verbose):
             arr = arrai.read()
 
             rowsread += len(arr)
-            narrai += 1
 
         # Close the file (eventually destroy the extended type)
         fileh.close()
@@ -139,10 +137,10 @@ def read_file(filename, ngroups, recsize, verbose):
         fileh = tb.open_file(filename, mode="r", root_uep="group%04d" % ngroup)
         # Get the group
         group = fileh.root
-        ntable = 0
+
         if verbose:
             print("Group ==>", group)
-        for table in fileh.list_nodes(group, "Table"):
+        for ntable, table in enumerate(fileh.list_nodes(group, "Table")):
             rowsize = table.rowsize
             buffersize = table.rowsize * table.nrowsinbuf
             if verbose > 1:
@@ -169,7 +167,6 @@ def read_file(filename, ngroups, recsize, verbose):
 
             assert nrow == table.nrows
             rowsread += table.nrows
-            ntable += 1
 
         # Close the file (eventually destroy the extended type)
         fileh.close()
@@ -192,17 +189,15 @@ class TrackRefs:
         for o in obs:
             all_ = sys.getrefcount(o)
             t = type(o)
-            if verbose:
-                # if t == types.TupleType:
-                if isinstance(o, tb.Group):
-                    # if isinstance(o, MetaIsDescription):
-                    print("-->", o, "refs:", all_)
-                    refrs = gc.get_referrers(o)
-                    trefrs = []
-                    for refr in refrs:
-                        trefrs.append(type(refr))
-                    print("Referrers -->", refrs)
-                    print("Referrers types -->", trefrs)
+            if verbose and isinstance(o, tb.Group):
+                # if isinstance(o, MetaIsDescription):
+                print("-->", o, "refs:", all_)
+                refrs = gc.get_referrers(o)
+                trefrs = []
+                for refr in refrs:
+                    trefrs.append(type(refr))
+                print("Referrers -->", refrs)
+                print("Referrers types -->", trefrs)
             # if t == types.StringType: print "-->",o
             if t in type2count:
                 type2count[t] += 1
@@ -218,7 +213,7 @@ class TrackRefs:
                     type2all[t] - self.type2all.get(t, 0),
                     t,
                 )
-                for t in type2count.keys()
+                for t in type2count
             ]
         )
         ct.reverse()

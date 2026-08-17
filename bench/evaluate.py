@@ -54,14 +54,14 @@ def _compute(result, function, arguments, start=None, stop=None, step=None):
     for start2 in range(start, stop, step * nrowsinbuf):
         # Save the records on disk
         stop2 = start2 + step * nrowsinbuf
-        if stop2 > stop:
-            stop2 = stop
+        stop2 = min(stop2, stop)
+
         # Set the proper slice in the main dimension
         slices[maindim] = slice(start2, stop2, step)
         start3 = (start2 - start) / step
         stop3 = start3 + nrowsinbuf
-        if stop3 > shape[maindim]:
-            stop3 = shape[maindim]
+        stop3 = min(stop3, shape[maindim])
+
         # Compute the slice to be filled in destination
         sl = []
         for i in range(maindim):
@@ -117,8 +117,6 @@ def evaluate(ex, out=None, local_dict=None, global_dict=None, **kwargs):
     print("fullsig-->", compiled_ex.fullsig)
 
     _compute(out, compiled_ex, arguments)
-
-    return
 
 
 if __name__ == "__main__":

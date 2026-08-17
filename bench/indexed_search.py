@@ -51,7 +51,10 @@ class DB:
 
     def get_db_size(self):
         sout = subprocess.run(
-            "sync;du -s %s" % self.filename, shell=True, stdout=subprocess.PIPE
+            "sync;du -s %s" % self.filename,
+            shell=True,
+            stdout=subprocess.PIPE,
+            check=True,
         ).stdout
         return int(sout.split(maxsplit=1)[0])
 

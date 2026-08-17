@@ -5,7 +5,7 @@ from __future__ import annotations
 import copy
 import warnings
 from typing import Any, Literal
-from collections.abc import Callable, Generator, Sequence
+from collections.abc import Callable, Sequence, Generator
 
 import numpy as np
 import numpy.typing as npt
@@ -24,7 +24,7 @@ def same_position(
 
     def newmethod(self: Col, other: Col) -> bool:
         try:
-            other._v_pos
+            _ = other._v_pos
         except AttributeError:
             return False  # not a column definition
         return self._v_pos == other._v_pos and oldmethod(self, other)
@@ -34,7 +34,7 @@ def same_position(
     return newmethod
 
 
-class Col(atom.Atom, metaclass=type):
+class Col(atom.Atom):
     """Defines a non-nested column.
 
     Col instances are used as a means to declare the different properties of a
@@ -261,7 +261,7 @@ def _generate_col_classes() -> Generator[type[Col]]:
     """Generate all column classes."""
     # Abstract classes are not in the class map.
     cprefixes = ["Int", "UInt", "Float", "Time"]
-    for kind, kdata in atom.atom_map.items():
+    for kdata in atom.atom_map.values():
         if hasattr(kdata, "kind"):  # atom class: non-fixed item size
             atomclass = kdata
             cprefixes.append(atomclass.prefix())
@@ -553,10 +553,9 @@ class Description:
         cols_no_pos.sort()
         keys = [name for (pos, name) in cols_with_pos] + cols_no_pos
 
-        pos = 0
         nested = False
         # Get properties for compound types
-        for k in keys:
+        for pos, k in enumerate(keys):
             if validate:
                 # Check for key name validity
                 check_name_validity(k)
@@ -573,7 +572,7 @@ class Description:
                 )
             obj._v_pos = pos  # Set the position of this object
             obj._v_parent = self  # The parent description
-            pos += 1
+
             newdict["_v_colobjects"][k] = obj
             newdict["_v_names"].append(k)
             obj.__dict__["_v_name"] = k
@@ -818,11 +817,11 @@ class MetaIsDescription(type):
         for b in bases:
             if "columns" in b.__dict__:
                 newdict["columns"].update(b.__dict__["columns"])
-        for k in classdict:
+        for k, v in classdict.items():
             # if not (k.startswith('__') or k.startswith('_v_')):
             # We let pass _v_ variables to configure class behaviour
             if not (k.startswith("__")):
-                newdict["columns"][k] = classdict[k]
+                newdict["columns"][k] = v
 
         # Return a new class with the "columns" attribute filled
         return type.__new__(cls, classname, bases, newdict)

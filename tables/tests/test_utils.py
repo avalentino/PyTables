@@ -2,10 +2,8 @@ import sys
 from io import StringIO
 from unittest.mock import patch
 
-import tables.scripts.ptdump as ptdump
-import tables.scripts.pttree as pttree
-import tables.scripts.ptrepack as ptrepack
 from tables.tests import common
+from tables.scripts import ptdump, pttree, ptrepack
 
 
 class ptrepackTestCase(common.PyTablesTestCase):
@@ -27,10 +25,10 @@ class ptrepackTestCase(common.PyTablesTestCase):
         with patch.object(sys, "argv", argv):
             ptrepack.main()
 
-        args, kwargs = mock_open_file.call_args_list[0]
+        args, _ = mock_open_file.call_args_list[0]
         self.assertEqual(args, (src_fn, "r"))
 
-        args, kwargs = mock_copy_leaf.call_args_list[0]
+        args, _ = mock_copy_leaf.call_args_list[0]
         self.assertEqual(args, (src_fn, dst_fn, src_path, dst_path))
 
 
@@ -51,7 +49,7 @@ class ptdumpTestCase(common.PyTablesTestCase):
         with patch.object(sys, "argv", argv):
             ptdump.main()
 
-        args, kwargs = mock_open_file.call_args_list[0]
+        args, _ = mock_open_file.call_args_list[0]
         self.assertEqual(args, (src_fn, "r"))
 
 
@@ -73,7 +71,7 @@ class pttreeTestCase(common.PyTablesTestCase):
         with patch.object(sys, "argv", argv):
             pttree.main()
 
-        args, kwargs = mock_open_file.call_args_list[0]
+        args, _ = mock_open_file.call_args_list[0]
         self.assertEqual(args, (src_fn, "r"))
 
 

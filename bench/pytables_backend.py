@@ -68,16 +68,15 @@ class PyTablesDB(DB):
     def fill_table(self, con):
         "Fills the table"
         table = con.root.table
-        j = 0
-        for i in range(0, self.nrows, self.step):
+
+        for j, i in enumerate(range(0, self.nrows, self.step)):
             stop = (j + 1) * self.step
-            if stop > self.nrows:
-                stop = self.nrows
+            stop = min(stop, self.nrows)
             arr_i4, arr_f8 = self.fill_arrays(i, stop)
-            #             recarr = records.fromarrays([arr_i4, arr_i4, arr_f8, arr_f8])
-            #             table.append(recarr)
+            # recarr = records.fromarrays([arr_i4, arr_i4, arr_f8, arr_f8])
+            # table.append(recarr)
             table.append([arr_i4, arr_i4, arr_f8, arr_f8])
-            j += 1
+
         table.flush()
 
     def index_col(self, con, column, kind, optlevel, verbose):

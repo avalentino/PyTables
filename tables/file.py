@@ -15,21 +15,21 @@ import atexit
 import weakref
 import datetime
 import warnings
-from typing import Any, Literal
+from typing import Any, Self, Literal
 from pathlib import Path
 from collections import defaultdict
-from collections.abc import Callable, Generator, Iterator
+from collections.abc import Callable, Iterator, Generator
 
 import numpy as np
 import numexpr as ne
 import numpy.typing as npt
 
 from . import (
-    hdf5extension,
-    utilsextension,
-    parameters,
     undoredo,
+    parameters,
+    hdf5extension,
     linkextension,
+    utilsextension,
     lrucacheextension,
 )
 from .atom import Atom
@@ -38,7 +38,7 @@ from .link import SoftLink, ExternalLink
 from .node import Node, NotLoggedMixin
 from .path import join_path, split_path
 from .array import Array
-from .group import Group, RootGroup, TransactionGroupG, TransactionG, MarkG
+from .group import Group, MarkG, RootGroup, TransactionG, TransactionGroupG
 from .table import Table
 from .utils import detect_number_of_cores
 from .carray import CArray
@@ -48,20 +48,20 @@ from .filters import Filters
 from .vlarray import VLArray
 from .registry import get_class_by_name
 from .exceptions import (
-    ClosedFileError,
-    FileModeError,
     NodeError,
-    NoSuchNodeError,
-    UnclosedFileWarning,
+    FileModeError,
     UndoRedoError,
+    ClosedFileError,
     ClosedNodeError,
+    NoSuchNodeError,
     PerformanceWarning,
+    UnclosedFileWarning,
 )
 from .description import (
-    Description,
-    IsDescription,
     UInt8Col,
     StringCol,
+    Description,
+    IsDescription,
     descr_from_dtype,
     dtype_from_descr,
 )
@@ -483,19 +483,18 @@ class NodeManager:
         if nodepath in self.registry:
             if not node._v_isopen:
                 del self.registry[nodepath]
-        elif check_unregistered:
+        elif check_unregistered and node._v_isopen:
             # If the node is not in the registry (this should never happen)
             # we close it forcibly since it is not ensured that the __del__
             # method is called for object that are still alive when the
             # interpreter is shut down
-            if node._v_isopen:
-                warnings.warn(
-                    "dropping a node that is not in the registry: "
-                    "``%s``" % nodepath
-                )
+            warnings.warn(
+                "dropping a node that is not in the registry: "
+                "``%s``" % nodepath
+            )
 
-                node._g_pre_kill_hook()
-                node._f_close()
+            node._g_pre_kill_hook()
+            node._f_close()
 
     def flush_nodes(self) -> None:
         """Flush all nodes."""
@@ -505,9 +504,9 @@ class NodeManager:
         for path, node in list(self.registry.items()):
             if not node._v_isopen:
                 closed_keys.append(path)
-            elif "/_i_" not in path:  # Indexes are not necessary to be flushed
-                if isinstance(node, Leaf):
-                    node.flush()
+            elif "/_i_" not in path and isinstance(node, Leaf):
+                # Indexes are not necessary to be flushed
+                node.flush()
 
         for path in closed_keys:
             # self.cache.pop(path, None)
@@ -847,11 +846,10 @@ class File(hdf5extension.File):
         self._node_manager.node_factory = self.root._g_load_child
 
         # Save the PyTables format version for this file.
-        if new:
-            if params["PYTABLES_SYS_ATTRS"]:
-                root._v_attrs._g__setattr(
-                    "PYTABLES_FORMAT_VERSION", format_version
-                )
+        if new and params["PYTABLES_SYS_ATTRS"]:
+            root._v_attrs._g__setattr(
+                "PYTABLES_FORMAT_VERSION", format_version
+            )
 
         # If the file is old, and not opened in "read-only" mode,
         # check if it has a transaction log
@@ -2385,7 +2383,11 @@ class File(hdf5extension.File):
     def _create_mark(self, trans: TransactionG, mid: int) -> MarkG:
         return MarkG(trans, _mark_name % mid, "Mark number %d" % mid, new=True)
 
-    def enable_undo(self, filters: Filters = Filters(complevel=1)) -> None:
+    _DEFAULT_ENABLE_UNDO_FILTERS: Filters = Filters(complevel=1)
+
+    def enable_undo(
+        self, filters: Filters = _DEFAULT_ENABLE_UNDO_FILTERS
+    ) -> None:
         """Enable the Undo/Redo mechanism.
 
         This operation prepares the database for undoing and redoing
@@ -2716,8 +2718,7 @@ class File(hdf5extension.File):
                 else:
                     self._curmark = int(actionlog["arg1"][i]) - 1
                     # Protection against negative marks
-                    if self._curmark < 0:
-                        self._curmark = 0
+                    self._curmark = max(self._curmark, 0)
             self._curaction += direction
 
     def undo(self, mark: int | str | None = None) -> None:
@@ -2814,8 +2815,7 @@ class File(hdf5extension.File):
         # Increment the current mark only if we are not at the end of marks
         if self._curmark < self._nmarks - 1:
             self._curmark += 1
-        if self._curaction > self._actionlog.nrows - 1:
-            self._curaction = self._actionlog.nrows - 1
+        self._curaction = min(self._curaction, self._actionlog.nrows - 1)
 
         # print("(post)REDO: (curaction, curmark) = (%s,%s)" % \
         #       (self._curaction, self._curmark))
@@ -2938,7 +2938,7 @@ class File(hdf5extension.File):
         # Delete the entry from the registry of opened files
         _open_files.remove(self)
 
-    def __enter__(self) -> File:
+    def __enter__(self) -> Self:
         """Enter a context and return the same file."""
         return self
 
@@ -3001,9 +3001,11 @@ class File(hdf5extension.File):
 
         # Print all the nodes (Group and Leaf objects) on object tree
         lines = [
-            f"File(filename={self.filename!s}, title={self.title!r}, "
-            f"mode={self.mode!r}, root_uep={self.root_uep!r}, "
-            f"filters={self.filters!r})"
+            (
+                f"File(filename={self.filename!s}, title={self.title!r}, "
+                f"mode={self.mode!r}, root_uep={self.root_uep!r}, "
+                f"filters={self.filters!r})"
+            ),
         ]
         for group in self.walk_groups("/"):
             lines.append(f"{group}")

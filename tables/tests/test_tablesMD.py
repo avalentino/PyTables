@@ -505,7 +505,17 @@ class RecordDTWriteTestCase(BasicTestCase):
 class NumPyDTWriteTestCase(BasicTestCase):
     title = "NumPyDTWriteTestCase"
     record = np.dtype("(2,)S4,(2,2)S4,(2,)i4,(2,2)i4,i2,2f8,f4,i2,S1")
-    record.names = "var0,var1,var1_,var2,var3,var4,var5,var6,var7".split(",")
+    record.names = [
+        "var0",
+        "var1",
+        "var1_",
+        "var2",
+        "var3",
+        "var4",
+        "var5",
+        "var6",
+        "var7",
+    ]
 
 
 class RecArrayOneWriteTestCase(BasicTestCase):
@@ -685,19 +695,25 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             recarray = table.read(self.start, self.stop, self.step)
             result = []
             for nrec in range(len(recarray)):
-                if recarray["var2"][nrec][0][0] < self.nrows and 0 < self.step:
-                    result.append(recarray["var2"][nrec][0][0])
-                elif (
-                    recarray["var2"][nrec][0][0] > self.nrows and 0 > self.step
+                if any(
+                    [
+                        recarray["var2"][nrec][0][0] < self.nrows
+                        and 0 < self.step,
+                        recarray["var2"][nrec][0][0] > self.nrows
+                        and 0 > self.step,
+                    ]
                 ):
                     result.append(recarray["var2"][nrec][0][0])
         elif self.checkgetCol:
             column = table.read(self.start, self.stop, self.step, "var2")
             result = []
             for nrec in range(len(column)):
-                if column[nrec][0][0] < self.nrows and 0 < self.step:  # *-*
-                    result.append(column[nrec][0][0])  # *-*
-                elif column[nrec][0][0] > self.nrows and 0 > self.step:  # *-*
+                if any(
+                    [
+                        column[nrec][0][0] < self.nrows and 0 < self.step,
+                        column[nrec][0][0] > self.nrows and 0 > self.step,
+                    ]
+                ):
                     result.append(column[nrec][0][0])  # *-*
         else:
             if 0 < self.step:
@@ -730,8 +746,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         else:
             stopr = self.stop
 
-        if self.nrows < stopr:
-            stopr = self.nrows
+        stopr = min(stopr, self.nrows)
 
         if common.verbose:
             print("Nrows in", table._v_pathname, ":", table.nrows)
@@ -771,19 +786,22 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                         r[0][0], list(range(startr, stopr, self.step))[-1]
                     )
             elif startr > stopr and 0 > self.step:
-                r = [
+                r = common.first(
                     r["var2"]
                     for r in table.iterrows(self.start, self.stop, self.step)
                     if r["var2"][0][0] > self.nrows
-                ][0]
+                )
                 if self.nrows < self.expectedrows:
                     self.assertEqual(
                         r[0][0],
-                        list(range(self.start, self.stop or -1, self.step))[0],
+                        common.first(
+                            range(self.start, self.stop or -1, self.step)
+                        ),
                     )
                 else:
                     self.assertEqual(
-                        r[0][0], list(range(startr, stopr or -1, self.step))[0]
+                        r[0][0],
+                        common.first(range(startr, stopr or -1, self.step)),
                     )
 
         # Close the file
@@ -1016,7 +1034,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.check_range()
         except ValueError:
             if common.verbose:
-                type, value, traceback = sys.exc_info()
+                # type, value, traceback = sys.exc_info()
                 print("\nGreat!, the next ValueError was caught!")
             self.h5file.close()
         # else:
@@ -1028,7 +1046,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.check_range()
         except ValueError:
             if common.verbose:
-                type, value, traceback = sys.exc_info()
+                # type, value, traceback = sys.exc_info()
                 print("\nGreat!, the next ValueError was caught!")
             self.h5file.close()
         # else:

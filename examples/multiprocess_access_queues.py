@@ -59,11 +59,7 @@ class FileAccess(multiprocessing.Process):
                 # look up the appropriate result_queue for this data processor
                 # instance
                 result_queue = self.result_queues[proc_num]
-                print(
-                    "processor {} reading from row {}".format(
-                        proc_num, row_num
-                    )
-                )
+                print(f"processor {proc_num} reading from row {row_num}")
                 result_queue.put(self.read_data(row_num))
                 another_loop = True
             except queue.Empty:
@@ -113,26 +109,26 @@ class DataProcessor(multiprocessing.Process):
         super().__init__()
 
     def run(self):
-        self.output_file = open(self.output_file, "w")
-        # read a random row from the file
-        row_num = random.randrange(self.array_size)
-        self.read_queue.put((row_num, self.proc_num))
-        self.output_file.write(str(row_num) + "\n")
-        self.output_file.write(str(self.result_queue.get()) + "\n")
+        with open(self.output_file, "w") as fd:
+            self.output_file = fd
+            # read a random row from the file
+            row_num = random.randrange(self.array_size)
+            self.read_queue.put((row_num, self.proc_num))
+            self.output_file.write(str(row_num) + "\n")
+            self.output_file.write(str(self.result_queue.get()) + "\n")
 
-        # modify a random row to equal 11 * (self.proc_num + 1)
-        row_num = random.randrange(self.array_size)
-        new_data = np.zeros((1, self.array_size), "i8") + 11 * (
-            self.proc_num + 1
-        )
-        self.write_queue.put((row_num, new_data))
+            # modify a random row to equal 11 * (self.proc_num + 1)
+            row_num = random.randrange(self.array_size)
+            new_data = np.zeros((1, self.array_size), "i8") + 11 * (
+                self.proc_num + 1
+            )
+            self.write_queue.put((row_num, new_data))
 
-        # pause, then read the modified row
-        time.sleep(0.015)
-        self.read_queue.put((row_num, self.proc_num))
-        self.output_file.write(str(row_num) + "\n")
-        self.output_file.write(str(self.result_queue.get()) + "\n")
-        self.output_file.close()
+            # pause, then read the modified row
+            time.sleep(0.015)
+            self.read_queue.put((row_num, self.proc_num))
+            self.output_file.write(str(row_num) + "\n")
+            self.output_file.write(str(self.result_queue.get()) + "\n")
 
 
 # this function starts the FileAccess class instance and
@@ -187,9 +183,10 @@ if __name__ == "__main__":
     # print out contents of log files and delete them
     print()
     for output_file in output_files:
+        output_file = Path(output_file)
         print()
         print(f"contents of log file {output_file}")
-        print(open(output_file).read())
-        Path(output_file).unlink()
+        print(output_file.read_text())
+        output_file.unlink()
 
     Path("test.h5").unlink()

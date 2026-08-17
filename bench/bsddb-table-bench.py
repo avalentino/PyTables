@@ -110,7 +110,6 @@ def create_file(filename, totalrows, recsize, verbose):
                 d["float1"] = arr
                 arr2[0] = 2.2
                 d["float2"] = arr2
-                pass
             else:
                 d["float1"] = float(i)
                 d["float2"] = float(i)

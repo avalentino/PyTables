@@ -174,13 +174,13 @@ class HDF5ExtError(RuntimeError):
         verbose = bool(self._h5bt_policy in ("VERBOSE", "verbose"))
 
         if verbose and self.h5backtrace:
-            bt = "\n".join(
-                [
-                    "HDF5 error back trace\n",
-                    self.format_h5_backtrace(),
-                    "End of HDF5 error back trace",
-                ]
-            )
+            lines = [
+                "HDF5 error back trace",
+                "",
+                self.format_h5_backtrace(),
+                "End of HDF5 error back trace",
+            ]
+            bt = "\n".join(lines)
 
             if len(self.args) == 1 and isinstance(self.args[0], str):
                 msg = super().__str__()
@@ -230,8 +230,6 @@ class ClosedNodeError(ValueError):
 
     """
 
-    pass
-
 
 class ClosedFileError(ValueError):
     """The operation can not be completed because the hosting file is closed.
@@ -240,8 +238,6 @@ class ClosedFileError(ValueError):
     allowed.
 
     """
-
-    pass
 
 
 class FileModeError(ValueError):
@@ -254,8 +250,6 @@ class FileModeError(ValueError):
     allowed.
 
     """
-
-    pass
 
 
 class NodeError(AttributeError, LookupError):
@@ -275,8 +269,6 @@ class NodeError(AttributeError, LookupError):
 
     """
 
-    pass
-
 
 class NoSuchNodeError(NodeError):
     """An operation was requested on a node that does not exist.
@@ -285,8 +277,6 @@ class NoSuchNodeError(NodeError):
     ``(where, name)`` pair leading to a nonexistent node.
 
     """
-
-    pass
 
 
 class UndoRedoError(Exception):
@@ -298,8 +288,6 @@ class UndoRedoError(Exception):
 
     """
 
-    pass
-
 
 class UndoRedoWarning(Warning):
     """Issued when an action not supporting Undo/Redo is run.
@@ -307,8 +295,6 @@ class UndoRedoWarning(Warning):
     This warning is only shown when the Undo/Redo mechanism is enabled.
 
     """
-
-    pass
 
 
 class NaturalNameWarning(Warning):
@@ -320,8 +306,6 @@ class NaturalNameWarning(Warning):
     used explicitly).
     """
 
-    pass
-
 
 class PerformanceWarning(Warning):
     """Warning for operations which may cause a performance drop.
@@ -332,8 +316,6 @@ class PerformanceWarning(Warning):
 
     """
 
-    pass
-
 
 class FlavorError(ValueError):
     """Unsupported or unavailable flavor or flavor conversion.
@@ -343,8 +325,6 @@ class FlavorError(ValueError):
     given flavors is not supported nor available.
 
     """
-
-    pass
 
 
 class FlavorWarning(Warning):
@@ -359,8 +339,6 @@ class FlavorWarning(Warning):
 
     """
 
-    pass
-
 
 class FiltersWarning(Warning):
     """Unavailable filters.
@@ -370,8 +348,6 @@ class FiltersWarning(Warning):
     filter is to be used instead.
 
     """
-
-    pass
 
 
 class OldIndexWarning(Warning):
@@ -383,8 +359,6 @@ class OldIndexWarning(Warning):
 
     """
 
-    pass
-
 
 class DataTypeWarning(Warning):
     """Unsupported data type.
@@ -393,8 +367,6 @@ class DataTypeWarning(Warning):
     (normally in a file created with other tool than PyTables).
 
     """
-
-    pass
 
 
 class ExperimentalFeatureWarning(Warning):
@@ -405,16 +377,12 @@ class ExperimentalFeatureWarning(Warning):
 
     """
 
-    pass
-
 
 class UnclosedFileWarning(Warning):
     """Warning raised when there are still open files at program exit.
 
     PyTables will close remaining open files at exit, but raise this warning.
     """
-
-    pass
 
 
 class ChunkError(Exception):
@@ -426,8 +394,6 @@ class ChunkError(Exception):
 
     """
 
-    pass
-
 
 class NotChunkedError(ChunkError):
     """A direct chunking operation was attempted on a non-chunked dataset.
@@ -436,8 +402,6 @@ class NotChunkedError(ChunkError):
     instance.
 
     """
-
-    pass
 
 
 class NotChunkAlignedError(ChunkError):
@@ -451,8 +415,6 @@ class NotChunkAlignedError(ChunkError):
 
     """
 
-    pass
-
 
 class NoSuchChunkError(ChunkError):
     """The chunk with the given coordinates does not exist in storage.
@@ -463,5 +425,3 @@ class NoSuchChunkError(ChunkError):
     can be written, in which case it is created in storage.
 
     """
-
-    pass

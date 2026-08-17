@@ -8,7 +8,7 @@ import sys
 import argparse
 import warnings
 from pathlib import Path
-from collections import defaultdict, deque
+from collections import deque, defaultdict
 
 import numpy as np
 
@@ -137,8 +137,6 @@ def main():
         tree_str = get_tree_str(f, nodename, **args.__dict__)
         print(tree_str)
 
-    pass
-
 
 def get_tree_str(
     f,
@@ -197,7 +195,7 @@ def get_tree_str(
             continue
 
         path = node._v_pathname
-        addr, rc = node._get_obj_info()
+        addr, _ = node._get_obj_info()
         ref_count[addr] += 1
         ref_idx[path] = ref_count[addr]
         hl_addresses[path] = addr
@@ -304,8 +302,8 @@ def get_tree_str(
             elif isinstance(node, (tb.Array, tb.Table)):
 
                 if print_size:
-                    sizestr = "mem={}, disk={}".format(
-                        b2h(in_mem[path]), b2h(on_disk[path])
+                    sizestr = (
+                        f"mem={b2h(in_mem[path])}, disk={b2h(on_disk[path])}"
                     )
                     if print_percent:
                         sizestr += f" [{ratio:5.1%}]"
@@ -328,8 +326,8 @@ def get_tree_str(
             elif depth == max_depth:
                 itemstr = "... %i leaves" % leaf_count[path]
                 if print_size:
-                    itemstr += ", mem={}, disk={}".format(
-                        b2h(in_mem[path]), b2h(on_disk[path])
+                    itemstr += (
+                        f", mem={b2h(in_mem[path])}, disk={b2h(on_disk[path])}"
                     )
                 if print_percent:
                     itemstr += f" [{ratio:5.1%}]"
@@ -381,8 +379,9 @@ def get_tree_str(
 
         out_str += "-" * 60 + "\n"
         out_str += "Total branch leaves:    %i\n" % total_items
-        out_str += "Total branch size:      {} in memory, {} on disk\n".format(
-            b2h(total_in_mem), b2h(total_on_disk)
+        out_str += (
+            f"Total branch size:      {b2h(total_in_mem)} in memory, "
+            f"{b2h(total_on_disk)} on disk\n"
         )
         out_str += "Mean compression ratio: %.2f\n" % avg_ratio
         out_str += "HDF5 file size:         %s\n" % b2h(fsize)

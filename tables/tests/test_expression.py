@@ -212,7 +212,7 @@ class MixedContainersTestCase(common.TempFileMixin, common.PyTablesTestCase):
         c = np.arange(2 * N, 3 * N, dtype="int32").reshape(self.shape)
         d = np.arange(3 * N, 4 * N, dtype="int32").reshape(self.shape)
         e = np.arange(4 * N, 5 * N, dtype="int32").reshape(self.shape)
-        self.f = f = int(3)  # a regular python type
+        self.f = f = 3  # a regular python type
         self.g = g = np.int16(2)  # a NumPy scalar type
 
         # Original values

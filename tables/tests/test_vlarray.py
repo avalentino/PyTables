@@ -786,9 +786,9 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("\n", "-=" * 30)
             print("Running %s.test03a_IntAtom..." % self.__class__.__name__)
 
-        for atype in ttypes:
+        for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
-                "/", atype, atom=tb.Atom.from_sctype(ttypes[atype])
+                "/", atype, atom=tb.Atom.from_sctype(vtype)
             )
             a0 = np.array([1, 2, 3], dtype=atype)
             a0 = a0.byteswap()
@@ -814,12 +814,10 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
             self.assertEqual(vlarray.nrows, 2)
             self.assertTrue(
-                common.allequal(
-                    row[0], np.array([1, 2, 3], dtype=ttypes[atype])
-                )
+                common.allequal(row[0], np.array([1, 2, 3], dtype=vtype))
             )
             self.assertTrue(
-                common.allequal(row[1], np.array([1, 0], dtype=ttypes[atype]))
+                common.allequal(row[1], np.array([1, 0], dtype=vtype))
             )
             self.assertEqual(len(row[0]), 3)
             self.assertEqual(len(row[1]), 2)
@@ -892,9 +890,9 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("\n", "-=" * 30)
             print("Running %s.test03c_IntAtom..." % self.__class__.__name__)
 
-        for atype in ttypes:
+        for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
-                "/", atype, atom=tb.Atom.from_sctype(ttypes[atype])
+                "/", atype, atom=tb.Atom.from_sctype(vtype)
             )
             a0 = np.array([1, 2, 3], dtype=atype)
             vlarray.append(a0)
@@ -926,12 +924,10 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
             self.assertEqual(vlarray.nrows, 2)
             self.assertTrue(
-                common.allequal(
-                    row[0], np.array([3, 2, 1], dtype=ttypes[atype])
-                )
+                common.allequal(row[0], np.array([3, 2, 1], dtype=vtype))
             )
             self.assertTrue(
-                common.allequal(row[1], np.array([0, 1], dtype=ttypes[atype]))
+                common.allequal(row[1], np.array([0, 1], dtype=vtype))
             )
             self.assertEqual(len(row[0]), 3)
             self.assertEqual(len(row[1]), 2)
@@ -954,11 +950,11 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Running %s.test03d_IntAtom..." % self.__class__.__name__)
 
         byteorder = {"little": "big", "big": "little"}[sys.byteorder]
-        for atype in ttypes:
+        for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
                 "/",
                 atype,
-                atom=tb.Atom.from_sctype(ttypes[atype]),
+                atom=tb.Atom.from_sctype(vtype),
                 byteorder=byteorder,
             )
             a0 = np.array([1, 2, 3], dtype=atype)
@@ -997,12 +993,10 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 self.assertEqual(vlarray.byteorder, byteorder)
             self.assertEqual(vlarray.nrows, 2)
             self.assertTrue(
-                common.allequal(
-                    row[0], np.array([3, 2, 1], dtype=ttypes[atype])
-                )
+                common.allequal(row[0], np.array([3, 2, 1], dtype=vtype))
             )
             self.assertTrue(
-                common.allequal(row[1], np.array([0, 1], dtype=ttypes[atype]))
+                common.allequal(row[1], np.array([0, 1], dtype=vtype))
             )
             self.assertEqual(len(row[0]), 3)
             self.assertEqual(len(row[1]), 2)
@@ -1071,9 +1065,9 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("\n", "-=" * 30)
             print("Running %s.test04a_FloatAtom..." % self.__class__.__name__)
 
-        for atype in ttypes:
+        for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
-                "/", atype, atom=tb.Atom.from_sctype(ttypes[atype])
+                "/", atype, atom=tb.Atom.from_sctype(vtype)
             )
             a0 = np.array([1.3, 2.2, 3.3], dtype=atype)
             a0 = a0.byteswap()
@@ -1099,14 +1093,10 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
             self.assertEqual(vlarray.nrows, 2)
             self.assertTrue(
-                common.allequal(
-                    row[0], np.array([1.3, 2.2, 3.3], dtype=ttypes[atype])
-                )
+                common.allequal(row[0], np.array([1.3, 2.2, 3.3], dtype=vtype))
             )
             self.assertTrue(
-                common.allequal(
-                    row[1], np.array([5.96, 0.597], dtype=ttypes[atype])
-                )
+                common.allequal(row[1], np.array([5.96, 0.597], dtype=vtype))
             )
             self.assertEqual(len(row[0]), 3)
             self.assertEqual(len(row[1]), 2)
@@ -1179,9 +1169,9 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("\n", "-=" * 30)
             print("Running %s.test04c_FloatAtom..." % self.__class__.__name__)
 
-        for atype in ttypes:
+        for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
-                "/", atype, atom=tb.Atom.from_sctype(ttypes[atype])
+                "/", atype, atom=tb.Atom.from_sctype(vtype)
             )
             a0 = np.array([1.3, 2.2, 3.3], dtype=atype)
             vlarray.append(a0)
@@ -1213,14 +1203,10 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
             self.assertEqual(vlarray.nrows, 2)
             self.assertTrue(
-                common.allequal(
-                    row[0], np.array([4.3, 2.2, 4.3], dtype=ttypes[atype])
-                )
+                common.allequal(row[0], np.array([4.3, 2.2, 4.3], dtype=vtype))
             )
             self.assertTrue(
-                common.allequal(
-                    row[1], np.array([1.123, 1.1e-3], dtype=ttypes[atype])
-                )
+                common.allequal(row[1], np.array([1.123, 1.1e-3], dtype=vtype))
             )
             self.assertEqual(len(row[0]), 3)
             self.assertEqual(len(row[1]), 2)
@@ -1244,11 +1230,11 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Running %s.test04d_FloatAtom..." % self.__class__.__name__)
 
         byteorder = {"little": "big", "big": "little"}[sys.byteorder]
-        for atype in ttypes:
+        for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
                 "/",
                 atype,
-                atom=tb.Atom.from_sctype(ttypes[atype]),
+                atom=tb.Atom.from_sctype(vtype),
                 byteorder=byteorder,
             )
             a0 = np.array([1.3, 2.2, 3.3], dtype=atype)
@@ -1285,14 +1271,10 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
             self.assertEqual(vlarray.nrows, 2)
             self.assertTrue(
-                common.allequal(
-                    row[0], np.array([4.3, 2.2, 4.3], dtype=ttypes[atype])
-                )
+                common.allequal(row[0], np.array([4.3, 2.2, 4.3], dtype=vtype))
             )
             self.assertTrue(
-                common.allequal(
-                    row[1], np.array([1.123, 1.1e-3], dtype=ttypes[atype])
-                )
+                common.allequal(row[1], np.array([1.123, 1.1e-3], dtype=vtype))
             )
             self.assertEqual(len(row[0]), 3)
             self.assertEqual(len(row[1]), 2)
@@ -2863,7 +2845,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(len(row[0]), 10)
         self.assertEqual(len(row[1]), 10)
         self.assertEqual(len(row[2]), 100)
-        for x in range(0, 10):
+        for x in range(10):
             self.assertTrue(
                 common.allequal(row[0][x], np.arange(x, dtype="int32"))
             )
@@ -2871,7 +2853,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.assertTrue(
                 common.allequal(row[1][x - 5], np.arange(x, dtype="int32"))
             )
-        for x in range(0, 100):
+        for x in range(100):
             self.assertTrue(
                 common.allequal(row[2][x], np.arange(x, dtype="int32"))
             )
@@ -2901,7 +2883,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(len(row[0]), 10)
         self.assertEqual(len(row[1]), 10)
         self.assertEqual(len(row[2]), 100)
-        for x in range(0, 10):
+        for x in range(10):
             self.assertTrue(
                 common.allequal(row[0][x], np.arange(x, dtype="int32"))
             )
@@ -2909,7 +2891,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.assertTrue(
                 common.allequal(row[1][x - 5], np.arange(x, dtype="int32"))
             )
-        for x in range(0, 100):
+        for x in range(100):
             self.assertTrue(
                 common.allequal(row[2][x], np.arange(x, dtype="int32"))
             )
@@ -3286,7 +3268,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(len(row[0]), 10)
         self.assertEqual(len(row[1]), 10)
         self.assertEqual(len(row[2]), 100)
-        for x in range(0, 10):
+        for x in range(10):
             self.assertTrue(
                 common.allequal(row[0][x], np.arange(x, dtype="int32"))
             )
@@ -3294,7 +3276,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.assertTrue(
                 common.allequal(row[1][x - 5], np.arange(x, dtype="int32"))
             )
-        for x in range(0, 100):
+        for x in range(100):
             self.assertTrue(
                 common.allequal(row[2][x], np.arange(x, dtype="int32"))
             )
@@ -3324,7 +3306,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(len(row[0]), 10)
         self.assertEqual(len(row[1]), 10)
         self.assertEqual(len(row[2]), 100)
-        for x in range(0, 10):
+        for x in range(10):
             self.assertTrue(
                 common.allequal(row[0][x], np.arange(x, dtype="int32"))
             )
@@ -3332,7 +3314,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.assertTrue(
                 common.allequal(row[1][x - 5], np.arange(x, dtype="int32"))
             )
-        for x in range(0, 100):
+        for x in range(100):
             self.assertTrue(
                 common.allequal(row[2][x], np.arange(x, dtype="int32"))
             )

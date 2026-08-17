@@ -8,7 +8,7 @@ from collections.abc import Sequence
 import numpy as np
 import numpy.typing as npt
 
-from .utils import convert_to_np_atom2, SizeType
+from .utils import SizeType, convert_to_np_atom2
 from .carray import CArray
 
 if TYPE_CHECKING:
@@ -277,15 +277,17 @@ class EArray(CArray):
         # This is a hack to prevent doing unnecessary conversions
         # when copying buffers
         self._v_convert = False
+
         # Start the copy itself
         for start2 in range(start, stop, step * nrowsinbuf):
             # Save the records on disk
             stop2 = start2 + step * nrowsinbuf
-            if stop2 > stop:
-                stop2 = stop
+            stop2 = min(stop2, stop)
+
             # Set the proper slice in the extensible dimension
             slices[maindim] = slice(start2, stop2, step)
             obj._append(self.__getitem__(tuple(slices)))
+
         # Active the conversion again (default)
         self._v_convert = True
         nbytes = np.prod(self.shape, dtype=SizeType) * self.atom.itemsize

@@ -20,7 +20,7 @@ ncfile = NetCDF.NetCDFFile(sys.argv[1], mode="r")
 # open h5 file.
 h5file = tb.open_file(sys.argv[2], mode="w")
 # loop over variables in netCDF file.
-for varname in ncfile.variables.keys():
+for varname in ncfile.variables:
     var = ncfile.variables[varname]
     vardims = list(var.dimensions)
     vardimsizes = [ncfile.dimensions[vardim] for vardim in vardims]
@@ -54,7 +54,7 @@ for varname in ncfile.variables.keys():
     # set variable attributes.
     for key, val in var.__dict__.iteritems():
         setattr(vardata.attrs, key, val)
-    setattr(vardata.attrs, "dimensions", tuple(vardims))
+    vardata.attrs.dimensions, tuple(vardims)
 
 # set global (file) attributes.
 for key, val in ncfile.__dict__.iteritems():

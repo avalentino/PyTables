@@ -31,8 +31,7 @@ def make_col(row_type, row_name, row_item, str_len):
     """for strings it will always make at least 80 char or twice mac char size"""
     set_len = 80
     if str_len:
-        if 2 * str_len > set_len:
-            set_len = 2 * str_len
+        set_len = max(set_len, 2 * str_len)
         row_type[row_name] = tb.StringCol(set_len)
     else:
         type_matrix = {
@@ -56,28 +55,26 @@ def make_row(data):
             # get max length
             the_max = 0
             for i in data:
-                if len(i) > the_max:
-                    the_max = len(i)
+                the_max = max(the_max, len(i))
             make_col(row_type, "col", data[0], the_max)
         elif the_type:
             make_col(row_type, "col", data[0], 0)
         else:  # list within the list, make many columns
             make_col(row_type, "col_depth", 0, 0)
-            count = 0
-            for col in data:
+
+            for count, col in enumerate(data):
                 the_type = is_scalar(col[0])
                 if the_type == "str":
                     # get max length
                     the_max = 0
                     for i in data:
-                        if len(i) > the_max:
-                            the_max = len(i)
+                        the_max = max(the_max, len(i))
                     make_col(row_type, "col_" + str(count), col[0], the_max)
                 elif the_type:
                     make_col(row_type, "col_" + str(count), col[0], 0)
                 else:
                     raise ValueError("too many nested levels of lists")
-                count += 1
+
     return row_type
 
 
@@ -97,8 +94,7 @@ def add_table(fileh, group_obj, data, table_name):
                 row["col"] = i
                 row.append()
         else:
-            count = 0
-            for col in data:
+            for count, col in enumerate(data):
                 row["col_depth"] = len(col)
                 for the_row in col:
                     if is_scalar(the_row):
@@ -106,7 +102,7 @@ def add_table(fileh, group_obj, data, table_name):
                         row.append()
                     else:
                         raise ValueError("too many levels of lists")
-                count += 1
+
     table1.flush()
 
 
@@ -125,7 +121,6 @@ def add_cache(fileh, cache):
             cache_pieces.append(cache_part)
     row_type = {}
     row_type["col_0"] = tb.StringCol(8000)
-    #
     table_cache = fileh.create_table(group_obj, table_name, row_type, "H")
     for piece in cache_pieces:
         print(len(piece))

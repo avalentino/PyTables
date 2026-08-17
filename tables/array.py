@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 import operator
-from typing import Any, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import numpy.typing as npt
@@ -12,12 +12,12 @@ import numpy.typing as npt
 from . import hdf5extension
 from .leaf import Leaf
 from .utils import (
-    is_idx,
-    convert_to_np_atom2,
     SizeType,
+    is_idx,
     lazyattr,
-    byteorders,
     quantize,
+    byteorders,
+    convert_to_np_atom2,
 )
 from .flavor import flavor_of, array_as_internal, internal_to_flavor
 from .filters import Filters
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 # obversion = "2.3"    # This adds support for enumerated datatypes.
 obversion = "2.4"  # Numeric and numarray flavors are gone.
 
-SelectionType = Union[int, slice, list[Union[int, slice]], npt.ArrayLike]
+SelectionType = int | slice | list[int | slice] | npt.ArrayLike
 
 
 class Array(hdf5extension.Array, Leaf):
@@ -353,9 +353,9 @@ class Array(hdf5extension.Array, Leaf):
             if self._row + 1 >= self.nrowsinbuf or self._row < 0:
                 self._stopb = self._startb + self._step * self.nrowsinbuf
                 # Protection for reading more elements than needed
-                if self._stopb > self._stop:
-                    self._stopb = self._stop
+                self._stopb = min(self._stopb, self._stop)
                 listarr = self._read(self._startb, self._stopb, self._step)
+
                 # Swap the axes to easy the return of elements
                 if self.extdim > 0:
                     listarr = listarr.swapaxes(self.extdim, 0)

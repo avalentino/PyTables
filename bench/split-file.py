@@ -34,6 +34,6 @@ for line in Path(filename).read_text().splitlines():
                 sfilename = f"{prefix}-O{optlevel}.out"
         else:
             sfilename = f"{prefix}.out"
-        sf = open(sfilename, "a")
+        sf = open(sfilename, "a")  # noqa: SIM115
     if sf:
         sf.write(line)

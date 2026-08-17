@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 import warnings
-from typing import Any, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Union
 from collections.abc import Iterator
 
 import numpy as np
@@ -13,7 +13,7 @@ import numexpr as ne
 import tables as tb
 
 from .exceptions import PerformanceWarning
-from .parameters import IO_BUFFER_SIZE, BUFFER_TIMES
+from .parameters import BUFFER_TIMES, IO_BUFFER_SIZE
 
 if TYPE_CHECKING:
     from .array import Array
@@ -205,15 +205,17 @@ class Expr:
         # PyTables objects, as the reads always return contiguous and
         # aligned objects, or at least I think so).
         for name, var in vars_.items():
-            if isinstance(var, np.ndarray):
+            if (
+                isinstance(var, np.ndarray)
+                and not var.flags.aligned
+                and var.ndim != 1
+            ):
                 # See numexpr.necompiler.evaluate for a rational
                 # of the code below
-                if not var.flags.aligned:
-                    if var.ndim != 1:
-                        # Do a copy of this variable
-                        var = var.copy()
-                        # Update the vars_ dictionary
-                        vars_[name] = var
+                # Do a copy of this variable
+                var = var.copy()
+                # Update the vars_ dictionary
+                vars_[name] = var
 
         # Get the variables and types
         values = self.values
@@ -453,8 +455,7 @@ value of dimensions that are orthogonal (and preferably close) to the
         maindims = []
         for val in self.values:
             # Get the minimum of the lengths
-            if len(val.shape) > maxndim:
-                maxndim = len(val.shape)
+            maxndim = max(maxndim, len(val.shape))
             if hasattr(val, "maindim"):
                 maindims.append(val.maindim)
         if maxndim == 0:
@@ -580,8 +581,7 @@ value of dimensions that are orthogonal (and preferably close) to the
             # Skip scalar values in variables
             if i in slice_pos:
                 nrows = self._calc_nrowsinbuf(val)
-                if nrows > nrowsinbuf:
-                    nrowsinbuf = nrows
+                nrowsinbuf = max(nrowsinbuf, nrows)
 
         if not itermode:
             return (
@@ -670,10 +670,11 @@ value of dimensions that are orthogonal (and preferably close) to the
         # Start the computation itself
         for start2 in range(start, stop, step * nrowsinbuf):
             stop2 = start2 + step * nrowsinbuf
-            if stop2 > stop:
-                stop2 = stop
+            stop2 = min(stop2, stop)
+
             # Set the proper slice for inputs
             i_slices[maindim] = slice(start2, stop2, step)
+
             # Get the input values
             vals = []
             for i, val in enumerate(values):
@@ -683,8 +684,10 @@ value of dimensions that are orthogonal (and preferably close) to the
                     # A read of values is not apparently needed, as PyTables
                     # leaves seems to work just fine inside Numexpr
                     vals.append(val)
+
             # Do the actual computation for this slice
             rout = self._compiled_expr(*vals)
+
             # Set the values into the out buffer
             if self.append_mode:
                 out.append(rout)
@@ -692,9 +695,9 @@ value of dimensions that are orthogonal (and preferably close) to the
                 # Compute the slice to be filled in output
                 start3 = o_start + (start2 - start) // step
                 stop3 = start3 + nrowsinbuf * o_step
-                if stop3 > o_stop:
-                    stop3 = o_stop
+                stop3 = min(stop3, o_stop)
                 o_slices[o_maindim] = slice(start3, stop3, o_step)
+
                 # Set the slice
                 out[tuple(o_slices)] = rout
 
@@ -736,10 +739,11 @@ value of dimensions that are orthogonal (and preferably close) to the
         # Start the computation itself
         for start2 in range(start, stop, step * nrowsinbuf):
             stop2 = start2 + step * nrowsinbuf
-            if stop2 > stop:
-                stop2 = stop
+            stop2 = min(stop2, stop)
+
             # Set the proper slice in the main dimension
             i_slices[maindim] = slice(start2, stop2, step)
+
             # Get the values for computing the buffer
             vals = []
             for i, val in enumerate(values):
@@ -749,8 +753,10 @@ value of dimensions that are orthogonal (and preferably close) to the
                     # A read of values is not apparently needed, as PyTables
                     # leaves seems to work just fine inside Numexpr
                     vals.append(val)
+
             # Do the actual computation
             rout = self._compiled_expr(*vals)
+
             # Return one row per call
             yield from rout
 

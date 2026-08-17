@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 import operator
-from typing import Any, NoReturn, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, NoReturn
 from collections.abc import Sequence
 
 import numpy as np
@@ -14,13 +14,13 @@ from . import hdf5extension
 from .atom import ObjectAtom, VLStringAtom, VLUnicodeAtom
 from .leaf import Leaf, calc_chunksize
 from .utils import (
-    convert_to_np_atom,
-    convert_to_np_atom2,
-    idx2long,
-    correct_byteorder,
     SizeType,
     is_idx,
+    idx2long,
     lazyattr,
+    correct_byteorder,
+    convert_to_np_atom,
+    convert_to_np_atom2,
 )
 from .flavor import internal_to_flavor
 
@@ -887,8 +887,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
         for start2 in range(start, stop, step * nrowsinbuf):
             # Save the records on disk
             stop2 = start2 + step * nrowsinbuf
-            if stop2 > stop:
-                stop2 = stop
+            stop2 = min(stop2, stop)
             nparr = self._read_array(start=start2, stop=stop2, step=step)[0]
             nobjects = nparr.shape[0]
             obj._append(nparr, nobjects)

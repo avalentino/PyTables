@@ -624,7 +624,7 @@ class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
         np.testing.assert_equal(out_buffer, array[0 : self.size : 2])
 
     def test_read_non_contiguous_buffer(self):
-        array, disk_array = self.create_array()
+        _, disk_array = self.create_array()
         out_buffer = np.empty((self.size,), "f8")
         out_buffer_slice = out_buffer[0 : self.size : 2]
 
@@ -634,7 +634,7 @@ class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
             disk_array.read(0, self.size, 2, out_buffer_slice)
 
     def test_buffer_too_small(self):
-        array, disk_array = self.create_array()
+        _, disk_array = self.create_array()
         out_buffer = np.empty((self.size // 2,), "f8")
         self.assertRaises(
             ValueError, disk_array.read, 0, self.size, 1, out_buffer
@@ -645,7 +645,7 @@ class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
             self.assertIn("output array size invalid, got", str(exc))
 
     def test_buffer_too_large(self):
-        array, disk_array = self.create_array()
+        _, disk_array = self.create_array()
         out_buffer = np.empty((self.size + 1,), "f8")
         self.assertRaises(
             ValueError, disk_array.read, 0, self.size, 1, out_buffer

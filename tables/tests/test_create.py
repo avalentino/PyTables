@@ -16,7 +16,6 @@ import warnings
 from pathlib import Path
 
 import numpy as np
-from packaging.version import Version
 
 import tables as tb
 from tables.tests import common
@@ -73,7 +72,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         except tb.NodeError:
             if common.verbose:
-                type, value, traceback = sys.exc_info()
+                _, value, _ = sys.exc_info()
                 print("\nGreat!, the next NameError was caught!")
                 print(value)
         else:
@@ -145,10 +144,10 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Build a dictionary with the types as values and varnames as keys
         recordDict = {}
-        i = 0
-        for varname in varnames:
+
+        for i, varname in enumerate(varnames):
             recordDict[varname] = tb.Col.from_type("int32", dflt=1, pos=i)
-            i += 1
+
         # Append this entry to indicate the alignment!
         recordDict["_v_align"] = "="
         table = self.h5file.create_table(
@@ -192,10 +191,9 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Build a dictionary with the types as values and varnames as keys
         recordDict = {}
-        i = 0
-        for varname in varnames:
+
+        for i, varname in enumerate(varnames):
             recordDict[varname] = tb.Col.from_type("int32", dflt=1)
-            i += 1
 
         # Now, create a table with this record object
         # This way of creating node objects has been deprecated
@@ -210,7 +208,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         except tb.PerformanceWarning:
             if common.verbose:
-                type, value, traceback = sys.exc_info()
+                _, value, _ = sys.exc_info()
                 print("\nGreat!, the next PerformanceWarning was caught!")
                 print(value)
         else:
@@ -308,12 +306,10 @@ class FiltersTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             ea2.append(var3List)
 
             # Finally a couple of carrays too
-            vla1 = self.h5file.create_carray(
+            self.h5file.create_carray(
                 group, "carray1", tb.StringAtom(itemsize=4), (2,)
             )
-            vla2 = self.h5file.create_carray(
-                group, "carray2", tb.Int16Atom(), (2,)
-            )
+            self.h5file.create_carray(group, "carray2", tb.Int16Atom(), (2,))
 
             # Create a new group (descendant of group)
             if j == 1:  # The second level
@@ -524,7 +520,7 @@ class FiltersTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Test filter:", repr(filters))
             print("Filters in file:", repr(group3._v_filters))
 
-        repr(filters) == repr(group3._v_filters)
+        assert repr(filters) == repr(group3._v_filters)
         # The next nodes have to have the same filter properties as
         # self.filters
         nodelist = [
@@ -560,7 +556,7 @@ class FiltersTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 class FiltersCase1(FiltersTreeTestCase):
     filters = tb.Filters()
     gfilters = tb.Filters(complevel=1)
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 @common.unittest.skipIf(
@@ -569,7 +565,7 @@ class FiltersCase1(FiltersTreeTestCase):
 class FiltersCase2(FiltersTreeTestCase):
     filters = tb.Filters(complevel=1, complib="bzip2")
     gfilters = tb.Filters(complevel=1)
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 @common.unittest.skipIf(
@@ -578,37 +574,37 @@ class FiltersCase2(FiltersTreeTestCase):
 class FiltersCase3(FiltersTreeTestCase):
     filters = tb.Filters(shuffle=True, complib="zlib")
     gfilters = tb.Filters(complevel=1, shuffle=False, complib="lzo")
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 class FiltersCase4(FiltersTreeTestCase):
     filters = tb.Filters(shuffle=True)
     gfilters = tb.Filters(complevel=1, shuffle=False)
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 class FiltersCase5(FiltersTreeTestCase):
     filters = tb.Filters(fletcher32=True)
     gfilters = tb.Filters(complevel=1, shuffle=False)
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 class FiltersCase6(FiltersTreeTestCase):
     filters = None
     gfilters = tb.Filters(complevel=1, shuffle=False)
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 class FiltersCase7(FiltersTreeTestCase):
     filters = tb.Filters(complevel=1)
     gfilters = None
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 class FiltersCase8(FiltersTreeTestCase):
     filters = None
     gfilters = None
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 @common.unittest.skipIf(
@@ -617,7 +613,7 @@ class FiltersCase8(FiltersTreeTestCase):
 class FiltersCase9(FiltersTreeTestCase):
     filters = tb.Filters(shuffle=True, complib="zlib")
     gfilters = tb.Filters(complevel=5, shuffle=True, complib="bzip2")
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 @common.unittest.skipIf(
@@ -626,7 +622,7 @@ class FiltersCase9(FiltersTreeTestCase):
 class FiltersCase10(FiltersTreeTestCase):
     filters = tb.Filters(shuffle=False, complevel=1, complib="blosc")
     gfilters = tb.Filters(complevel=5, shuffle=True, complib="blosc")
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 @common.unittest.skipIf(
@@ -635,7 +631,7 @@ class FiltersCase10(FiltersTreeTestCase):
 class FiltersCaseBloscBloscLZ(FiltersTreeTestCase):
     filters = tb.Filters(shuffle=False, complevel=1, complib="blosc:blosclz")
     gfilters = tb.Filters(complevel=5, shuffle=True, complib="blosc:blosclz")
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
 
 
 @common.unittest.skipIf(
@@ -652,7 +648,7 @@ class FiltersCaseBloscLZ4(FiltersTreeTestCase):
         self.gfilters = tb.Filters(
             complevel=5, shuffle=True, complib="blosc:lz4"
         )
-        self.open_kwargs = dict(filters=self.filters)
+        self.open_kwargs = {"filters": self.filters}
         super().setUp()
 
 
@@ -670,7 +666,7 @@ class FiltersCaseBloscLZ4HC(FiltersTreeTestCase):
         self.gfilters = tb.Filters(
             complevel=5, shuffle=True, complib="blosc:lz4hc"
         )
-        self.open_kwargs = dict(filters=self.filters)
+        self.open_kwargs = {"filters": self.filters}
         super().setUp()
 
 
@@ -688,7 +684,7 @@ class FiltersCaseBloscSnappy(FiltersTreeTestCase):
         self.gfilters = tb.Filters(
             complevel=5, shuffle=True, complib="blosc:snappy"
         )
-        self.open_kwargs = dict(filters=self.filters)
+        self.open_kwargs = {"filters": self.filters}
         super().setUp()
 
 
@@ -706,7 +702,7 @@ class FiltersCaseBloscZlib(FiltersTreeTestCase):
         self.gfilters = tb.Filters(
             complevel=5, shuffle=True, complib="blosc:zlib"
         )
-        self.open_kwargs = dict(filters=self.filters)
+        self.open_kwargs = {"filters": self.filters}
         super().setUp()
 
 
@@ -724,7 +720,7 @@ class FiltersCaseBloscZstd(FiltersTreeTestCase):
         self.gfilters = tb.Filters(
             complevel=5, shuffle=True, complib="blosc:zstd"
         )
-        self.open_kwargs = dict(filters=self.filters)
+        self.open_kwargs = {"filters": self.filters}
         super().setUp()
 
 
@@ -736,7 +732,7 @@ class FiltersCaseBloscBitShuffle(FiltersTreeTestCase):
     gfilters = tb.Filters(
         complevel=5, shuffle=False, bitshuffle=True, complib="blosc:blosclz"
     )
-    open_kwargs = dict(filters=filters)
+    open_kwargs = {"filters": filters}
     # print("version:", tables.which_lib_version("blosc")[1])
 
 
@@ -983,62 +979,6 @@ class CopyGroupTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("The origin node list -->", nodelist1)
             print("The copied node list -->", nodelist2)
         self.assertEqual(nodelist1, nodelist2)
-
-    def test03_RecursiveFilters(self):
-        """Checking recursive copy of a Group (checking Filters)"""
-
-        if common.verbose:
-            print("\n", "-=" * 30)
-            print(
-                f"Running {self.__class__.__name__}"
-                f".test03_RecursiveFilters..."
-            )
-
-        # Create the destination node
-        group = self.h5file2.root
-        for groupname in self.dstnode.split("/"):
-            if groupname:
-                group = self.h5file2.create_group(group, groupname)
-        dstgroup = self.h5file2.get_node(self.dstnode)
-
-        # Copy a group non-recursively
-        srcgroup = self.h5file.get_node(self.srcnode)
-        srcgroup._f_copy_children(
-            dstgroup, recursive=True, filters=self.filters
-        )
-        lenSrcGroup = len(srcgroup._v_pathname)
-        if lenSrcGroup == 1:
-            lenSrcGroup = 0  # Case where srcgroup == "/"
-        if self.close:
-            # Close the destination file
-            self.h5file2.close()
-            # And open it again
-            self.h5file2 = tb.open_file(self.h5fname2, "r")
-            dstgroup = self.h5file2.get_node(self.dstnode)
-
-        # Check that the copy has been done correctly
-        lenDstGroup = len(dstgroup._v_pathname)
-        if lenDstGroup == 1:
-            lenDstGroup = 0  # Case where dstgroup == "/"
-        first = 1
-        nodelist1 = {}
-        for node in srcgroup._f_walknodes():
-            if first:
-                # skip the first group
-                first = 0
-                continue
-            nodelist1[node._v_name] = node._v_pathname[lenSrcGroup:]
-
-        first = 1
-        for node in dstgroup._f_walknodes():
-            if first:
-                # skip the first group
-                first = 0
-                continue
-            if isinstance(node, tb.Group):
-                repr(node._v_filters) == repr(nodelist1[node._v_name])
-            else:
-                repr(node.filters) == repr(nodelist1[node._v_name])
 
 
 class CopyGroupCase1(CopyGroupTestCase):

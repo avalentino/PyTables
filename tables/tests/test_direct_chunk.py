@@ -69,9 +69,9 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
         raise NotImplementedError
 
     def iter_chunks(self):
-        chunk_ranges = list(
+        chunk_ranges = [
             range(0, s, cs) for (s, cs) in zip(self.shape, self.chunkshape)
-        )
+        ]
         yield from itertools.product(*chunk_ranges)
 
     def test_chunk_info_aligned(self):

@@ -32,8 +32,7 @@ def int_generator(nrows):
     for i in range(nrows):
         if i >= step * j:
             stop = (j + 1) * step
-            if stop > nrows:  # Seems unnecessary
-                stop = nrows
+            stop = min(stop, nrows)  # Seems unnecessary
             col_i, col_j = fill_arrays(i, stop)
             j += 1
             k = 0
@@ -236,10 +235,8 @@ if __name__ == "__main__":
     #         from pysqlite2 import dbapi2 as sqlite
     import psycopg2 as sqlite
 
-    if verbose:
-        # print "pysqlite version:", sqlite.version
-        if userandom:
-            print("using random values")
+    if verbose and userandom:
+        print("using random values")
 
     if docreate:
         if verbose:

@@ -2502,7 +2502,7 @@ class AttributesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         attrs = array.attrs
 
         self.h5file.enable_undo()
-        setattr(attrs, "attr_0", 0)
+        attrs.attr_0 = 0
         self.assertIn("attr_0", attrs)
         self.assertEqual(attrs.attr_0, 0)
         self.h5file.undo()
@@ -2525,7 +2525,7 @@ class AttributesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         attrs = array.attrs
 
         self.h5file.enable_undo()
-        setattr(attrs, "attr_1", 11)
+        attrs.attr_1 = 11
         self.assertIn("attr_1", attrs)
         self.assertEqual(attrs.attr_1, 11)
         self.h5file.undo()

@@ -146,8 +146,8 @@ def read_file(filename, recsize, verbose):
     rowsread = 0
     for groupobj in fileh.walk_groups(fileh.root):
         # print "Group pathname:", groupobj._v_pathname
-        row = 0
-        for table in fileh.list_nodes(groupobj, "Table"):
+
+        for row, table in enumerate(fileh.list_nodes(groupobj, "Table")):
             rowsize = table.rowsize
             print("reading", table)
             if verbose:
@@ -233,7 +233,7 @@ def read_file(filename, recsize, verbose):
                 print("resulting selection list ==>", e)
 
             rowsread += table.nrows
-            row += 1
+
             if verbose:
                 print("Total selected records ==> ", len(e))
 
@@ -361,8 +361,8 @@ if __name__ == "__main__":
     filters = tb.Filters(
         complevel=complevel,
         complib=complib,
-        shuffle=(True if shuffle == 1 else False),
-        bitshuffle=(True if shuffle == 2 else False),
+        shuffle=bool(shuffle == 1),
+        bitshuffle=bool(shuffle == 2),
         fletcher32=fletcher32,
     )
 
@@ -414,7 +414,6 @@ if __name__ == "__main__":
         cpu1 = cpuclock()
         if rng or field_name:
             rowsr, rowsz = read_field(file, field_name, rng, verbose)
-            pass
         else:
             for i in range(1):
                 rowsr, rowsz = read_file(file, recsize, verbose)

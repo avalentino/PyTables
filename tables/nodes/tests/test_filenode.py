@@ -6,14 +6,14 @@ import tempfile
 import warnings
 from pathlib import Path
 
-from ... import open_file, file, NoSuchNodeError
+from ... import NoSuchNodeError, file, open_file
 from ...nodes import filenode
 from ...tests.common import (
-    unittest,
     TempFileMixin,
+    unittest,
+    make_suite,
     parse_argv,
     print_versions,
-    make_suite,
 )
 from ...tests.common import PyTablesTestCase as TestCase
 
@@ -99,8 +99,8 @@ class ClosedFileTestCase(TempFileMixin, TestCase):
         self.fnode = None
         super().tearDown()
 
-    # All these tests may seem odd, but Python (2.3) files
-    # do test whether the file is not closed regardless of their mode.
+    # All these tests may seem odd, but Python (2.3) files do test whether
+    # the file is not closed regardless of their mode.
     def test00_Close(self):
         """Closing a closed file."""
 
@@ -207,11 +207,8 @@ class WriteFileTestCase(TempFileMixin, TestCase):
     def test00_WriteFile(self):
         """Writing a whole file node."""
 
-        datafile = open(self.datafname, "rb")
-        try:
+        with open(self.datafname, "rb") as datafile:
             copyFileToFile(datafile, self.fnode)
-        finally:
-            datafile.close()
 
     def test01_SeekFile(self):
         """Seeking and writing file node."""
@@ -368,7 +365,7 @@ class ReadFileTestCase(TempFileMixin, TestCase):
         """
 
         self.datafname = test_file(self.datafname)
-        self.datafile = open(self.datafname, "rb")
+        self.datafile = open(self.datafname, "rb")  # noqa: SIM115
 
         super().setUp()
 

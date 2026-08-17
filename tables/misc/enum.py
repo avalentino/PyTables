@@ -113,7 +113,7 @@ class Enum:
         mydict["_names"] = {}
         mydict["_values"] = {}
 
-        if isinstance(enum, list) or isinstance(enum, tuple):
+        if isinstance(enum, (list, tuple)):
             for value, name in enumerate(enum):  # values become 0, 1, 2...
                 self._check_and_set_pair(name, value)
         elif isinstance(enum, dict):

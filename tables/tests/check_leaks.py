@@ -8,7 +8,7 @@ trel = tref
 
 
 def show_mem(explain):
-    global tref, trel
+    global trel
 
     for line in Path("/proc/self/status").read_text().splitlines():
         if line.startswith("VmSize:"):

@@ -61,96 +61,90 @@ class Big(tb.IsDescription):
 def create_file(filename, totalrows, recsize):
 
     # Open a 'n'ew file
-    fileh = shelve.open(filename, flag="n")
+    with shelve.open(filename, flag="n") as fileh:
 
-    rowswritten = 0
-    # Get the record object associated with the new table
-    if recsize == "big":
-        d = Big()
-        arr = np.arange(32, dtype=np.float64)
-        arr2 = np.arange(32, dtype=np.float64)
-    elif recsize == "medium":
-        d = Medium()
-    else:
-        d = Small()
-    # print d
-    # sys.exit(0)
-    for j in range(3):
-        # Create a table
-        # table = fileh.create_table(group, 'tuple'+str(j), Record(), title,
-        #                          compress = 6, expectedrows = totalrows)
-        # Create a Table instance
-        tablename = "tuple" + str(j)
-        table = []
-        # Fill the table
-        if recsize == "big" or recsize == "medium":
-            for i in range(totalrows):
-                d.name = "Particle: %6d" % (i)
-                # d.TDCcount = i % 256
-                d.ADCcount = (i * 256) % (1 << 16)
-                if recsize == "big":
-                    # d.float1 = np.array([i]*32, np.float64)
-                    # d.float2 = np.array([i**2]*32, np.float64)
-                    arr[0] = 1.1
-                    d.float1 = arr
-                    arr2[0] = 2.2
-                    d.float2 = arr2
-                    pass
-                else:
-                    d.float1 = np.array([i**2] * 2, np.float64)
-                    # d.float1 = float(i)
-                    # d.float2 = float(i)
-                d.grid_i = i
-                d.grid_j = 10 - i
-                d.pressure = float(i * i)
-                d.energy = float(d.pressure**4)
-                table.append(
-                    (
-                        d.ADCcount,
-                        d.energy,
-                        d.float1,
-                        d.float2,
-                        d.grid_i,
-                        d.grid_j,
-                        d.name,
-                        d.pressure,
-                    )
-                )
-                # Only on float case
-                # table.append((d.ADCcount, d.energy, d.float1,
-                #              d.grid_i, d.grid_j, d.name, d.pressure))
+        rowswritten = 0
+        # Get the record object associated with the new table
+        if recsize == "big":
+            d = Big()
+            arr = np.arange(32, dtype=np.float64)
+            arr2 = np.arange(32, dtype=np.float64)
+        elif recsize == "medium":
+            d = Medium()
         else:
-            for i in range(totalrows):
-                d.var1 = str(i)
-                d.var2 = i
-                d.var3 = 12.1e10
-                table.append((d.var1, d.var2, d.var3))
+            d = Small()
+        # print d
+        # sys.exit(0)
+        for j in range(3):
+            # Create a table
+            # table = fileh.create_table(group, 'tuple'+str(j), Record(), title,
+            #                          compress = 6, expectedrows = totalrows)
+            # Create a Table instance
+            tablename = "tuple" + str(j)
+            table = []
+            # Fill the table
+            if recsize == "big" or recsize == "medium":
+                for i in range(totalrows):
+                    d.name = "Particle: %6d" % (i)
+                    # d.TDCcount = i % 256
+                    d.ADCcount = (i * 256) % (1 << 16)
+                    if recsize == "big":
+                        # d.float1 = np.array([i]*32, np.float64)
+                        # d.float2 = np.array([i**2]*32, np.float64)
+                        arr[0] = 1.1
+                        d.float1 = arr
+                        arr2[0] = 2.2
+                        d.float2 = arr2
+                    else:
+                        d.float1 = np.array([i**2] * 2, np.float64)
+                        # d.float1 = float(i)
+                        # d.float2 = float(i)
+                    d.grid_i = i
+                    d.grid_j = 10 - i
+                    d.pressure = float(i * i)
+                    d.energy = float(d.pressure**4)
+                    table.append(
+                        (
+                            d.ADCcount,
+                            d.energy,
+                            d.float1,
+                            d.float2,
+                            d.grid_i,
+                            d.grid_j,
+                            d.name,
+                            d.pressure,
+                        )
+                    )
+                    # Only on float case
+                    # table.append((d.ADCcount, d.energy, d.float1,
+                    #              d.grid_i, d.grid_j, d.name, d.pressure))
+            else:
+                for i in range(totalrows):
+                    d.var1 = str(i)
+                    d.var2 = i
+                    d.var3 = 12.1e10
+                    table.append((d.var1, d.var2, d.var3))
 
-        # Save this table on disk
-        fileh[tablename] = table
-        rowswritten += totalrows
+            # Save this table on disk
+            fileh[tablename] = table
+            rowswritten += totalrows
 
-    # Close the file
-    fileh.close()
     return (rowswritten, struct.calcsize(d._v_fmt))
 
 
 def read_file(filename, recsize):
     # Open the HDF5 file in read-only mode
-    fileh = shelve.open(filename, "r")
-    for table in ["tuple0", "tuple1", "tuple2"]:
-        if recsize == "big" or recsize == "medium":
-            e = [t[2] for t in fileh[table] if t[4] < 20]
-            # if there is only one float (array)
-            # e = [ t[1] for t in fileh[table] if t[3] < 20 ]
-        else:
-            e = [t[1] for t in fileh[table] if t[1] < 20]
+    with shelve.open(filename, "r") as fileh:
+        for table in ["tuple0", "tuple1", "tuple2"]:
+            if recsize == "big" or recsize == "medium":
+                e = [t[2] for t in fileh[table] if t[4] < 20]
+                # if there is only one float (array)
+                # e = [ t[1] for t in fileh[table] if t[3] < 20 ]
+            else:
+                e = [t[1] for t in fileh[table] if t[1] < 20]
 
-        print("resulting selection list ==>", e)
-        print("Total selected records ==> ", len(e))
-
-    # Close the file (eventually destroy the extended type)
-    fileh.close()
+            print("resulting selection list ==>", e)
+            print("Total selected records ==> ", len(e))
 
 
 # Add code to test here

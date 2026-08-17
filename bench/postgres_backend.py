@@ -27,8 +27,7 @@ class StreamChar:
         for i in range(self.nrows):
             if i >= j * self.step:
                 stop = (j + 1) * self.step
-                if stop > self.nrows:
-                    stop = self.nrows
+                stop = min(stop, self.nrows)
                 arr_i4, arr_f8 = self.db.fill_arrays(i, stop)
                 j += 1
                 k = 0

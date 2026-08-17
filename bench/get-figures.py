@@ -88,22 +88,25 @@ def get_values(filename):
                 qtime = float(tmp[: tmp.index("+-")])
             except ValueError:
                 qtime = float(tmp)
-            if colname in line:
-                if query and "1st" in line:
-                    sizes.append(isize)
-                    values.append(qtime)
-                elif query_cold and "cold" in line:
-                    sizes.append(isize)
-                    values.append(qtime)
-                elif query_warm and "warm" in line:
-                    sizes.append(isize)
-                    values.append(qtime)
-        elif query_repeated and line.startswith("[REP]"):
-            if colname in line and "warm" in line:
-                tmp = line.split(":")[1]
-                qtime = float(tmp[: tmp.index("+-")])
+            if colname in line and any(
+                [
+                    query and "1st" in line,
+                    query_cold and "cold" in line,
+                    query_warm and "warm" in line,
+                ]
+            ):
                 sizes.append(isize)
                 values.append(qtime)
+        elif (
+            query_repeated
+            and line.startswith("[REP]")
+            and colname in line
+            and "warm" in line
+        ):
+            tmp = line.split(":")[1]
+            qtime = float(tmp[: tmp.index("+-")])
+            sizes.append(isize)
+            values.append(qtime)
     return sizes, values
 
 

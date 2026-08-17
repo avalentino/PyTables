@@ -8,7 +8,7 @@ import math
 import weakref
 import warnings
 from time import perf_counter as clock
-from typing import Any, Literal, TextIO, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, TextIO, Literal
 from pathlib import Path
 from collections.abc import Callable
 
@@ -75,13 +75,15 @@ def is_idx(index: Any) -> bool:
             return True
         except TypeError:
             return False
-    elif isinstance(index, np.integer):
-        return True
-    # For Python 2.4 one should test 0-dim and 1-dim, 1-elem arrays as well
-    elif (
-        isinstance(index, np.ndarray)
-        and (index.shape == ())
-        and index.dtype.str[1] == "i"
+    elif any(
+        [
+            isinstance(index, np.integer),
+            # For Python 2.4 one should test 0-dim and 1-dim,
+            # 1-elem arrays as well
+            isinstance(index, np.ndarray)
+            and (index.shape == ())
+            and index.dtype.str[1] == "i",
+        ]
     ):
         return True
 
@@ -337,8 +339,10 @@ def fetch_logged_instances(classes: str = "*") -> list[tuple[str, int]]:
 
 def count_logged_instances(classes: str, file: TextIO = sys.stdout) -> None:
     """Write to file the number of logged instances."""
-    for classname in string_to_classes(classes):
-        file.write(f"{classname}: {len(tracked_classes[classname])}\n")
+    file.writelines(
+        f"{classname}: {len(tracked_classes[classname])}\n"
+        for classname in string_to_classes(classes)
+    )
 
 
 def list_logged_instances(classes: str, file: TextIO = sys.stdout) -> None:
@@ -358,9 +362,11 @@ def dump_logged_instances(classes: str, file: TextIO = sys.stdout) -> None:
         for ref in tracked_classes[classname]:
             obj = ref()
             if obj is not None:
-                file.write("    %s:\n" % obj)
-                for key, value in obj.__dict__.items():
-                    file.write(f"        {key:>20} : {value}\n")
+                file.write(f"    {obj}:\n")
+                file.writelines(
+                    f"        {key:>20} : {value}\n"
+                    for key, value in obj.__dict__.items()
+                )
 
 
 #

@@ -17,7 +17,7 @@ Misc variables:
 
 from __future__ import annotations
 
-from typing import Any, Literal, NoReturn, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal, NoReturn
 from pathlib import Path
 
 import tables as tb

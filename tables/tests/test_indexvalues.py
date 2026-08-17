@@ -2403,7 +2403,8 @@ class SelectValuesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         t2var2_vals = [p["var2"] for p in table2]
         msg = (
             f"Incorrect results for t1var2[n] == True where\n"
-            f"t2var1_vals={repr(t2var1_vals)}\nt2var2_vals={repr(t2var2_vals)}\n"
+            f"t2var1_vals={t2var1_vals!r}\n"
+            f"t2var2_vals={t2var2_vals!r}\n"
             f"\n{results1=}\n{results2=}"
         )
         self.assertEqual(len(results1), len(results2), msg=msg)
@@ -3438,7 +3439,7 @@ def iclassdata():
             # don't want to include the methods (testing purposes only)
             # cbasenames = ( '%sITableMixin' % ckind, "object")
             cbasenames = ("%sITableMixin" % ckind, ctest)
-            classdict = dict(heavy=bool(ctest in heavy_tests))
+            classdict = {"heavy": bool(ctest in heavy_tests)}
             yield (classname, cbasenames, classdict)
 
 
@@ -3446,7 +3447,7 @@ def iclassdata():
 for cname, cbasenames, cdict in iclassdata():
     cbases = tuple(eval(cbase) for cbase in cbasenames)
     class_ = type(cname, cbases, cdict)
-    exec("%s = class_" % cname)
+    locals()[cname] = class_
 
 
 # Test case for issue #319
@@ -3472,11 +3473,11 @@ class BuffersizeMultipleChunksize(
         table = self.h5file.create_table(
             node,
             "table",
-            dict(
-                index=tb.Int64Col(),
-                o=tb.Int64Col(),
-                value=tb.FloatCol(shape=()),
-            ),
+            {
+                "index": tb.Int64Col(),
+                "o": tb.Int64Col(),
+                "value": tb.FloatCol(shape=()),
+            },
             expectedrows=10_000_000,
         )
 
@@ -3553,10 +3554,7 @@ def suite():
     for n in range(niter):
         for cdata in iclassdata():
             class_ = eval(cdata[0])
-            if not class_.heavy:
-                suite_ = common.make_suite(class_)
-                theSuite.addTest(suite_)
-            elif common.heavy:
+            if not class_.heavy or common.heavy:
                 suite_ = common.make_suite(class_)
                 theSuite.addTest(suite_)
         theSuite.addTest(common.make_suite(LastRowReuseBuffers))

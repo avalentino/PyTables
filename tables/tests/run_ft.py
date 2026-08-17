@@ -14,7 +14,7 @@ import unittest
 import threading
 import collections
 from typing import Any, Self, TextIO
-from dataclasses import dataclass, field
+from dataclasses import field, dataclass
 from collections.abc import Generator
 from concurrent.futures import (
     Future,

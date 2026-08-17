@@ -51,10 +51,7 @@ def _load_blosc2():
 
     import ctypes.util
 
-    if ctypes.util.find_library(lib_name):
-        return True
-
-    return False
+    return ctypes.util.find_library(lib_name)
 
 
 if not _load_blosc2():
@@ -73,13 +70,13 @@ hdf5_version = _get_hdf5_version()
 """
 
 from .atom import *
-from .file import File, open_file, copy_file
+from .file import File, copy_file, open_file
 from .leaf import Leaf, ChunkInfo
 from .node import Node
 from .array import Array
 from .group import Group
-from .table import Table, Cols, Column
-from .tests import print_versions, test
+from .table import Cols, Table, Column
+from .tests import test, print_versions
 from .carray import CArray
 from .earray import EArray
 from .flavor import restrict_flavors
@@ -91,24 +88,24 @@ from .misc.enum import Enum
 from .exceptions import *
 from .expression import Expr
 from .description import *
-from .unimplemented import UnImplemented, Unknown
+from .unimplemented import Unknown, UnImplemented
+from .utilsextension import (
+    is_hdf5_file,
+    is_pytables_file,
+    which_lib_version,
+    blosc_compressor_list,
+    set_blosc_max_threads,
+    silence_hdf5_messages,
+    blosc2_compressor_list,
+    set_blosc2_max_threads,
+)
+from .utilsextension import blosc_get_complib_info_ as blosc_get_complib_info
+from .utilsextension import blosc2_get_complib_info_ as blosc2_get_complib_info
 from .utilsextension import (
     blosc_compcode_to_compname_ as blosc_compcode_to_compname,
 )
 from .utilsextension import (
     blosc2_compcode_to_compname_ as blosc2_compcode_to_compname,
-)
-from .utilsextension import blosc_get_complib_info_ as blosc_get_complib_info
-from .utilsextension import blosc2_get_complib_info_ as blosc2_get_complib_info
-from .utilsextension import (
-    blosc_compressor_list,
-    blosc2_compressor_list,
-    is_hdf5_file,
-    is_pytables_file,
-    which_lib_version,
-    set_blosc_max_threads,
-    set_blosc2_max_threads,
-    silence_hdf5_messages,
 )
 
 # List here only the objects we want to be publicly available
@@ -223,6 +220,13 @@ __all__ = [
     "File",
     # Expr class
     "Expr",
+    # provisional
+    "blosc_compcode_to_compname",
+    "blosc2_compcode_to_compname",
+    "blosc_get_complib_info",
+    "blosc2_get_complib_info",
+    "blosc_compressor_list",
+    "blosc2_compressor_list",
 ]
 
 if "Float16Atom" in locals():

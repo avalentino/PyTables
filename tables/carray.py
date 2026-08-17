@@ -11,7 +11,7 @@ import numpy.typing as npt
 
 from .atom import Atom
 from .array import Array
-from .utils import correct_byteorder, SizeType
+from .utils import SizeType, correct_byteorder
 
 if TYPE_CHECKING:
     from .group import Group
@@ -297,14 +297,14 @@ class CArray(Array):
         for start2 in range(start, stop, step * nrowsinbuf):
             # Save the records on disk
             stop2 = start2 + step * nrowsinbuf
-            if stop2 > stop:
-                stop2 = stop
+            stop2 = min(stop2, stop)
+
             # Set the proper slice in the main dimension
             slices[maindim] = slice(start2, stop2, step)
             start3 = (start2 - start) // step
             stop3 = start3 + nrowsinbuf
-            if stop3 > shape[maindim]:
-                stop3 = shape[maindim]
+            stop3 = min(stop3, shape[maindim])
+
             # The next line should be generalised if, in the future,
             # maindim is designed to be different from 0 in CArrays.
             # See ticket #199.

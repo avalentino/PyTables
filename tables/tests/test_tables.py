@@ -2141,7 +2141,8 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(row[2], b"." * 4)
 
     def test08_AppendModifyRows(self):
-        """Checking whether blosc2 optimized appending *and* reading rows works or not"""
+        """Checking whether blosc2 optimized appending *and* reading rows
+        works or not"""
 
         class Particle(tb.IsDescription):
             name = tb.StringCol(16, pos=1)  # 16-character String
@@ -2362,8 +2363,19 @@ class DictWriteTestCase(BasicTestCase):
 # Pure NumPy dtype
 class NumPyDTWriteTestCase(BasicTestCase):
     title = "NumPyDTWriteTestCase"
-    formats = "S4,i4,i2,2f8,f4,i2,S1,b1,c8,c16".split(",")
-    names = "var1,var2,var3,var4,var5,var6,var7,var8,var9,var10".split(",")
+    formats = ["S4", "i4", "i2", "2f8", "f4", "i2", "S1", "b1", "c8", "c16"]
+    names = [
+        "var1",
+        "var2",
+        "var3",
+        "var4",
+        "var5",
+        "var6",
+        "var7",
+        "var8",
+        "var9",
+        "var10",
+    ]
 
     if hasattr(tb, "Float16Col"):
         formats.append("f2")
@@ -2387,8 +2399,19 @@ class NumPyDTWriteTestCase(BasicTestCase):
 
 class RecArrayOneWriteTestCase(BasicTestCase):
     title = "RecArrayOneWrite"
-    formats = "S4,i4,i2,2f8,f4,i2,S1,b1,c8,c16".split(",")
-    names = "var1,var2,var3,var4,var5,var6,var7,var8,var9,var10".split(",")
+    formats = ["S4", "i4", "i2", "2f8", "f4", "i2", "S1", "b1", "c8", "c16"]
+    names = [
+        "var1",
+        "var2",
+        "var3",
+        "var4",
+        "var5",
+        "var6",
+        "var7",
+        "var8",
+        "var9",
+        "var10",
+    ]
 
     if hasattr(tb, "Float16Col"):
         formats.append("f2")
@@ -2415,8 +2438,19 @@ class RecArrayTwoWriteTestCase(BasicTestCase):
     title = "RecArrayTwoWrite"
     expectedrows = 100
     recarrayinit = 1
-    formats = "S4,i4,i2,2f8,f4,i2,S1,b1,c8,c16".split(",")
-    names = "var1,var2,var3,var4,var5,var6,var7,var8,var9,var10".split(",")
+    formats = ["S4", "i4", "i2", "2f8", "f4", "i2", "S1", "b1", "c8", "c16"]
+    names = [
+        "var1",
+        "var2",
+        "var3",
+        "var4",
+        "var5",
+        "var6",
+        "var7",
+        "var8",
+        "var9",
+        "var10",
+    ]
 
     if hasattr(tb, "Float16Col"):
         formats.append("f2")
@@ -2443,8 +2477,19 @@ class RecArrayThreeWriteTestCase(BasicTestCase):
     title = "RecArrayThreeWrite"
     expectedrows = 100
     recarrayinit = 1
-    formats = "S4,i4,i2,2f8,f4,i2,S1,b1,c8,c16".split(",")
-    names = "var1,var2,var3,var4,var5,var6,var7,var8,var9,var10".split(",")
+    formats = ["S4", "i4", "i2", "2f8", "f4", "i2", "S1", "b1", "c8", "c16"]
+    names = [
+        "var1",
+        "var2",
+        "var3",
+        "var4",
+        "var5",
+        "var6",
+        "var7",
+        "var8",
+        "var9",
+        "var10",
+    ]
 
     if hasattr(tb, "Float16Col"):
         formats.append("f2")
@@ -2471,8 +2516,19 @@ class RecArrayAlignedWriteTestCase(BasicTestCase):
     title = "RecArrayThreeWrite"
     expectedrows = 100
     recarrayinit = 1
-    formats = "S4,i4,i2,2f8,f4,i2,S1,b1,c8,c16".split(",")
-    names = "var1,var2,var3,var4,var5,var6,var7,var8,var9,var10".split(",")
+    formats = ["S4", "i4", "i2", "2f8", "f4", "i2", "S1", "b1", "c8", "c16"]
+    names = [
+        "var1",
+        "var2",
+        "var3",
+        "var4",
+        "var5",
+        "var6",
+        "var7",
+        "var8",
+        "var9",
+        "var10",
+    ]
 
     if hasattr(tb, "Float16Col"):
         formats.append("f2")
@@ -3140,17 +3196,23 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             recarray = table.read(self.start, self.stop, self.step)
             result = []
             for nrec in range(len(recarray)):
-                if recarray["var2"][nrec] < self.nrows and 0 < self.step:
-                    result.append(recarray["var2"][nrec])
-                elif recarray["var2"][nrec] > self.nrows and 0 > self.step:
+                if any(
+                    [
+                        recarray["var2"][nrec] < self.nrows and 0 < self.step,
+                        recarray["var2"][nrec] > self.nrows and 0 > self.step,
+                    ]
+                ):
                     result.append(recarray["var2"][nrec])
         elif self.checkgetCol:
             column = table.read(self.start, self.stop, self.step, "var2")
             result = []
             for nrec in range(len(column)):
-                if column[nrec] < self.nrows and 0 < self.step:
-                    result.append(column[nrec])
-                elif column[nrec] > self.nrows and 0 > self.step:
+                if any(
+                    [
+                        column[nrec] < self.nrows and 0 < self.step,
+                        column[nrec] > self.nrows and 0 > self.step,
+                    ]
+                ):
                     result.append(column[nrec])
         else:
             if 0 < self.step:
@@ -3183,8 +3245,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         else:
             stopr = self.stop
 
-        if self.nrows < stopr:
-            stopr = self.nrows
+        stopr = min(stopr, self.nrows)
 
         if common.verbose:
             print("Nrows in", table._v_pathname, ":", table.nrows)
@@ -3225,19 +3286,22 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                         rec["var2"], list(range(startr, stopr, self.step))[-1]
                     )
             elif startr > stopr and 0 > self.step:
-                rec = [
+                rec = common.first(
                     r["var2"]
                     for r in table.iterrows(self.start, self.stop, self.step)
                     if r["var2"] > self.nrows
-                ][0]
+                )
                 if self.nrows < self.expectedrows:
                     self.assertEqual(
                         rec,
-                        list(range(self.start, self.stop or -1, self.step))[0],
+                        common.first(
+                            range(self.start, self.stop or -1, self.step)
+                        ),
                     )
                 else:
                     self.assertEqual(
-                        rec, list(range(startr, stopr or -1, self.step))[0]
+                        rec,
+                        common.first(range(startr, stopr or -1, self.step)),
                     )
 
         # Close the file
@@ -3488,13 +3552,10 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.check_range()
         except ValueError:
             if common.verbose:
-                type, value, traceback = sys.exc_info()
+                _, value, _ = sys.exc_info()
                 print("\nGreat!, the next ValueError was caught!")
                 print(value)
             self.h5file.close()
-        # else:
-        #     print rec
-        #     self.fail("expected a ValueError")
 
         # Case where step == 0
         self.step = 0
@@ -3502,7 +3563,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.check_range()
         except ValueError:
             if common.verbose:
-                type, value, traceback = sys.exc_info()
+                _, value, _ = sys.exc_info()
                 print("\nGreat!, the next ValueError was caught!")
                 print(value)
             self.h5file.close()
@@ -6553,7 +6614,7 @@ class DefaultValues(common.TempFileMixin, common.PyTablesTestCase):
 
         # Create a recarray with the same default values
         values = [b"abcd", 1, 2, 3.1, 4.2, 5, "e", 1, 1j, 1 + 0j]
-        formats = "S4,i4,i2,f8,f4,u2,S1,b1,c8,c16".split(",")
+        formats = ["S4", "i4", "i2", "f8", "f4", "u2", "S1", "b1", "c8", "c16"]
 
         if hasattr(tb, "Float16Col"):
             values.append(6.4)
@@ -6628,7 +6689,7 @@ class DefaultValues(common.TempFileMixin, common.PyTablesTestCase):
 
         # Create a recarray with the same default values
         values = [b"abcd", 1, 2, 3.1, 4.2, 5, "e", 1, 1j, 1 + 0j]
-        formats = "S4,i4,i2,f8,f4,u2,S1,b1,c8,c16".split(",")
+        formats = ["S4", "i4", "i2", "f8", "f4", "u2", "S1", "b1", "c8", "c16"]
 
         if hasattr(tb, "Float16Col"):
             values.append(6.4)
@@ -6725,7 +6786,7 @@ class LengthTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Running %s.test01_lengthrows..." % self.__class__.__name__)
 
         # Number of rows
-        len(self.table) == self.nrows
+        assert len(self.table) == self.nrows
 
     def test02_lengthcols(self):
         """Checking __length__ in Cols."""
@@ -6736,9 +6797,9 @@ class LengthTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Number of columns
         if self.record is Record:
-            len(self.table.cols) == 8
+            self.assertEqual(len(self.table.cols), len(Record.columns))
         elif self.record is Record2:
-            len(self.table.cols) == 4
+            self.assertEqual(len(self.table.cols), len(Record2.columns))
 
     def test03_lengthcol(self):
         """Checking __length__ in Column."""
@@ -6749,7 +6810,7 @@ class LengthTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Number of rows for all columns column
         for colname in self.table.colnames:
-            len(getattr(self.table.cols, colname)) == self.nrows
+            assert len(getattr(self.table.cols, colname)) == self.nrows
 
 
 class Length1TestCase(LengthTestCase):
@@ -7642,7 +7703,7 @@ class RowContainsTestCase(common.TempFileMixin, common.PyTablesTestCase):
         f = self.h5file
         a = np.array([(1, 2, 3)], dtype="i1,i2,i4")
         t = f.create_table(f.root, "test", a)
-        row = [r for r in t.iterrows()][0]
+        row = common.first(t.iterrows())
         if common.verbose:
             print("row -->", row[:])
         for item in (1, 2, 3):
@@ -7980,7 +8041,7 @@ class TestCreateTableColumnAttrs(
         # for k, v in self.freq_attrs.items():
         #     # self.assertTrue(table.cols.freq.attrs.contains(k))
         #     self.assertTrue(table.cols.freq.attrs[k] == self.freq_attrs[k])
-        for k, v in self.labels_attrs.items():
+        for k in self.labels_attrs:
             # self.assertTrue(table.cols.labels.attrs.contains(k))
             self.assertTrue(table.cols.labels.attrs[k] == self.labels_attrs[k])
 

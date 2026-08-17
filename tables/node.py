@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import warnings
 import functools
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from collections.abc import Callable
 
 from .path import join_path, split_path, isvisiblepath
 from .utils import lazyattr
-from .registry import class_name_dict, class_id_dict
+from .registry import class_id_dict, class_name_dict
 from .undoredo import move_to_shadow
 from .exceptions import (
-    ClosedNodeError,
     NodeError,
+    ClosedNodeError,
     UndoRedoWarning,
     PerformanceWarning,
 )
@@ -157,7 +157,7 @@ class Node(metaclass=MetaNode):
     # `_v_parent` is accessed via its file to avoid upwards references.
     def _g_getparent(self) -> Group:
         """Return the parent :class:`Group` instance."""
-        parentpath, nodename = split_path(self._v_pathname)
+        parentpath, _ = split_path(self._v_pathname)
         return self._v_file._get_node(parentpath)
 
     _v_parent = property(_g_getparent)
@@ -326,7 +326,6 @@ class Node(metaclass=MetaNode):
 
     def _g_pre_kill_hook(self) -> None:
         """Code to be called before killing the node."""
-        pass
 
     def _g_create(self) -> int:
         """Create a new HDF5 node and return its object identifier."""
@@ -452,7 +451,6 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
 
     def _g_post_init_hook(self) -> None:
         """Code to be run after node creation and before creation logging."""
-        pass
 
     def _g_update_dependent(self) -> None:
         """Update dependent objects after a location change.

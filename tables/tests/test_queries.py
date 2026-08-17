@@ -424,7 +424,7 @@ def create_test_method(type_, op, extracond, func=None):
         table = self.table
         self.create_indexes(colname, ncolname, "c_idxextra")
 
-        table_slice = dict(start=1, stop=table.nrows - 5, step=3)
+        table_slice = {"start": 1, "stop": table.nrows - 5, "step": 3}
         rownos, fvalues = None, None
         # Test that both simple and nested columns work as expected.
         # Knowing how the table is filled, results must be the same.
@@ -484,7 +484,7 @@ def create_test_method(type_, op, extracond, func=None):
                     )
                     for _ in range(2)
                 ]
-            except TypeError as terr:
+            except TypeError:
                 raise SilentlySkipTest("The condition is not boolean.")
             except NotImplementedError:
                 raise SilentlySkipTest(
@@ -579,7 +579,7 @@ def niclassdata():
                 f"{ndim}TableMixin",
                 "TableDataTestCase",
             )
-            classdict = dict(heavy=heavy)
+            classdict = {"heavy": heavy}
             yield (classname, cbasenames, classdict)
 
 
@@ -651,7 +651,11 @@ def iclassdata():
                     "ScalarTableMixin",
                     "TableDataTestCase",
                 )
-                classdict = dict(heavy=heavy, optlevel=optlevel, indexed=True)
+                classdict = {
+                    "heavy": heavy,
+                    "optlevel": optlevel,
+                    "indexed": True,
+                }
                 yield (classname, cbasenames, classdict)
 
 
@@ -660,7 +664,7 @@ for cdatafunc in [niclassdata, iclassdata]:
     for cname, cbasenames, cdict in cdatafunc():
         cbases = tuple(eval(cbase) for cbase in cbasenames)
         class_ = type(cname, cbases, cdict)
-        exec("%s = class_" % cname)
+        locals()[cname] = class_
 
 
 # Test cases on query usage

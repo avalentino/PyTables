@@ -355,7 +355,7 @@ def bench_search(
     for atom in atomlist:
         tablepath = tableparent + atom
         table = bf.get_node(tablepath)
-        rowsr, rowsel, rowssz, time1, time2, tcpu1, tcpu2 = read_file(
+        rowsr, rowsel, _, time1, time2, tcpu1, tcpu2 = read_file(
             file, atom, riter, indexmode, dselect, verbose
         )
         row = table.row

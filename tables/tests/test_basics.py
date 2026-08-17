@@ -236,7 +236,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         with self.assertRaises(LookupError):
             # Try to get the 'array' object in the old existing file
-            self.h5file.root.array
+            _ = self.h5file.root.array
 
     def test04a_openErrorFile(self):
         """Checking opening a non-existing file for reading"""
@@ -294,7 +294,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the removed object
         with self.assertRaises(LookupError):
-            self.h5file.root.agroup
+            _ = self.h5file.root.agroup
 
         # Try to get a child of the removed object
         with self.assertRaises(LookupError):
@@ -322,7 +322,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the removed object
         with self.assertRaises(LookupError):
-            self.h5file.root.agroup
+            _ = self.h5file.root.agroup
 
         # Try to get a child of the removed object
         with self.assertRaises(LookupError):
@@ -350,7 +350,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the removed object
         with self.assertRaises(LookupError):
-            self.h5file.root.agroup2
+            _ = self.h5file.root.agroup2
 
     def test06b_removeLeaf(self):
         """Checking removing Leaves from an existing file."""
@@ -363,7 +363,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the removed object
         with self.assertRaises(LookupError):
-            self.h5file.root.anarray
+            _ = self.h5file.root.anarray
 
     def test06c_removeLeaf(self):
         """Checking removing Leaves and access it immediately."""
@@ -373,7 +373,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the removed object
         with self.assertRaises(LookupError):
-            self.h5file.root.anarray
+            _ = self.h5file.root.anarray
 
     def test06d_removeLeaf(self):
         """Checking removing a non-existent node"""
@@ -395,7 +395,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the removed object
         with self.assertRaises(LookupError):
-            self.h5file.root.atable
+            _ = self.h5file.root.atable
 
     def test07_renameLeaf(self):
         """Checking renaming a leave and access it after a close/open."""
@@ -414,7 +414,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.anarray
+            _ = self.h5file.root.anarray
 
     def test07b_renameLeaf(self):
         """Checking renaming Leaves and accessing them immediately."""
@@ -430,7 +430,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.anarray
+            _ = self.h5file.root.anarray
 
     def test07c_renameLeaf(self):
         """Checking renaming Leaves and modify attributes after that."""
@@ -503,7 +503,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.agroup
+            _ = self.h5file.root.agroup
 
         # Try to get a child with the old pathname
         with self.assertRaises(LookupError):
@@ -528,7 +528,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.agroup
+            _ = self.h5file.root.agroup
 
         # Try to get a child with the old pathname
         with self.assertRaises(LookupError):
@@ -599,7 +599,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.anarray
+            _ = self.h5file.root.anarray
 
     def test10b_moveLeaf(self):
         """Checking moving a leave and access it without a close/open."""
@@ -616,7 +616,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.anarray
+            _ = self.h5file.root.anarray
 
     def test10c_moveLeaf(self):
         """Checking moving Leaves and modify attributes after that."""
@@ -660,7 +660,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.atable
+            _ = self.h5file.root.atable
 
     def test10_2b_moveTable(self):
         """Checking moving a table and access it without a close/open."""
@@ -677,7 +677,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.atable
+            _ = self.h5file.root.atable
 
     def test10_2b_bis_moveTable(self):
         """Checking moving a table and use cached row without a close/open."""
@@ -767,7 +767,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.agroup
+            _ = self.h5file.root.agroup
 
         # Try to get a child with the old pathname
         with self.assertRaises(LookupError):
@@ -795,7 +795,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Try to get the previous object with the old name
         with self.assertRaises(LookupError):
-            self.h5file.root.agroup
+            _ = self.h5file.root.agroup
 
         # Try to get a child with the old pathname
         with self.assertRaises(LookupError):
@@ -1232,17 +1232,17 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 class NodeCacheOpenFile(OpenFileTestCase):
     node_cache_slots = tb.parameters.NODE_CACHE_SLOTS
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class NoNodeCacheOpenFile(OpenFileTestCase):
     node_cache_slots = 0
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class DictNodeCacheOpenFile(OpenFileTestCase):
     node_cache_slots = -tb.parameters.NODE_CACHE_SLOTS
-    open_kwargs = dict(node_cache_slots=node_cache_slots)
+    open_kwargs = {"node_cache_slots": node_cache_slots}
 
 
 class CheckFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
@@ -1250,10 +1250,13 @@ class CheckFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
         super().setUp()
 
         # Create a regular (text) file
-        self.txtfile = tempfile.mktemp(".h5")
-        self.fileh = open(self.txtfile, "w")
-        self.fileh.write("Hello!")
-        self.fileh.close()
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".h5", delete=False
+        ) as fileh:
+            self.txtfile = fileh.name
+            self.fileh = fileh
+            self.fileh.write("Hello!")
 
     def tearDown(self):
         self.fileh.close()
@@ -2351,7 +2354,7 @@ except tb.HDF5ExtError, e:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            stdout, stderr = p.communicate()
+            _, stderr = p.communicate()
 
             self.assertNotIn("HDF5-DIAG", stderr.decode("ascii"))
         finally:
@@ -2389,7 +2392,7 @@ except tb.HDF5ExtError as e:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            stdout, stderr = p.communicate()
+            _, stderr = p.communicate()
 
             self.assertIn("HDF5-DIAG", stderr.decode("ascii"))
         finally:
@@ -2445,7 +2448,7 @@ class TestDescription(common.PyTablesTestCase):
 
     def test_descr_from_dtype(self):
         t = np.dtype([("col1", "int16"), ("col2", float)])
-        descr, byteorder = tb.description.descr_from_dtype(t)
+        descr, _ = tb.description.descr_from_dtype(t)
 
         self.assertIn("col1", descr._v_colobjects)
         self.assertIn("col2", descr._v_colobjects)
@@ -2462,7 +2465,7 @@ class TestDescription(common.PyTablesTestCase):
         ]
         t = np.dtype(header)
 
-        descr, byteorder = tb.description.descr_from_dtype(t)
+        descr, _ = tb.description.descr_from_dtype(t)
         self.assertEqual(len(descr._v_names), 2)
         self.assertEqual(sorted(descr._v_names), ["t", "unit"])
 
@@ -2470,7 +2473,7 @@ class TestDescription(common.PyTablesTestCase):
         d1 = np.dtype([("x", "int16"), ("y", "int16")])
         d_comp = np.dtype([("time", "float64"), ("value", d1)])
 
-        descr, byteorder = tb.description.descr_from_dtype(d_comp)
+        descr, _ = tb.description.descr_from_dtype(d_comp)
 
         self.assertTrue(descr._v_is_nested)
         self.assertIn("time", descr._v_colobjects)
@@ -2488,7 +2491,7 @@ class TestDescription(common.PyTablesTestCase):
         d_comp = np.dtype([("time", "float64"), ("value", (d1, (1,)))])
 
         with self.assertWarns(UserWarning):
-            descr, byteorder = tb.description.descr_from_dtype(d_comp)
+            descr, _ = tb.description.descr_from_dtype(d_comp)
 
         self.assertTrue(descr._v_is_nested)
         self.assertIn("time", descr._v_colobjects)

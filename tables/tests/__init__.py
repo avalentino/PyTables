@@ -6,6 +6,11 @@ functionality.
 
 """
 
-import tables.req_versions  # Necessary for the test suite
 from tables.tests.common import print_versions
 from tables.tests.test_suite import test, suite
+
+__all__ = [
+    "print_versions",
+    "suite",
+    "test",
+]

@@ -63,8 +63,6 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Number of written rows:", self.nrows)
             print("Number of indexed rows:", indexrows)
 
-        return
-
     def test00_flushLastRow(self):
         """Checking flushing an Index incrementing only the last row."""
 
@@ -713,8 +711,8 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if self.nrows > 500:
             tests.append(self.nrows - 500)
         for limit in tests:
-            handle_a = [0, table.where("(var3 < e)", dict(e=limit))]
-            handle_b = [0, table.where("(var3 < e)", dict(e=limit))]
+            handle_a = [0, table.where("(var3 < e)", {"e": limit})]
+            handle_b = [0, table.where("(var3 < e)", {"e": limit})]
 
             try:
                 while True:
@@ -729,7 +727,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.assertEqual(handle_a[0], limit)
             self.assertEqual(handle_b[0], limit)
             self.assertEqual(
-                len(list(table.where("(var3 < e)", dict(e=limit)))), limit
+                len(list(table.where("(var3 < e)", {"e": limit}))), limit
             )
 
 
@@ -1607,14 +1605,13 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
                         % (colname, table2.cols._f_col(colname).index.dirty)
                     )
         for colname in table2.colnames:
-            if table2.cols._f_col(colname).index:
-                if table2.autoindex:
-                    # All the destination columns should be non-dirty because
-                    # the copy removes the dirty state and puts the
-                    # index in a sane state
-                    self.assertEqual(
-                        table2.cols._f_col(colname).index.dirty, False
-                    )
+            if table2.cols._f_col(colname).index and table2.autoindex:
+                # All the destination columns should be non-dirty because
+                # the copy removes the dirty state and puts the
+                # index in a sane state
+                self.assertEqual(
+                    table2.cols._f_col(colname).index.dirty, False
+                )
 
 
 # minRowIndex = 10000  # just if one wants more indexed rows to be checked
@@ -1709,7 +1706,7 @@ class AI12TestCase(AutomaticIndexingTestCase):
 
 
 class ManyNodesTestCase(common.TempFileMixin, common.PyTablesTestCase):
-    opem_kwargs = dict(node_cache_slots=64)
+    opem_kwargs = {"node_cache_slots": 64}
 
     def test00(self):
         """Indexing many nodes in one single session (based on bug #26)"""
@@ -1817,11 +1814,7 @@ class IndexFiltersTestCase(common.TempFileMixin, common.PyTablesTestCase):
         ni = icol.index
         if common.verbose:
             print(f"Old parameters: {kind}, {optlevel}, {filters}")
-            print(
-                "New parameters: {}, {}, {}".format(
-                    ni.kind, ni.optlevel, ni.filters
-                )
-            )
+            print(f"New parameters: {ni.kind}, {ni.optlevel}, {ni.filters}")
         self.assertEqual(ni.kind, kind)
         self.assertEqual(ni.optlevel, optlevel)
         self.assertEqual(ni.filters, filters)
@@ -2719,11 +2712,11 @@ class TestIndexingNans(common.TempFileMixin, common.PyTablesTestCase):
         table = self.h5file.create_table(
             "/",
             "table",
-            dict(
-                index=tb.Int64Col(),
-                values=tb.FloatCol(shape=()),
-                values2=tb.FloatCol(shape=()),
-            ),
+            {
+                "index": tb.Int64Col(),
+                "values": tb.FloatCol(shape=()),
+                "values2": tb.FloatCol(shape=()),
+            },
         )
 
         r = table.row
@@ -2747,11 +2740,11 @@ class TestIndexingNans(common.TempFileMixin, common.PyTablesTestCase):
         table = self.h5file.create_table(
             "/",
             "table",
-            dict(
-                index=tb.Int64Col(),
-                values=tb.FloatCol(shape=()),
-                values2=tb.FloatCol(shape=()),
-            ),
+            {
+                "index": tb.Int64Col(),
+                "values": tb.FloatCol(shape=()),
+                "values2": tb.FloatCol(shape=()),
+            },
         )
 
         r = table.row
@@ -2776,11 +2769,11 @@ class TestIndexingNans(common.TempFileMixin, common.PyTablesTestCase):
         table = self.h5file.create_table(
             "/",
             "table",
-            dict(
-                index=tb.Int64Col(),
-                values=tb.FloatCol(shape=()),
-                values2=tb.FloatCol(shape=()),
-            ),
+            {
+                "index": tb.Int64Col(),
+                "values": tb.FloatCol(shape=()),
+                "values2": tb.FloatCol(shape=()),
+            },
         )
 
         r = table.row

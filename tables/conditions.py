@@ -17,7 +17,7 @@ Functions:
 from __future__ import annotations
 
 import re
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from collections.abc import Callable, Iterable
 
 import numpy as np

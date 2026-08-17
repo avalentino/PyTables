@@ -201,7 +201,7 @@ name_object = h5file.root.columns.name
 print("Info on the object:", name_object)
 print("  shape ==>", name_object.shape)
 print("  title ==>", name_object.title)
-print("  type ==> " % name_object.atom.dtype)
+print("  type ==> ", name_object.atom.dtype)
 
 
 # Read the 'name' actual data

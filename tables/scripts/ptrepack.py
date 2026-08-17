@@ -174,7 +174,7 @@ def copy_leaf(
             propindexes=propindexes,
         )
     except Exception:
-        type_, value, traceback = sys.exc_info()
+        type_, value, _ = sys.exc_info()
         print(
             f"Problems doing the copy from '{srcfile}:{srcnode}' to "
             f"'{dstfile}:{dstnode}'"
@@ -195,9 +195,11 @@ def copy_leaf(
         if srcfileh.format_version.startswith("1"):
             # Remove original flavor in case the source file has 1.x format
             dstnode.del_attr("FLAVOR")
-        elif srcfileh.format_version < "2.1":
-            if dstnode.get_attr("FLAVOR") in numpy_aliases:
-                dstnode.set_attr("FLAVOR", tb.flavor.internal_flavor)
+        elif (
+            srcfileh.format_version < "2.1"
+            and dstnode.get_attr("FLAVOR") in numpy_aliases
+        ):
+            dstnode.set_attr("FLAVOR", tb.flavor.internal_flavor)
 
     # Recreate possible old indexes in destination node
     if srcnode._c_classid == "TABLE":
@@ -309,7 +311,7 @@ def copy_children(
             use_hardlinks=use_hardlinks,
         )
     except Exception:
-        type_, value, traceback = sys.exc_info()
+        type_, value, _ = sys.exc_info()
         print(
             "Problems doing the copy from '%s:%s' to '%s:%s'"
             % (srcfile, srcgroup, dstfile, dstgroup)
@@ -333,9 +335,11 @@ def copy_children(
             if srcfileh.format_version.startswith("1"):
                 # Remove original flavor in case the source file has 1.x format
                 dstnode.del_attr("FLAVOR")
-            elif srcfileh.format_version < "2.1":
-                if dstnode.get_attr("FLAVOR") in numpy_aliases:
-                    dstnode.set_attr("FLAVOR", tb.flavor.internal_flavor)
+            elif (
+                srcfileh.format_version < "2.1"
+                and dstnode.get_attr("FLAVOR") in numpy_aliases
+            ):
+                dstnode.set_attr("FLAVOR", tb.flavor.internal_flavor)
 
     # Convert the remaining tables with old indexes (if any)
     for table in srcgroup._f_walknodes("Table"):

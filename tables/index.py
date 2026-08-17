@@ -10,14 +10,14 @@ import tempfile
 import warnings
 from time import perf_counter as clock
 from time import process_time as cpuclock
-from typing import Literal, TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from pathlib import Path
 
 import numpy as np
 import numpy.typing as npt
 
 from . import indexesextension
-from .atom import UIntAtom, Atom
+from .atom import Atom, UIntAtom
 from .leaf import Filters
 from .node import NotLoggedMixin
 from .path import join_path
@@ -25,22 +25,22 @@ from .group import Group
 from .utils import is_idx, idx2long, lazyattr
 from .carray import CArray
 from .earray import EArray
-from .indexes import CacheArray, LastRowArray, IndexArray
+from .indexes import CacheArray, IndexArray, LastRowArray
 from .idxutils import (
-    calc_chunksize,
-    calcoptlevels,
-    get_reduction_level,
-    nextafter,
     inftype,
+    nextafter,
+    calcoptlevels,
+    calc_chunksize,
+    get_reduction_level,
 )
 from .exceptions import PerformanceWarning
 from .utilsextension import (
-    nan_aware_gt,
-    nan_aware_ge,
-    nan_aware_lt,
-    nan_aware_le,
     bisect_left,
     bisect_right,
+    nan_aware_ge,
+    nan_aware_gt,
+    nan_aware_le,
+    nan_aware_lt,
 )
 from .lrucacheextension import ObjectCache
 
@@ -219,9 +219,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
     @property
     def table(self) -> Table:
         """Accessor for the `Table` object of this index."""
-        tablepath, columnpath = _table_column_pathname_of_index(
-            self._v_pathname
-        )
+        tablepath, _ = _table_column_pathname_of_index(self._v_pathname)
         table = self._v_file._get_node(tablepath)
         return table
 
@@ -467,12 +465,13 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             self.nelementsILR = nelements_ilr
             if nelements_ilr > 0:
                 self.nrows += 1
+
             # Get the bounds as a cache (this has to remain here!)
             rchunksize = self.chunksize // self.reduction
             nbounds_lr = (nelements_slr - 1) // rchunksize
-            if nbounds_lr < 0:
-                nbounds_lr = 0  # correction for -1 bounds
+            nbounds_lr = max(nbounds_lr, 0)  # correction for -1 bounds
             nbounds_lr += 2  # bounds + begin + end
+
             # All bounds values (+begin + end) are at the end of sortedLR
             self.bebounds = self.sortedLR[
                 nelements_slr : nelements_slr + nbounds_lr
@@ -911,15 +910,12 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                     if self.swap("chunks", "stop"):
                         break
             else:
-                if optmedian:
-                    if self.swap("chunks", "median"):
-                        break
-                if optstarts:
-                    if self.swap("chunks", "start"):
-                        break
-                if optstops:
-                    if self.swap("chunks", "stop"):
-                        break
+                if optmedian and self.swap("chunks", "median"):
+                    break
+                if optstarts and self.swap("chunks", "start"):
+                    break
+                if optstops and self.swap("chunks", "stop"):
+                    break
             break  # If we reach this, exit the loop
 
         # Check if we require a complete sort.  Important: this step
@@ -1115,9 +1111,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         if rmult < thmult:
             return True
         # Additional check for the overlap ratio
-        if 0 <= tover < thtover:
-            return True
-        return False
+        return bool(0 <= tover < thtover)
 
     def create_temp(self) -> None:
         """Create some temporary objects for slice sorting purposes."""
@@ -1689,8 +1683,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
 
                 # Loop over the remaining slices in block
                 lrb = nrow + nsb
-                if lrb > nslices:
-                    lrb = nslices
+                lrb = min(lrb, nslices)
                 nslice = nrow  # Just in case the loop behind executes nothing
                 for nslice in range(nrow + 1, lrb):
                     self.reorder_slice(
@@ -1706,6 +1699,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                 # Write the first part of the buffers to the regular leaves
                 self.write_slice(sorted_, nslice, ssorted[:ss])
                 self.write_slice(indices, nslice, sindices[:ss])
+
                 # Update caches for this slice
                 self.update_caches(nslice, ssorted[:ss])
 
@@ -1817,8 +1811,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             assert pos <= ss
         else:
             end = pos + cs
-            if end > nelements_lr:
-                end = nelements_lr
+            end = min(end, nelements_lr)
             pos += bisect_left(self.sortedLR[pos:end], item)
             assert pos <= nelements_lr
         assert pos > 0
@@ -2193,9 +2186,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                     tlen = sorted_._search_bin_na_f(*item)
                 elif self.type == "float64":
                     tlen = sorted_._search_bin_na_d(*item)
-                elif self.type == "float96":
-                    tlen = sorted_._search_bin_na_g(*item)
-                elif self.type == "float128":
+                elif self.type in ("float96", "float128"):
                     tlen = sorted_._search_bin_na_g(*item)
                 elif self.type == "uint32":
                     tlen = sorted_._search_bin_na_ui(*item)
@@ -2281,12 +2272,13 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                 else:
                     begin = rchunksize * nchunk
                     end = rchunksize * (nchunk + 1)
-                    if end > hi:
-                        end = hi
+                    end = min(end, hi)
+
                     # Read the chunk from disk
                     chunk = self.sortedLR._read_sorted_slice(
                         self.sorted, begin, end
                     )
+
                     # Put it in cache.  It's important to *copy*
                     # the buffer, as it is reused in future reads!
                     sorted_lr_cache.setitem(
@@ -2298,6 +2290,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                 start = hi
         else:
             start = 0
+
         # Lookup for item2
         if nan_aware_ge(item2, b0):
             if nan_aware_lt(item2, b1):
@@ -2311,8 +2304,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                     else:
                         begin = rchunksize * nchunk2
                         end = rchunksize * (nchunk2 + 1)
-                        if end > hi:
-                            end = hi
+                        end = min(end, hi)
                         # Read the chunk from disk
                         chunk = self.sortedLR._read_sorted_slice(
                             self.sorted, begin, end

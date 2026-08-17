@@ -33,7 +33,7 @@ import hdf5plugin
 
 import tables
 
-persistent = True if len(sys.argv) == 1 else False
+persistent = bool(len(sys.argv) == 1)
 if persistent:
     print("Testing the persistent backends")
 else:

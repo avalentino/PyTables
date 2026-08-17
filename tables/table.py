@@ -9,9 +9,9 @@ import operator
 import warnings
 import functools
 from time import perf_counter as clock
-from typing import Any, Literal, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal
 from pathlib import Path
-from collections.abc import Callable, Generator, Iterator, Sequence
+from collections.abc import Callable, Iterator, Sequence, Generator
 
 import numpy as np
 import numexpr as ne
@@ -22,27 +22,27 @@ from .atom import Atom
 from .leaf import Leaf
 from .path import join_path, split_path
 from .index import (
-    OldIndex,
-    default_index_filters,
-    default_auto_index,
     Index,
+    OldIndex,
     IndexesDescG,
     IndexesTableG,
+    default_auto_index,
+    default_index_filters,
 )
-from .utils import is_idx, lazyattr, SizeType
+from .utils import SizeType, is_idx, lazyattr
 from .utils import NailedDict as CacheDict
 from .flavor import flavor_of, array_as_internal, internal_to_flavor
 from .conditions import compile_condition
 from .exceptions import (
     NodeError,
     HDF5ExtError,
-    PerformanceWarning,
-    OldIndexWarning,
     NoSuchNodeError,
+    OldIndexWarning,
+    PerformanceWarning,
 )
-from .description import IsDescription, Description, Col, descr_from_dtype
+from .description import Col, Description, IsDescription, descr_from_dtype
 from .utilsextension import get_nested_field
-from .lrucacheextension import ObjectCache, NumCache
+from .lrucacheextension import NumCache, ObjectCache
 
 profile = False
 # profile = True  # Uncomment for profiling
@@ -328,8 +328,7 @@ def _column__create_index(
     # Protection on tables larger than the expected rows (perhaps the
     # user forgot to pass this parameter to the Table constructor?)
     expectedrows = table._v_expectedrows
-    if table.nrows > expectedrows:
-        expectedrows = table.nrows
+    expectedrows = max(expectedrows, table.nrows)
 
     # Create the index itself
     index = Index(
@@ -699,7 +698,7 @@ class Table(tableextension.Table, Leaf):
         filters: Filters | None = None,
         expectedrows: int | None = None,
         chunkshape: int | tuple[int] | None = None,
-        byteorder: Literal["little", "big", None] = None,
+        byteorder: Literal["little", "big"] | None = None,
         _log: bool = True,
         track_times: bool = True,
     ) -> None:
@@ -824,13 +823,15 @@ class Table(tableextension.Table, Leaf):
             self.description = description
 
         # No description yet?
-        if new and self.description is None:
-            # Try NumPy dtype instances
-            if isinstance(description, np.dtype):
-                tup = descr_from_dtype(
-                    description, ptparams=parentnode._v_file.params
-                )
-                self.description, self._rabyteorder = tup
+        if (
+            new
+            and self.description is None
+            and isinstance(description, np.dtype)
+        ):
+            tup = descr_from_dtype(
+                description, ptparams=parentnode._v_file.params
+            )
+            self.description, self._rabyteorder = tup
 
         # No description yet?
         if new and self.description is None:
@@ -976,9 +977,8 @@ class Table(tableextension.Table, Leaf):
         # to make sure nrowsinbuf is greater than or
         # equal to the chunksize.
         # See gh-206 and gh-238
-        if self.chunkshape is not None:
-            if nrowsinbuf < self.chunkshape[0]:
-                nrowsinbuf = self.chunkshape[0]
+        if self.chunkshape is not None and nrowsinbuf < self.chunkshape[0]:
+            nrowsinbuf = self.chunkshape[0]
 
         # Safeguard against row sizes being extremely large
         if nrowsinbuf == 0:
@@ -1051,13 +1051,16 @@ very small/large chunksize, you may want to increase/decrease it.""",
             self._v_recarray = self._g_fix_byteorder_data(
                 self._v_recarray, self._rabyteorder
             )
-            if len(self._v_recarray) > self._v_expectedrows:
-                self._v_expectedrows = len(self._v_recarray)
+            self._v_expectedrows = max(
+                self._v_expectedrows, len(self._v_recarray)
+            )
+
         # Compute a sensible chunkshape
         if self._v_chunkshape is None:
             self._v_chunkshape = self._calc_chunkshape(
                 self._v_expectedrows, self.rowsize, self.rowsize
             )
+
         # Correct the byteorder, if still needed
         if self.byteorder is None:
             self.byteorder = sys.byteorder
@@ -1116,33 +1119,32 @@ very small/large chunksize, you may want to increase/decrease it.""",
 
         # 4. If there are field fill attributes, get them from disk and
         #    set them in the table description.
-        if self._v_file.params["PYTABLES_SYS_ATTRS"]:
-            if "FIELD_0_FILL" in self._v_attrs._f_list("sys"):
-                i = 0
-                get_attr = self._v_attrs.__getattr__
-                for objcol in self.description._f_walk(type="Col"):
-                    colname = objcol._v_pathname
-                    # Get the default values for each column
-                    fieldname = "FIELD_%s_FILL" % i
-                    defval = get_attr(fieldname)
-                    if defval is not None:
-                        objcol.dflt = defval
-                    else:
-                        warnings.warn(
-                            "could not load default value "
-                            "for the ``%s`` column of table ``%s``; "
-                            "using ``%r`` instead"
-                            % (colname, self._v_pathname, objcol.dflt)
-                        )
-                        defval = objcol.dflt
-                    i += 1
+        if self._v_file.params[
+            "PYTABLES_SYS_ATTRS"
+        ] and "FIELD_0_FILL" in self._v_attrs._f_list("sys"):
+            get_attr = self._v_attrs.__getattr__
+            for i, objcol in enumerate(self.description._f_walk(type="Col")):
+                colname = objcol._v_pathname
+                # Get the default values for each column
+                fieldname = "FIELD_%s_FILL" % i
+                defval = get_attr(fieldname)
+                if defval is not None:
+                    objcol.dflt = defval
+                else:
+                    warnings.warn(
+                        "could not load default value "
+                        "for the ``%s`` column of table ``%s``; "
+                        "using ``%r`` instead"
+                        % (colname, self._v_pathname, objcol.dflt)
+                    )
+                    defval = objcol.dflt
 
-                # Set also the correct value in the desc._v_dflts dictionary
-                for descr in self.description._f_walk(type="Description"):
-                    for name in descr._v_names:
-                        objcol = descr._v_colobjects[name]
-                        if isinstance(objcol, Col):
-                            descr._v_dflts[objcol._v_name] = objcol.dflt
+            # Set also the correct value in the desc._v_dflts dictionary
+            for descr in self.description._f_walk(type="Description"):
+                for name in descr._v_names:
+                    objcol = descr._v_colobjects[name]
+                    if isinstance(objcol, Col):
+                        descr._v_dflts[objcol._v_name] = objcol.dflt
 
         # 5. Cache some data which is already in the description.
         self._cache_description_data()
@@ -1415,7 +1417,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
 
         # Bad luck, the condition must be parsed and compiled.
         # Fortunately, the key provides some valuable information. ;)
-        condition, colnames, varnames, colpaths, vartypes = condkey
+        condition, colnames, varnames, _, vartypes = condkey
 
         # Extract more information from referenced columns.
 
@@ -1944,9 +1946,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                     field = None
                 else:
                     raise KeyError(
-                        ("Field {} not found in table " "{}").format(
-                            field, self
-                        )
+                        f"Field {field} not found in table " f"{self}"
                     )
             else:
                 # The column hangs directly from the top
@@ -1999,7 +1999,8 @@ very small/large chunksize, you may want to increase/decrease it.""",
         # H5TBread_fields_name in tableextension will be finished
         # F. Alted 2005/05/26
         # XYX Ho implementem per a PyTables 2.0??
-        elif field and step > 15 and 0:
+        # elif field and step > 15:
+        elif False:
             # For step>15, this seems to work always faster than row._fill_col.
             self._read_field_name(result, start, stop, step, field)
         else:
@@ -3005,8 +3006,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
             index = self._check_sortby_csi(sortby, checkCSI)
         for start2 in range(start, stop, absstep * lenbuf):
             stop2 = start2 + absstep * lenbuf
-            if stop2 > stop:
-                stop2 = stop
+            stop2 = min(stop2, stop)
             # The next 'if' is not needed, but it doesn't bother either
             if sortby is None:
                 rows = self[start2:stop2:step]
@@ -3027,11 +3027,12 @@ very small/large chunksize, you may want to increase/decrease it.""",
         for start2 in range(start, stop, step * nrowsinbuf):
             # Save the records on disk
             stop2 = start2 + step * nrowsinbuf
-            if stop2 > stop:
-                stop2 = stop
+            stop2 = min(stop2, stop)
+
             # Optimized version (it saves some conversions)
             nrows = ((stop2 - start2 - 1) // step) + 1
             self.row._fill_col(self._v_iobuf, start2, stop2, step, None)
+
             # The output buffer is created anew,
             # so the operation is safe to in-place conversion.
             obj._append_records(nrows)
@@ -3094,7 +3095,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
         # Generate equivalent indexes in the new table, if required.
         if propindexes and self.indexed:
             self._g_prop_indexes(newtable)
-        return (newtable, nbytes)
+        return newtable, nbytes
 
     # This overloading of copy is needed here in order to document
     # the additional keywords for the Table case.
@@ -3602,10 +3603,7 @@ class Column:
     @property
     def is_indexed(self) -> bool:
         """Return True if the column is indexed, false otherwise."""
-        if self.index is None:
-            return False
-        else:
-            return True
+        return self.index is not None
 
     @property
     def maindim(self) -> int:
@@ -4118,5 +4116,4 @@ class ColumnAttributeSet:
         if attrnames:
             rep = [f"{attr} := {getattr(self, attr)!r}" for attr in attrnames]
             return f"{self!s}:\n   [" + ",\n    ".join(rep) + "]"
-        else:
-            return str(self)
+        return str(self)

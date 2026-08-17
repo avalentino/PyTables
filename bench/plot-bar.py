@@ -122,10 +122,9 @@ if __name__ == "__main__":
 
     filenames = pargs
     bars = []
-    n = 0
-    for filename in filenames:
+
+    for n, filename in enumerate(filenames):
         values = get_values(filename)
         print("Values-->", values)
         bars.append(plot_bar(values, n))
-        n += 1
     show_plot(bars, filenames, tit)

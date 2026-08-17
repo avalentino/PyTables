@@ -171,16 +171,14 @@ def join_path(parentpath: str, name: str) -> str:
     '/foo'
 
     """
-    if name.startswith("./"):  # Support relative paths (mainly for links)
-        name = name[2:]
+    name = name.removeprefix("./")  # Support relative paths (mainly for links)
     if parentpath == "/" and name.startswith("/"):
-        pstr = "%s" % name
+        pstr = name
     elif parentpath == "/" or name.startswith("/"):
         pstr = f"{parentpath}{name}"
     else:
         pstr = f"{parentpath}/{name}"
-    if pstr.endswith("/"):
-        pstr = pstr[:-1]
+    pstr = pstr.removesuffix("/")
     return pstr
 
 

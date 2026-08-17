@@ -34,12 +34,12 @@ def quantize(data, least_significant_digit):
     """
 
     precision = 10**-least_significant_digit
-    exp = math.log(precision, 10)
+    exp = math.log10(precision)
     if exp < 0:
         exp = math.floor(exp)
     else:
         exp = math.ceil(exp)
-    bits = math.ceil(math.log(10**-exp, 2))
+    bits = math.ceil(math.log2(10**-exp))
     scale = 2**bits
     return np.around(scale * data) / scale
 
@@ -54,60 +54,58 @@ def get_db_size(filename):
 
 def bench(chunkshape, filters):
     np.random.seed(1)  # to have reproductible results
-    filename = tempfile.NamedTemporaryFile(suffix=".h5").name
-    print("Doing test on the file system represented by:", filename)
+    with tempfile.NamedTemporaryFile(suffix=".h5") as f:
+        filename = f.name
+        print("Doing test on the file system represented by:", filename)
 
-    f = tb.open_file(filename, "w")
-    e = f.create_earray(
-        f.root,
-        "earray",
-        datom,
-        shape=(0, M),
-        filters=filters,
-        chunkshape=chunkshape,
-    )
-    # Fill the array
-    t1 = clock()
-    for i in range(N):
-        # e.append([np.random.rand(M)])  # use this for less compressibility
-        e.append([quantize(np.random.rand(M), 6)])
-    # os.system("sync")
-    print(f"Creation time: {clock() - t1:.3f}", end=" ")
-    filesize = get_db_size(filename)
-    filesize_bytes = Path(filename).stat().st_size
-    print("\t\tFile size: %d -- (%s)" % (filesize_bytes, filesize))
+        e = f.create_earray(
+            f.root,
+            "earray",
+            datom,
+            shape=(0, M),
+            filters=filters,
+            chunkshape=chunkshape,
+        )
+        # Fill the array
+        t1 = clock()
+        for i in range(N):
+            # e.append([np.random.rand(M)])  # use this for less compressibility
+            e.append([quantize(np.random.rand(M), 6)])
+        # os.system("sync")
+        print(f"Creation time: {clock() - t1:.3f}", end=" ")
+        filesize = get_db_size(filename)
+        filesize_bytes = Path(filename).stat().st_size
+        print("\t\tFile size: %d -- (%s)" % (filesize_bytes, filesize))
 
-    # Read in sequential mode:
-    e = f.root.earray
-    t1 = clock()
-    # Flush everything to disk and flush caches
-    # os.system("sync; echo 1 > /proc/sys/vm/drop_caches")
-    for row in e:
-        _ = row
-    print(f"Sequential read time: {clock() - t1:.3f}", end=" ")
+        # Read in sequential mode:
+        e = f.root.earray
+        t1 = clock()
+        # Flush everything to disk and flush caches
+        # os.system("sync; echo 1 > /proc/sys/vm/drop_caches")
+        for row in e:
+            _ = row
+        print(f"Sequential read time: {clock() - t1:.3f}", end=" ")
 
-    # f.close()
-    # return
+        # f.close()
+        # return
 
-    # Read in random mode:
-    i_index = np.random.randint(0, N, 128)
-    j_index = np.random.randint(0, M, 256)
-    # Flush everything to disk and flush caches
-    # os.system("sync; echo 1 > /proc/sys/vm/drop_caches")
+        # Read in random mode:
+        i_index = np.random.randint(0, N, 128)
+        j_index = np.random.randint(0, M, 256)
+        # Flush everything to disk and flush caches
+        # os.system("sync; echo 1 > /proc/sys/vm/drop_caches")
 
-    # Protection against too large chunksizes
-    # 4 MB
-    if 0 and filters.complevel and chunkshape[0] * chunkshape[1] * 8 > 2**22:
-        f.close()
-        return
+        # Protection against too large chunksizes: 4 MB
+        # if filters.complevel and chunkshape[0] * chunkshape[1] * 8 > 2**22:
+        if False:
+            f.close()
+            return
 
-    t1 = clock()
-    for i in i_index:
-        for j in j_index:
-            _ = e[i, j]
-    print(f"\tRandom read time: {clock() - t1:.3f}")
-
-    f.close()
+        t1 = clock()
+        for i in i_index:
+            for j in j_index:
+                _ = e[i, j]
+        print(f"\tRandom read time: {clock() - t1:.3f}")
 
 
 # Benchmark with different chunksizes and filters

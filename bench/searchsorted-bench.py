@@ -144,8 +144,7 @@ def read_file(filename, atom, niter, verbose):
             #             results = [ (p.nrow(), p["var3"]) for p in table
             #                         if (1000.-i <= p["var3"] < 1000.+i) ]
             rowselected += len(results)
-        else:
-            raise ValueError("Unsupported atom value")
+        raise ValueError("Unsupported atom value")
     if verbose and 1:
         print("Values that fulfill the conditions:")
         print(results)

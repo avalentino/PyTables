@@ -356,7 +356,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             b = group.array.read()
             if common.verbose:
                 print("%3d," % (rank), end=" ")
-            if not a.tolist() == b.tolist() and common.verbose:
+            if a.tolist() != b.tolist() and common.verbose:
                 dset = group.array
                 print("Info from dataset:", dset._v_pathname)
                 print("  Shape: ==>", dset.shape, end=" ")

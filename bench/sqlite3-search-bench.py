@@ -26,8 +26,7 @@ def int_generator(nrows):
     for i in range(nrows):
         if i >= step * j:
             stop = (j + 1) * step
-            if stop > nrows:  # Seems unnecessary
-                stop = nrows
+            stop = min(stop, nrows)  # Seems unnecessary
             col_i, col_j = fill_arrays(i, stop)
             j += 1
             k = 0

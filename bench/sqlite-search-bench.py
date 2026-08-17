@@ -200,8 +200,6 @@ CREATE INDEX ivar3 ON small(var3);
     table.row.append()
     bf.close()
 
-    return
-
 
 def read_file(dbfile, nrows, indexmode, heavy, dselect, bfile, riter):
     # Connect to the database.
@@ -255,9 +253,9 @@ def read_file(dbfile, nrows, indexmode, heavy, dselect, bfile, riter):
 
         valmax = round(nrows / 2 - dev)
         # split the selection range in regular chunks
-        if riter > valmax * 2:
-            riter = valmax * 2
+        riter = min(riter, valmax * 2)
         chunksize = (valmax * 2 / riter) * 10
+
         # Get a list of integers for the intervals
         randlist = range(0, valmax, chunksize)
         randlist.extend(range(nrows - valmax, nrows, chunksize))
@@ -351,8 +349,6 @@ def read_file(dbfile, nrows, indexmode, heavy, dselect, bfile, riter):
     # Close the database
     conn.close()
     bf.close()  # the bench database
-
-    return
 
 
 if __name__ == "__main__":

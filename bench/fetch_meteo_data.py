@@ -44,7 +44,7 @@ def open_zarr(year, month, datestart, dateend, path):
 datasets = [
     "precipitation_amount_1hour_Accumulation",
     "integral_wrt_time_of_surface_direct_downwelling_shortwave_flux_"
-    "in_air_1hour_Accumulation",
+    + "in_air_1hour_Accumulation",
     "air_pressure_at_mean_sea_level",
     "snow_density",
     "eastward_wind_at_10_metres",
@@ -82,14 +82,14 @@ if "-v" in sys.argv:
     verbose = True
     sys.argv.remove("-v")
 if len(sys.argv) != 3:
-    raise Exception("You must pass 2 arguments: start date and stop date")
+    raise RuntimeError("You must pass 2 arguments: start date and stop date")
 try:
     date_start = datetime.date.fromisoformat(sys.argv[1])
     date_stop = datetime.date.fromisoformat(sys.argv[2])
 except ValueError:
-    raise Exception("Dates must be in ISO format (e.g. YYYY-MM-DD)")
+    raise ValueError("Dates must be in ISO format (e.g. YYYY-MM-DD)")
 if date_stop < date_start:
-    raise Exception("Start date must be before stop date")
+    raise ValueError("Start date must be before stop date")
 
 # Fetch and append
 date_i = date_start

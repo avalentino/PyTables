@@ -138,9 +138,8 @@ class RawPyTablesIO(io.RawIOBase):
         This method has no effect if the file is already closed.
 
         """
-        if not self.closed:
-            if getattr(self._node, "_v_file", None) is None:
-                warnings.warn("host PyTables file is already closed!")
+        if not self.closed and getattr(self._node, "_v_file", None) is None:
+            warnings.warn("host PyTables file is already closed!")
 
         try:
             super().close()

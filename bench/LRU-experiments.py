@@ -77,7 +77,7 @@ def modify_junk_lru3():
     for j in range(3):
         t1 = clock()
         for tt in fileh.walk_nodes(group, "Table"):
-            tt.attrs.TITLE
+            _ = tt.attrs.TITLE
             for row in tt:
                 pass
         print(f"iter and time --> {j + 1} {clock() - t1:.3f}")
