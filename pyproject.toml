@@ -3,8 +3,7 @@
 # "Prerequisites" in User's Guide,
 # build jobs in `.github/workflows/*.yml`.
 requires = [
-    "setuptools >= 61.0.0",
-    "wheel",
+    "setuptools >= 77.0.0",
     # NOTE: it is still possible to build PyTables with numpy 1.x
     # Please refer to https://github.com/PyTables/PyTables/issues/1200
     # If you change this to build with `numpy` 1, please update `numpy` in `dependencies` as well
@@ -30,7 +29,11 @@ description = "Hierarchical datasets for Python"
 # `classifiers` below,
 # `min_python_version` in `setup.py`.
 requires-python = ">=3.11"
-license = { text = "BSD 3-Clause License" }
+license = "BSD-3-Clause"
+license-files = [
+    "LICENSE.txt",
+    "LICENSES/*.txt",
+]
 keywords = [ "hdf5" ]
 authors = [
     { name = "Francesc Alted" },
@@ -54,7 +57,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: Unix",
     "Programming Language :: Python",
@@ -106,13 +108,6 @@ ptdump = "tables.scripts.ptdump:main"
 ptrepack = "tables.scripts.ptrepack:main"
 pt2to3 = "tables.scripts.pt2to3:main"
 pttree = "tables.scripts.pttree:main"
-
-
-[tool.setuptools]
-platforms = [ "any" ]
-zip-safe = false
-# include-package-data = true
-license-files = [ "LICENSE.txt" ]
 
 
 [tool.setuptools.dynamic]

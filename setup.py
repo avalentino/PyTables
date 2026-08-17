@@ -19,8 +19,8 @@ from pathlib import Path
 # Using ``setuptools`` enables lots of goodies
 from setuptools import setup, Extension
 from packaging.version import Version
-from wheel.bdist_wheel import bdist_wheel
 from setuptools.command.build_ext import build_ext
+from setuptools.command.bdist_wheel import bdist_wheel
 
 # The name for the pkg-config utility
 PKG_CONFIG = "pkg-config"
