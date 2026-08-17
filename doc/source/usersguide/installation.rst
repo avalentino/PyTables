@@ -63,11 +63,11 @@ If you don't, fetch and install them before proceeding.
 * Numexpr_ >= 2.6.2
 * packaging_
 * py-cpuinfo_
-* c-blosc_ >= 1.11.1 (sources are bundled with PyTables sources but the user can
+* c-blosc_ >= 2.17 (sources are bundled with PyTables sources but the user can
   use an external version of sources using the :envvar:`BLOSC_DIR` environment
   variable or the `--blosc` flag of the :file:`setup.py`)
 * Either
-   * python-blosc2_ >= 2.3.0, this is the Python wheel containing *both* the
+   * python-blosc2_ >= 3.2.0, this is the Python wheel containing *both* the
      C-Blosc2 libs and headers (>= 2.11.0), as well as the Python wrapper for
      Blosc2 (not currently used, but it might be in the future), or
    * A standalone installation of the c-blosc2_ library (>= 2.11.0) including
