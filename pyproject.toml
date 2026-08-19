@@ -240,3 +240,8 @@ ignore-words-list = [
     "fOf",
     "FOM",
 ]
+
+
+[tool.cython-lint]
+max-line-length = 80
+ignore = ["E111", "E114", "E221", "E222", "E266"]
