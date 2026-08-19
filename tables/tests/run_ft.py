@@ -197,7 +197,7 @@ _EXCLUDE_CASES = set("""
     tables.tests.test_basics.HDF5ErrorHandling
     tables.tests.test_basics.OpenFileFailureTestCase
     tables.tests.test_create.SetBloscMaxThreadsTestCase
-    tables.tests.test_tablesMD.CompressTwoTablesTestCase
+    tables.tests.test_tables_md.CompressTwoTablesTestCase
     tables.tests.test_utils.ptdumpTestCase.test_paths_windows
     tables.tests.test_utils.ptrepackTestCase.test_paths_windows
     tables.tests.test_utils.pttreeTestCase.test_paths_windows

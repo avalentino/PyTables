@@ -1196,7 +1196,7 @@ def enum_to_hdf5(object enum_atom, str byteorder):
     # Return the new, open HDF5 enumerated type.
     return enum_id
 
-  except:
+  except Exception:
     if H5Tclose(enum_id) < 0:
       raise HDF5ExtError("failed to close HDF5 enumerated type")
 

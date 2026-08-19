@@ -34,6 +34,10 @@ def same_position(
     return newmethod
 
 
+class _ColClassesRegistry(dict):
+    pass
+
+
 class Col(atom.Atom):
     """Defines a non-nested column.
 
@@ -79,7 +83,7 @@ class Col(atom.Atom):
     """
 
     # filled as column classes are created
-    _class_from_prefix: dict[str, type[Col]] = {}
+    _class_from_prefix: dict[str, type[Col]] = _ColClassesRegistry()
     """Maps column prefixes to column classes."""
 
     @classmethod

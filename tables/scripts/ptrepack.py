@@ -122,7 +122,7 @@ def copy_leaf(
         )
         try:
             dstgroup = dstfileh.get_node(dstgroup)
-        except Exception:
+        except (NameError, TypeError, tb.NoSuchNodeError):
             # The dstgroup does not seem to exist. Try creating it.
             dstgroup = newdst_group(dstfileh, dstgroup, title, filters)
         else:

@@ -39,11 +39,11 @@ class RawPyTablesIO(io.RawIOBase):
     """Base class for raw binary I/O on HDF5 files using PyTables."""
 
     # A lambda to turn a size into a shape, for each version.
-    _size_to_shape = [
+    _size_to_shape = (
         None,
         lambda n: (n, 1),
         lambda m: (m,),
-    ]
+    )
 
     def __init__(self, node, mode=None):
         super().__init__()
@@ -559,19 +559,19 @@ class RAFileNode(FileNodeMixin, RawPyTablesIO):
     """
 
     # The atom representing a byte in the array, for each version.
-    _byte_shape = [
+    _byte_shape = (
         None,
         (0, 1),
         (0,),
-    ]
+    )
 
-    __allowed_init_kwargs = [
+    __allowed_init_kwargs = (
         "where",
         "name",
         "title",
         "filters",
         "expectedsize",
-    ]
+    )
 
     def __init__(self, node, h5file, **kwargs):
         if node is not None:
@@ -819,9 +819,9 @@ def read_from_filenode(
     # guess output filename if necessary
     # TODO: pathlib.Path strips trailing slash automatically :-(
     if path.is_dir() or filename.endswith(os.path.sep):
-        try:
+        if hasattr(fnode.node.attrs, "_filename"):
             path = path / fnode.node.attrs._filename
-        except Exception:
+        else:
             path = path / fnode.node.name
 
     if os.access(path, os.R_OK) and not overwrite:

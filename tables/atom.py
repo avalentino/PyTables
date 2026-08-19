@@ -858,7 +858,7 @@ class ComplexAtom(Atom):
     kind = "complex"
     _deftype = "complex128"
     _defvalue = 0j
-    _isizes = [8, 16]
+    _isizes = (8, 16)
 
     @property  # type: ignore[misc]
     def itemsize(self) -> int:  # type: ignore[override]
@@ -871,10 +871,10 @@ class ComplexAtom(Atom):
     all_types.add("complex128")
     if hasattr(np, "complex192"):
         all_types.add("complex192")
-        _isizes.append(24)
+        _isizes = _isizes + (24,)
     if hasattr(np, "complex256"):
         all_types.add("complex256")
-        _isizes.append(32)
+        _isizes = _isizes + (32,)
 
     def __init__(
         self, itemsize: int, shape: Shape = (), dflt: Any = _defvalue

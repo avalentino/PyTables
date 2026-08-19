@@ -74,7 +74,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(f"Running {self.__class__.__name__}.test00_getNode...")
+            print(f"Running {self.__class__.__name__}.test00_get_node...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         nodelist = ["/", "/table0", "/group0/var1", "/group0/group1/var4"]
@@ -99,7 +99,11 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 try:
                     object = self.h5file.get_node(group, name)
                 except LookupError:
-                    pass
+                    if common.verbose:
+                        print(
+                            f"\nGroup ``{group}`` has no child "
+                            f"under ``{name}``"
+                        )
                 else:
                     nodepaths.append(object._v_pathname)
 
@@ -156,7 +160,11 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 try:
                     object = self.h5file.get_node(group, name, "Array")
                 except Exception:
-                    pass
+                    if common.verbose:
+                        print(
+                            f"\nGroup ``{group}`` has no child named ``Array``"
+                            f"under ``{name}``"
+                        )
                 else:
                     nodearrays.append(object._v_pathname)
 
@@ -228,7 +236,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             try:
                 objectlist = self.h5file.list_nodes(node)
             except Exception:
-                pass
+                if common.verbose:
+                    print(f"\nUnamble to list ``{node}``")
             else:
                 objects.extend(objectlist)
                 for object in objectlist:
@@ -255,7 +264,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             try:
                 objectlist = self.h5file.list_nodes(node)
             except Exception:
-                pass
+                if common.verbose:
+                    print(f"\nUnamble to list ``{node}``")
             else:
                 for object in objectlist:
                     nodenames.append(object._v_pathname)
@@ -352,9 +362,10 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         objects = []
         for node in nodelist:
             try:
-                objectlist = [o for o in self.h5file.iter_nodes(node)]
+                objectlist = list(self.h5file.iter_nodes(node))
             except Exception:
-                pass
+                if common.verbose:
+                    print(f"\nUnamble to iter ``{node}``")
             else:
                 objects.extend(objectlist)
                 for object in objectlist:
@@ -379,9 +390,10 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         nodenames = []
         for node in objects:
             try:
-                objectlist = [o for o in self.h5file.iter_nodes(node)]
+                objectlist = list(self.h5file.iter_nodes(node))
             except Exception:
-                pass
+                if common.verbose:
+                    print(f"\nUnamble to iter ``{node}``")
             else:
                 for object in objectlist:
                     nodenames.append(object._v_pathname)

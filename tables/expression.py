@@ -23,6 +23,10 @@ if TYPE_CHECKING:
 ContainerType = Union[np.ndarray, "Array", "Column"]
 
 
+class _ExprvarsCache(dict):
+    pass
+
+
 class Expr:
     """A class for evaluating expressions with arbitrary array-like objects.
 
@@ -138,7 +142,7 @@ class Expr:
 
     """
 
-    _exprvars_cache = {}
+    _exprvars_cache = _ExprvarsCache()
     """Cache of variables participating in expressions.
 
     .. versionadded:: 3.0

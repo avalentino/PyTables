@@ -164,8 +164,8 @@ def main():
     if isinstance(args.rng, str):
         try:
             options.rng = slice(*ast.literal_eval(args.rng))
-        except Exception:
-            parser.error("Error when getting the range parameter.")
+        except Exception as exc:
+            parser.error(f"Error when getting the range parameter: {exc}.")
         else:
             args.dump = 1
 

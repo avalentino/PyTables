@@ -14,7 +14,7 @@ def suite():
         "tables.tests.test_types",
         "tables.tests.test_lists",
         "tables.tests.test_tables",
-        "tables.tests.test_tablesMD",
+        "tables.tests.test_tables_md",
         "tables.tests.test_large_tables",
         "tables.tests.test_array",
         "tables.tests.test_earray",
