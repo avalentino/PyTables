@@ -45,8 +45,6 @@ from numpy cimport (
     npy_uint64,
     npy_float32,
     npy_float64,
-    npy_float,
-    npy_double,
     npy_longdouble,
     PyArray_BYTES,
     PyArray_DATA,
@@ -64,7 +62,7 @@ from libc.string cimport memcpy, strncmp
 from .definitions cimport hid_t, herr_t, hsize_t, H5Screate_simple, H5Sclose
 from .lrucacheextension cimport NumCache
 
-#-------------------------------------------------------------------
+# ------------------------------------------------------------------
 
 # External C functions
 
@@ -113,7 +111,7 @@ cdef extern from "idx-opt.h" nogil:
   int bisect_right_g(npy_longdouble *a, npy_longdouble x, int hi, int offset)
 
 
-#----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 # Initialization code
 
@@ -121,7 +119,7 @@ cdef extern from "idx-opt.h" nogil:
 # using any numpy facilities in an extension module.
 import_array()
 
-#---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 ctypedef fused floating_type:
     npy_float32
@@ -144,16 +142,17 @@ ctypedef fused number_type:
     npy_float64
     npy_longdouble
 
-#===========================================================================
+# ==========================================================================
 # Functions
-#===========================================================================
+# ==========================================================================
 
-#---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # keysort
-#---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 DEF PYA_QS_STACK = 100
 DEF SMALL_QUICKSORT = 15
+
 
 def keysort(ndarray array1, ndarray array2):
     """Sort array1 in-place. array2 is also sorted following the array1 order.
@@ -169,47 +168,120 @@ def keysort(ndarray array1, ndarray array2):
 
     # floating types
     if type_num == cnp.NPY_FLOAT16:
-        _keysort[npy_float16](<npy_float16*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_float16](
+          <npy_float16*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_FLOAT32:
-        _keysort[npy_float32](<npy_float32*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_float32](
+          <npy_float32*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_FLOAT64:
-        _keysort[npy_float64](<npy_float64*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_float64](
+          <npy_float64*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_LONGDOUBLE:
-        _keysort[npy_longdouble](<npy_longdouble*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_longdouble](
+          <npy_longdouble*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     # signed integer types
     elif type_num == cnp.NPY_INT8:
-        _keysort[npy_int8](<npy_int8*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_int8](
+          <npy_int8*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_INT16:
-        _keysort[npy_int16](<npy_int16*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_int16](
+          <npy_int16*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_INT32:
-        _keysort[npy_int32](<npy_int32*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_int32](
+          <npy_int32*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_INT64:
-        _keysort[npy_int64](<npy_int64*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_int64](
+          <npy_int64*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     # unsigned integer types
     elif type_num == cnp.NPY_UINT8:
-        _keysort[npy_uint8](<npy_uint8*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_uint8](
+          <npy_uint8*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_UINT16:
-        _keysort[npy_uint16](<npy_uint16*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_uint16](
+          <npy_uint16*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_UINT32:
-        _keysort[npy_uint32](<npy_uint32*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_uint32](
+          <npy_uint32*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_UINT64:
-        _keysort[npy_uint64](<npy_uint64*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_uint64](
+          <npy_uint64*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     # other
     elif type_num == cnp.NPY_BOOL:
-        _keysort[npy_bool](<npy_bool*>PyArray_DATA(array1), PyArray_BYTES(array2), elsize2, size)
+        _keysort[npy_bool](
+          <npy_bool*>PyArray_DATA(array1),
+          PyArray_BYTES(array2),
+          elsize2,
+          size,
+        )
     elif type_num == cnp.NPY_STRING:
-        _keysort_string(PyArray_BYTES(array1), elsize1, PyArray_BYTES(array2), elsize2, size)
+        _keysort_string(
+          PyArray_BYTES(array1), elsize1, PyArray_BYTES(array2), elsize2, size
+        )
     else:
         raise ValueError("Unknown array datatype")
 
 
 cdef inline void swap_bytes(char *x, char *y, size_t n) noexcept nogil:
     if n == 8:
-        (<npy_int64*>x)[0], (<npy_int64*>y)[0] = (<npy_int64*>y)[0], (<npy_int64*>x)[0]
+        (<npy_int64*>x)[0], (<npy_int64*>y)[0] = (<npy_int64*>y)[0], (
+          <npy_int64*>x
+        )[0]
     elif n == 4:
-        (<npy_int32*>x)[0], (<npy_int32*>y)[0] = (<npy_int32*>y)[0], (<npy_int32*>x)[0]
+        (<npy_int32*>x)[0], (<npy_int32*>y)[0] = (<npy_int32*>y)[0], (
+          <npy_int32*>x
+        )[0]
     elif n == 2:
-        (<npy_int16*>x)[0], (<npy_int16*>y)[0] = (<npy_int16*>y)[0], (<npy_int16*>x)[0]
+        (<npy_int16*>x)[0], (<npy_int16*>y)[0] = (<npy_int16*>y)[0], (
+          <npy_int16*>x
+        )[0]
     else:
         for i in range(n):
             x[i], y[i] = y[i], x[i]
@@ -223,7 +295,9 @@ cdef inline int less_than(number_type* a, number_type* b) nogil:
 
 
 @cython.cdivision(True)
-cdef void _keysort(number_type* start1, char* start2, size_t elsize2, size_t n) noexcept nogil:
+cdef void _keysort(
+  number_type* start1, char* start2, size_t elsize2, size_t n
+) noexcept nogil:
     cdef number_type *pl = start1
     cdef number_type *pr = start1 + (n - 1)
 
@@ -238,8 +312,6 @@ cdef void _keysort(number_type* start1, char* start2, size_t elsize2, size_t n) 
 
     cdef char *istack[PYA_QS_STACK]
     cdef char **isptr = istack
-
-    cdef size_t stack_index = 0
 
     cdef number_type *pm
     cdef number_type *pi
@@ -366,7 +438,9 @@ cdef void _keysort(number_type* start1, char* start2, size_t elsize2, size_t n) 
 
 
 @cython.cdivision(True)
-cdef void _keysort_string(char* start1, size_t ss, char* start2, size_t ts, size_t n) noexcept nogil:
+cdef void _keysort_string(
+  char* start1, size_t ss, char* start2, size_t ts, size_t n
+) noexcept nogil:
     cdef char *pl = start1
     cdef char *pr = start1 + (n - 1) * ss
 
@@ -381,8 +455,6 @@ cdef void _keysort_string(char* start1, size_t ss, char* start2, size_t ts, size
 
     cdef char *istack[PYA_QS_STACK]
     cdef char **isptr = istack
-
-    cdef size_t stack_index = 0
 
     cdef char *pm
     cdef char *pi
@@ -510,9 +582,10 @@ cdef void _keysort_string(char* start1, size_t ss, char* start2, size_t ts, size
     free(vp)
     free(ivp)
 
-#---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # bisect
-#---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
 
 # This has been copied from the standard module bisect.
 # Checks for the values out of limits has been added at the beginning
@@ -530,12 +603,16 @@ def _bisect_left(a, x, int hi):
   cdef int lo, mid
 
   lo = 0
-  if x <= a[0]: return 0
-  if a[-1] < x: return hi
+  if x <= a[0]:
+    return 0
+  if a[-1] < x:
+    return hi
   while lo < hi:
       mid = (lo+hi)//2
-      if a[mid] < x: lo = mid+1
-      else: hi = mid
+      if a[mid] < x:
+        lo = mid+1
+      else:
+        hi = mid
   return lo
 
 
@@ -551,19 +628,22 @@ def _bisect_right(a, x, int hi):
   cdef int lo, mid
 
   lo = 0
-  if x < a[0]: return 0
-  if a[-1] <= x: return hi
+  if x < a[0]:
+    return 0
+  if a[-1] <= x:
+    return hi
   while lo < hi:
     mid = (lo+hi)//2
-    if x < a[mid]: hi = mid
-    else: lo = mid+1
+    if x < a[mid]:
+      hi = mid
+    else:
+      lo = mid+1
   return lo
 
 
-#===========================================================================
+# ==========================================================================
 # Classes
-#===========================================================================
-
+# ==========================================================================
 
 
 cdef class Index:
@@ -614,8 +694,9 @@ cdef class IndexArray(Array):
   cdef NumCache boundscache, sortedcache
   cdef ndarray bufferbc, bufferlb
 
-  def _read_index_slice(self, hsize_t irow, hsize_t start, hsize_t stop,
-                      ndarray idx):
+  def _read_index_slice(
+    self, hsize_t irow, hsize_t start, hsize_t stop, ndarray idx
+  ):
     cdef herr_t ret
     cdef void *buf = PyArray_DATA(idx)
 
@@ -627,13 +708,9 @@ cdef class IndexArray(Array):
     if ret < 0:
       raise HDF5ExtError("Problems reading the index indices.")
 
-
   def _init_sorted_slice(self, index):
     """Initialize the structures for doing a binary search."""
-
-    cdef long ndims
-    cdef int  rank, buflen, cachesize
-    cdef char *bname
+    cdef int  rank
     cdef hsize_t count[2]
     cdef ndarray starts, lengths, rvcache
     cdef object maxslots, rowsize
@@ -674,22 +751,21 @@ cdef class IndexArray(Array):
       # not be duplicated (I know, this smells badly, but anyway).
       params = self._v_file.params
       rowsize = (self.bounds_ext._v_chunkshape[1] * dtype.itemsize)
-      maxslots = params['BOUNDS_MAX_SIZE'] // rowsize
+      maxslots = params["BOUNDS_MAX_SIZE"] // rowsize
       self.boundscache = <NumCache>NumCache(
-        (maxslots, self.nbounds), dtype, 'non-opt types bounds')
+        (maxslots, self.nbounds), dtype, "non-opt types bounds")
       self.bufferbc = np.empty(dtype=dtype, shape=self.nbounds)
       # Get the pointer for the internal buffer for 2nd level cache
       self.rbufbc = PyArray_DATA(self.bufferbc)
       # Another NumCache for the sorted values
       rowsize = (self.chunksize*dtype.itemsize)
-      maxslots = params['SORTED_MAX_SIZE'] // (self.chunksize*dtype.itemsize)
+      maxslots = params["SORTED_MAX_SIZE"] // (self.chunksize*dtype.itemsize)
       self.sortedcache = <NumCache>NumCache(
-        (maxslots, self.chunksize), dtype, 'sorted')
+        (maxslots, self.chunksize), dtype, "sorted")
 
-
-
-  cdef void *_g_read_sorted_slice(self, hsize_t irow, hsize_t start,
-                                hsize_t stop):
+  cdef void *_g_read_sorted_slice(
+    self, hsize_t irow, hsize_t start, hsize_t stop
+  ):
     """Read the sorted part of an index."""
 
     with nogil:
@@ -703,7 +779,7 @@ cdef class IndexArray(Array):
     return self.rbuflb
 
   # can't time machine since this function is cdef'd
-  #_g_read_sorted_slice = prveious_api(_g_read_sorted_slice)
+  # _g_read_sorted_slice = prveious_api(_g_read_sorted_slice)
 
   # This is callable from python
   def _read_sorted_slice(self, hsize_t irow, hsize_t start, hsize_t stop):
@@ -711,7 +787,6 @@ cdef class IndexArray(Array):
 
     self._g_read_sorted_slice(irow, start, stop)
     return self.bufferlb
-
 
   cdef void *get_lru_bounds(self, int nrow, int nbounds):
     """Get the bounds from the cache, or read them."""
@@ -815,7 +890,6 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for uint8
   def _search_bin_na_ub(self, long item1, long item2):
     cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
@@ -877,7 +951,6 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for int16
   def _search_bin_na_s(self, long item1, long item2):
     cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
@@ -937,7 +1010,6 @@ cdef class IndexArray(Array):
       rbufst[nrow] = start
       rbufln[nrow] = length
     return tlength
-
 
   # Optimized version for uint16
   def _search_bin_na_us(self, long item1, long item2):
@@ -999,7 +1071,6 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for int32
   def _search_bin_na_i(self, long item1, long item2):
     cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
@@ -1059,7 +1130,6 @@ cdef class IndexArray(Array):
       rbufst[nrow] = start
       rbufln[nrow] = length
     return tlength
-
 
   # Optimized version for uint32
   def _search_bin_na_ui(self, npy_uint32 item1, npy_uint32 item2):
@@ -1121,7 +1191,6 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for int64
   def _search_bin_na_ll(self, npy_int64 item1, npy_int64 item2):
     cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
@@ -1181,7 +1250,6 @@ cdef class IndexArray(Array):
       rbufst[nrow] = start
       rbufln[nrow] = length
     return tlength
-
 
   # Optimized version for uint64
   def _search_bin_na_ull(self, npy_uint64 item1, npy_uint64 item2):
@@ -1243,10 +1311,9 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for float16
   def _search_bin_na_e(self, npy_float64 item1, npy_float64 item2):
-    cdef int cs, ss, ncs, nrow, nrows, nrow2, nbounds, rvrow
+    cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
     cdef int start, stop, tlength, length, bread, nchunk, nchunk2
     cdef int *rbufst
     cdef int *rbufln
@@ -1306,10 +1373,9 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for float32
   def _search_bin_na_f(self, npy_float64 item1, npy_float64 item2):
-    cdef int cs, ss, ncs, nrow, nrows, nrow2, nbounds, rvrow
+    cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
     cdef int start, stop, tlength, length, bread, nchunk, nchunk2
     cdef int *rbufst
     cdef int *rbufln
@@ -1368,10 +1434,9 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for float64
   def _search_bin_na_d(self, npy_float64 item1, npy_float64 item2):
-    cdef int cs, ss, ncs, nrow, nrows, nrow2, nbounds, rvrow
+    cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
     cdef int start, stop, tlength, length, bread, nchunk, nchunk2
     cdef int *rbufst
     cdef int *rbufln
@@ -1432,10 +1497,9 @@ cdef class IndexArray(Array):
       rbufln[nrow] = length
     return tlength
 
-
   # Optimized version for npy_longdouble/float96/float128
   def _search_bin_na_g(self, npy_longdouble item1, npy_longdouble item2):
-    cdef int cs, ss, ncs, nrow, nrows, nrow2, nbounds, rvrow
+    cdef int cs, ss, ncs, nrow, nrows, nbounds, rvrow
     cdef int start, stop, tlength, length, bread, nchunk, nchunk2
     cdef int *rbufst
     cdef int *rbufln
@@ -1482,9 +1546,11 @@ cdef class IndexArray(Array):
             # Get the bounds row from the LRU cache or read them.
             rbufbc = <npy_longdouble *>self.get_lru_bounds(nrow, nbounds)
           nchunk2 = bisect_right_g(rbufbc, item2, nbounds, 0)
-          if nchunk2 <> nchunk:
+          if nchunk2 != nchunk:
             # Get the sorted row from the LRU cache or read it.
-            rbuflb = <npy_longdouble *>self.get_lru_sorted(nrow, ncs, nchunk2, cs)
+            rbuflb = <npy_longdouble *>self.get_lru_sorted(
+              nrow, ncs, nchunk2, cs
+            )
           stop = bisect_right_g(rbuflb, item2, cs, 0) + cs*nchunk2
         else:
           stop = ss
@@ -1495,7 +1561,6 @@ cdef class IndexArray(Array):
       rbufst[nrow] = start
       rbufln[nrow] = length
     return tlength
-
 
   def _g_close(self):
     super()._g_close()
@@ -1520,7 +1585,6 @@ cdef class LastRowArray(Array):
     if ret < 0:
       raise HDF5ExtError("Problems reading the index data in Last Row.")
 
-
   def _read_sorted_slice(self, IndexArray sorted, hsize_t start, hsize_t stop):
     """Read the sorted part of an LR index."""
 
@@ -1534,12 +1598,3 @@ cdef class LastRowArray(Array):
     if ret < 0:
       raise HDF5ExtError("Problems reading the index data.")
     return sorted.bufferlb[:stop-start]
-
-
-
-## Local Variables:
-## mode: python
-## py-indent-offset: 2
-## tab-width: 2
-## fill-column: 78
-## End:

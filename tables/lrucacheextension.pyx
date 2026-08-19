@@ -39,12 +39,12 @@ from .parameters import (
     LOWEST_HIT_RATIO,
 )
 
-#----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 # Initialization code.
 # The numpy API requires this function to be called before
 # using any numpy facilities in an extension module.
 import_array()
-#----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 
 # ------- Minimalist NodeCache for nodes in PyTables ---------
@@ -56,12 +56,12 @@ import_array()
 # Thanks to the above behaviour, the next code has been stripped down
 # to a bare minimum (the info in cache is kept in just 2 lists).
 
-#*********************** Important note! *****************************
+# *********************** Important note! *****************************
 # The code behind has been carefully tuned to serve the needs of
 # PyTables cache for nodes. As a consequence, it is no longer
 # appropriate as a general LRU cache implementation. You have been
 # warned!.  F. Alted 2006-08-08
-#*********************************************************************
+# *********************************************************************
 
 
 cdef class NodeCache:
@@ -127,14 +127,14 @@ cdef class NodeCache:
     if PyUnicode_Check(path):
         # Start looking from the trailing values (most recently used)
         for i from self.nextslot > i >= 0:
-          #if strcmp(<char *>encoded_path, <char *>self.paths[i]) == 0:
+          # if strcmp(<char *>encoded_path, <char *>self.paths[i]) == 0:
           if PyUnicode_Compare(path, self.paths[i]) == 0:
             nslot = i
             break
     else:
         # Start looking from the trailing values (most recently used)
         for i from self.nextslot > i >= 0:
-          #if strcmp(<char *>path, <char *>self.paths[i]) == 0:
+          # if strcmp(<char *>path, <char *>self.paths[i]) == 0:
           if PyUnicode_Check(self.paths[i]):
             compare = PyUnicode_Compare(path, self.paths[i])
           else:
@@ -192,15 +192,20 @@ cdef class BaseCache:
 
     if nslots < 0:
       raise ValueError(f"Negative number ({nslots}) of slots!")
-    self.setcount = 0;  self.getcount = 0;  self.containscount = 0
-    self.enablecyclecount = 0;  self.disablecyclecount = 0
+    self.setcount = 0
+    self.getcount = 0
+    self.containscount = 0
+    self.enablecyclecount = 0
+    self.disablecyclecount = 0
     self.iscachedisabled = False  # Cache is enabled by default
     self.disableeverycycles = DISABLE_EVERY_CYCLES
     self.enableeverycycles = ENABLE_EVERY_CYCLES
     self.lowesthr = LOWEST_HIT_RATIO
-    self.nprobes = 0.0;  self.hitratio = 0.0
+    self.nprobes = 0.0
+    self.hitratio = 0.0
     self.nslots = nslots
-    self.seqn_ = 0;  self.nextslot = 0
+    self.seqn_ = 0
+    self.nextslot = 0
     self.name = name
     self.incsetcount = False
     # The array for keeping the access times (using long ints here)
@@ -221,7 +226,6 @@ cdef class BaseCache:
   # F. Alted 2006-08-09
   cdef int checkhitratio(self):
     cdef double hitratio
-    cdef long nslot
 
     if self.setcount > self.nslots:
       self.disablecyclecount = self.disablecyclecount + 1
@@ -230,9 +234,13 @@ cdef class BaseCache:
       hitratio = <double>self.getcount / self.containscount
       self.hitratio = self.hitratio + hitratio
       # Reset the hit counters
-      self.setcount = 0;  self.getcount = 0;  self.containscount = 0
-      if (not self.iscachedisabled and
-          self.disablecyclecount >= self.disableeverycycles):
+      self.setcount = 0
+      self.getcount = 0
+      self.containscount = 0
+      if (
+        not self.iscachedisabled
+        and self.disablecyclecount >= self.disableeverycycles
+      ):
         # Check whether the cache is being effective or not
         if hitratio < self.lowesthr:
           # Hit ratio is low. Disable the cache.
@@ -260,7 +268,8 @@ cdef class BaseCache:
       return False
     # Increment setitem because it can be that .setitem() doesn't
     # get called after calling this.
-    self.setcount = self.setcount + 1;  self.incsetcount = True
+    self.setcount = self.setcount + 1
+    self.incsetcount = True
     if self.iscachedisabled:
       if self.setcount == self.nslots:
         # The cache *could* be enabled in the next setitem operation
@@ -363,9 +372,8 @@ cdef class ObjectCache(BaseCache):
 
   # Update a slot
   cdef updateslot_(self, long nslot, long size, object key, object value):
-    cdef ObjectNode node, oldnode
+    cdef ObjectNode node
     cdef long nslot1, nslot2
-    cdef object lruidx
 
     assert nslot < self.nslots, "Number of nodes exceeding cache capacity."
     # Remove the previous nslot
@@ -473,18 +481,18 @@ cdef class ObjectCache(BaseCache):
   """
 
 
-###################################################################
+# ##################################################################
 #  Minimalistic LRU cache implementation for numerical data
-###################################################################
+# ##################################################################
 # The next code is more efficient in situations where efficiency is low.
-###################################################################
+# ##################################################################
 
-#*********************** Important note! ****************************
+# *********************** Important note! ****************************
 # The code behind has been carefully tuned to serve the needs of
 # caching numerical data. As a consequence, it is no longer appropriate
 # as a general LRU cache implementation. You have been warned!.
 # F. Alted 2006-08-09
-#********************************************************************
+# ********************************************************************
 
 cdef class NumCache(BaseCache):
   """Least-Recently-Used (LRU) cache specific for Numerical data."""
@@ -504,7 +512,8 @@ cdef class NumCache(BaseCache):
 
     cdef long nslots
 
-    nslots = shape[0];  self.slotsize = shape[1]
+    nslots = shape[0]
+    self.slotsize = shape[1]
     if nslots >= 1<<16:
       # nslots can't be higher than 2**16. Will silently trunk the number.
       nslots = <long>((1<<16)-1)  # Cast makes cython happy here
@@ -514,8 +523,9 @@ cdef class NumCache(BaseCache):
     # The cache object where all data will go
     # The last slot is to allow the setitem1_ method to still return
     # a valid scratch area for writing purposes
-    self.cacheobj = <ndarray>np.empty(shape=(nslots+1, self.slotsize),
-                                         dtype=dtype)
+    self.cacheobj = <ndarray>np.empty(
+      shape=(nslots+1, self.slotsize), dtype=dtype
+    )
     self.rcache = PyArray_DATA(self.cacheobj)
     # The array for keeping the keys of slots
     self.keys = <ndarray>(-np.ones(shape=nslots, dtype=np.int64))

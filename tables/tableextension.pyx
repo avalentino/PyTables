@@ -24,7 +24,6 @@ import os
 import sys
 import math
 import platform
-from time import time
 
 import numpy as np
 
@@ -36,12 +35,7 @@ from .utilsextension import (
     get_nested_field,
     atom_from_hdf5_type,
     create_nested_type,
-    hdf5_to_np_ext_type,
     platform_byteorder,
-    pttype_to_hdf5,
-    pt_special_kinds,
-    npext_prefixes_to_ptkinds,
-    hdf5_class_to_string,
     H5T_STD_I64,
 )
 
@@ -58,55 +52,39 @@ from numpy cimport (
 )
 from cpython cimport PyErr_Clear
 from libc.stdio cimport snprintf
-from libc.stdint cimport int32_t
-from libc.stdlib cimport malloc, free
-from libc.string cimport memcpy, strdup, strcmp, strlen
+from libc.string cimport memcpy
 
 from .definitions cimport (
     hid_t,
     herr_t,
     hsize_t,
     haddr_t,
-    htri_t,
     hbool_t,
-    H5F_ACC_RDONLY,
     H5P_DEFAULT,
     H5D_CHUNKED,
-    H5T_DIR_DEFAULT,
-    H5F_SCOPE_LOCAL,
-    H5F_SCOPE_GLOBAL,
     H5T_COMPOUND,
     H5Tget_order,
-    H5Fflush,
     H5Dget_create_plist,
     H5T_ORDER_LE,
     H5D_layout_t,
     H5Dopen,
-    H5Dclose,
-    H5Dread,
     H5Dget_type,
     H5Dget_space,
     H5Pget_layout,
     H5Pget_chunk,
     H5Pclose,
-    H5Sget_simple_extent_ndims,
     H5Sget_simple_extent_dims,
     H5Sclose,
     H5T_class_t,
     H5Tget_size,
-    H5Tset_size,
     H5Tcreate,
-    H5Tcopy,
     H5Tclose,
     H5Tget_nmembers,
     H5Tget_member_name,
     H5Tget_member_type,
-    H5Tget_native_type,
     H5Tget_member_offset,
     H5Tinsert,
     H5Tget_class,
-    H5Tget_super,
-    H5Tget_offset,
     H5T_cset_t,
     H5T_CSET_ASCII,
     H5T_CSET_UTF8,
@@ -114,10 +92,8 @@ from .definitions cimport (
     H5ATTRset_attribute,
     get_len_of_range,
     get_order,
-    set_order,
     is_complex,
     conv_float64_timeval32,
-    truncate_dset,
     H5free_memory,
 )
 
@@ -126,7 +102,7 @@ from .hdf5extension cimport Leaf
 from .utilsextension cimport get_native_type, cstr_to_pystr
 from .lrucacheextension cimport ObjectCache, NumCache
 
-#-----------------------------------------------------------------
+# ----------------------------------------------------------------
 
 # Optimized HDF5 API for PyTables
 cdef extern from "H5TB-opt.h" nogil:
@@ -136,50 +112,100 @@ cdef extern from "H5TB-opt.h" nogil:
     size_t chunkshape
     haddr_t *addrs
 
-  int fill_chunk_addrs(hid_t dataset_id, hsize_t nchunks, chunk_iter_op *chunk_op)
+  int fill_chunk_addrs(
+    hid_t dataset_id, hsize_t nchunks, chunk_iter_op *chunk_op
+  )
   int clean_chunk_addrs(chunk_iter_op *chunk_op)
 
-  herr_t H5TBOmake_table( char *table_title, hid_t loc_id, char *dset_name,
-                          char *version, char *class_,
-                          hid_t mem_type_id, hsize_t nrecords,
-                          hsize_t chunk_size, hsize_t block_size,
-                          void *fill_data, int compress,
-                          char *complib, int shuffle, int fletcher32,
-                          hbool_t track_times, hbool_t blosc2_support,
-                          void *data )
+  herr_t H5TBOmake_table(
+    char *table_title,
+    hid_t loc_id,
+    char *dset_name,
+    char *version,
+    char *class_,
+    hid_t mem_type_id,
+    hsize_t nrecords,
+    hsize_t chunk_size,
+    hsize_t block_size,
+    void *fill_data,
+    int compress,
+    char *complib,
+    int shuffle,
+    int fletcher32,
+    hbool_t track_times,
+    hbool_t blosc2_support,
+    void *data,
+  )
 
-  herr_t H5TBOread_records( char* filename, hbool_t blosc2_support,
-                            chunk_iter_op chunk_op,
-                            hid_t dataset_id, hid_t mem_type_id,
-                            hsize_t start, hsize_t nrecords, void *data )
+  herr_t H5TBOread_records(
+    char* filename,
+    hbool_t blosc2_support,
+    chunk_iter_op chunk_op,
+    hid_t dataset_id,
+    hid_t mem_type_id,
+    hsize_t start,
+    hsize_t nrecords,
+    void *data,
+  )
 
-  herr_t H5TBOread_elements( hid_t dataset_id, hid_t mem_type_id,
-                             hsize_t nrecords, void *coords, void *data )
+  herr_t H5TBOread_elements(
+    hid_t dataset_id,
+    hid_t mem_type_id,
+    hsize_t nrecords,
+    void *coords,
+    void *data,
+  )
 
-  herr_t H5TBOappend_records( hbool_t blosc2_support, hid_t dataset_id,
-                              hid_t mem_type_id, hsize_t start,
-                              hsize_t nrecords, void *data )
+  herr_t H5TBOappend_records(
+    hbool_t blosc2_support,
+    hid_t dataset_id,
+    hid_t mem_type_id,
+    hsize_t start,
+    hsize_t nrecords,
+    void *data,
+  )
 
-  herr_t H5TBOwrite_records ( hbool_t blosc2_support, hid_t dataset_id,
-                              hid_t mem_type_id, hsize_t start,
-                              hsize_t nrecords, hsize_t step, void *data )
+  herr_t H5TBOwrite_records(
+    hbool_t blosc2_support,
+    hid_t dataset_id,
+    hid_t mem_type_id,
+    hsize_t start,
+    hsize_t nrecords,
+    hsize_t step,
+    void *data,
+  )
 
-  herr_t write_records_blosc2( hid_t dataset_id, hid_t mem_type_id,
-                               hsize_t start, hsize_t nrecords,
-                               const void *data )
+  herr_t write_records_blosc2(
+    hid_t dataset_id,
+    hid_t mem_type_id,
+    hsize_t start,
+    hsize_t nrecords,
+    const void *data,
+  )
 
-  herr_t H5TBOwrite_elements( hid_t dataset_id, hid_t mem_type_id,
-                              hsize_t nrecords, void *coords, void *data )
+  herr_t H5TBOwrite_elements(
+    hid_t dataset_id,
+    hid_t mem_type_id,
+    hsize_t nrecords,
+    void *coords,
+    void *data,
+  )
 
-  herr_t H5TBOdelete_records( char* filename, hbool_t blosc2_support,
-                              chunk_iter_op chunk_op,
-                              hid_t dataset_id, hid_t mem_type_id,
-                              hsize_t ntotal_records, size_t src_size,
-                              hsize_t start, hsize_t nrecords,
-                              hsize_t maxtuples )
+  herr_t H5TBOdelete_records(
+    char* filename,
+    hbool_t blosc2_support,
+    chunk_iter_op chunk_op,
+    hid_t dataset_id,
+    hid_t mem_type_id,
+    hsize_t ntotal_records,
+    size_t src_size,
+    hsize_t start,
+    hsize_t nrecords,
+    hsize_t maxtuples,
+  )
 
 
-#----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 # Initialization code
 
@@ -187,7 +213,7 @@ cdef extern from "H5TB-opt.h" nogil:
 # using any numpy facilities in an extension module.
 import_array()
 
-#-------------------------------------------------------------
+# ------------------------------------------------------------
 
 
 # Private functions
@@ -217,7 +243,7 @@ cdef join_path(object parent, object name):
   if parent == "":
     return name
   else:
-    return parent + '/' + name
+    return parent + "/" + name
 
 
 # Public classes
@@ -230,10 +256,7 @@ cdef class Table(Leaf):
   cdef hbool_t blosc2_support_write
 
   def _create_table(self, title, complib, obversion):
-    cdef int     offset
     cdef int     ret
-    cdef long    buflen
-    cdef hid_t   oid
     cdef void    *data
     cdef hsize_t nrows
     cdef bytes   class_
@@ -249,10 +272,10 @@ cdef class Table(Leaf):
     cdef int i
     cdef H5T_cset_t cset = H5T_CSET_ASCII
 
-    encoded_title = title.encode('utf-8')
-    encoded_complib = complib.encode('utf-8')
-    encoded_obversion = obversion.encode('utf-8')
-    encoded_name = self.name.encode('utf-8')
+    encoded_title = title.encode("utf-8")
+    encoded_complib = complib.encode("utf-8")
+    encoded_obversion = obversion.encode("utf-8")
+    encoded_name = self.name.encode("utf-8")
 
     # Get the C pointer
     ctitle = encoded_title
@@ -260,7 +283,7 @@ cdef class Table(Leaf):
 
     # Compute the complete compound datatype based on the table description
     self.disk_type_id = create_nested_type(self.description, self.byteorder)
-    #self.type_id = H5Tcopy(self.disk_type_id)
+    # self.type_id = H5Tcopy(self.disk_type_id)
     # A H5Tcopy only is not enough, as we want the in-memory type to be
     # in the byteorder of the machine (sys.byteorder).
     self.type_id = create_nested_type(self.description, sys.byteorder)
@@ -290,10 +313,10 @@ cdef class Table(Leaf):
     # blosc2 opt
     self.blosc2_support_read = (
         self.blosc2_support_write and
-        ((platform.system().lower() != 'windows') or
-         (self._v_file.mode == 'r')))
+        ((platform.system().lower() != "windows") or
+         (self._v_file.mode == "r")))
 
-    class_ = self._c_classid.encode('utf-8')
+    class_ = self._c_classid.encode("utf-8")
     cdef hsize_t blocksize = int(os.environ.get("PT_DEFAULT_B2_BLOCKSIZE", "0"))
     self.dataset_id = H5TBOmake_table(ctitle, self.parent_id, encoded_name,
                                       cobversion, class_, self.disk_type_id,
@@ -307,7 +330,7 @@ cdef class Table(Leaf):
     if self.dataset_id < 0:
       raise HDF5ExtError("Problems creating the table")
 
-    if self._v_file.params['PYTABLES_SYS_ATTRS']:
+    if self._v_file.params["PYTABLES_SYS_ATTRS"]:
       cset = H5T_CSET_UTF8
       # Set the conforming table attributes
       # Attach the CLASS attribute
@@ -325,8 +348,9 @@ cdef class Table(Leaf):
           f"Can't set attribute 'VERSION' in table:\n {self.name}."
         )
       # Attach the TITLE attribute
-      ret = H5ATTRset_attribute_string(self.dataset_id, "TITLE", ctitle,
-                                       len(encoded_title), cset)
+      ret = H5ATTRset_attribute_string(
+        self.dataset_id, "TITLE", ctitle, len(encoded_title), cset
+      )
       if ret < 0:
         raise HDF5ExtError(
           f"Can't set attribute 'TITLE' in table:\n {self.name}."
@@ -345,10 +369,10 @@ cdef class Table(Leaf):
       # We write only the first level names
       for i, name in enumerate(self.description._v_names):
         snprintf(fieldname, 128, "FIELD_%d_NAME", i)
-        encoded_name = name.encode('utf-8')
-        ret = H5ATTRset_attribute_string(self.dataset_id, fieldname,
-                                         encoded_name, len(encoded_name),
-                                         cset)
+        encoded_name = name.encode("utf-8")
+        ret = H5ATTRset_attribute_string(
+          self.dataset_id, fieldname, encoded_name, len(encoded_name), cset
+        )
       if ret < 0:
         raise HDF5ExtError(
           f"Can't set attribute 'fieldname' in table:\n {self.name}."
@@ -358,25 +382,29 @@ cdef class Table(Leaf):
     self._chunked = True  # Accessible from python
 
     # Initialize blosc2 struct for chunk addresses
-    self.chunk_op = chunk_iter_op(self.description._v_itemsize, self.chunkshape[0], NULL)
+    self.chunk_op = chunk_iter_op(
+      self.description._v_itemsize, self.chunkshape[0], NULL
+    )
 
     # Finally, return the object identifier.
     return self.dataset_id
 
-
-  cdef get_nested_type(self, hid_t type_id, hid_t native_type_id,
-                       object colpath, object field_byteorders):
+  cdef get_nested_type(
+    self,
+    hid_t type_id,
+    hid_t native_type_id,
+    object colpath,
+    object field_byteorders,
+  ):
     """Open a nested type and return a nested dictionary as description."""
 
     cdef hid_t   member_type_id, native_member_type_id, member_offset
     cdef hsize_t nfields, i
-    cdef hsize_t dims[1]
     cdef size_t  itemsize
     cdef char    *c_colname
     cdef H5T_class_t class_id
     cdef char    c_byteorder2[11]  # "irrelevant" fits easily here
-    cdef char    *sys_byteorder
-    cdef object  desc, colobj, colpath2, typeclassname, typeclass
+    cdef object  desc, colobj, colpath2
     cdef object  byteorder
     cdef str     colname, byteorder2
 
@@ -385,8 +413,10 @@ cdef class Table(Leaf):
     # Get the number of members
     nfields = H5Tget_nmembers(type_id)
 
-    # Iterate through fields to get the correct order that elements may appear in
-    # The object type can be stored not in order, so order based on the offset in the data
+    # Iterate through fields to get the correct order that elements may
+    # appear in
+    # The object type can be stored not in order, so order based on the
+    # offset in the data
     position_order = []
     for i in range(nfields):
       member_offset = H5Tget_member_offset(type_id, i)
@@ -436,7 +466,7 @@ cdef class Table(Leaf):
             field_byteorders.append("little")
           else:
             field_byteorders.append("big")
-        elif colobj.kind in ['int', 'uint', 'float', 'complex', 'enum']:
+        elif colobj.kind in ["int", "uint", "float", "complex", "enum"]:
           # Keep track of the byteorder for this column
           get_order(member_type_id, c_byteorder2)
           byteorder2 = cstr_to_pystr(c_byteorder2)
@@ -476,14 +506,14 @@ cdef class Table(Leaf):
     """Get info from a table on disk."""
 
     cdef hid_t   space_id, plist
-    cdef size_t  type_size, size2
+    cdef size_t  type_size
     cdef hsize_t dims[1]        # enough for unidimensional tables
     cdef hsize_t chunksize[1]
     cdef H5D_layout_t layout
     cdef bytes encoded_name
 
     # Open the dataset
-    encoded_name = self.name.encode('utf-8')
+    encoded_name = self.name.encode("utf-8")
     self.dataset_id = H5Dopen(self.parent_id, encoded_name, H5P_DEFAULT)
     if self.dataset_id < 0:
       raise HDF5ExtError(
@@ -529,7 +559,7 @@ cdef class Table(Leaf):
 
     if offset < type_size:
       # Trailing padding, set the itemsize to the correct type_size (see #765)
-      desc['_v_itemsize'] = type_size
+      desc["_v_itemsize"] = type_size
 
     # Initialize blosc2 struct for chunk addresses
     self.chunk_op = chunk_iter_op(type_size, chunksize[0], NULL)
@@ -615,7 +645,7 @@ cdef class Table(Leaf):
   def _close_append(self):
     cdef hsize_t nrows
 
-    if self._v_file.params['PYTABLES_SYS_ATTRS']:
+    if self._v_file.params["PYTABLES_SYS_ATTRS"]:
       # Update the NROWS attribute
       nrows = self.nrows
       if (H5ATTRset_attribute(self.dataset_id, "NROWS", H5T_STD_I64,
@@ -648,8 +678,15 @@ cdef class Table(Leaf):
     self._convert_types(recarr, nrecords, 0)
     # Update the records:
     with nogil:
-        ret = H5TBOwrite_records(self.blosc2_support_write and (step == 1), self.dataset_id,
-                                 self.type_id, start, nrecords, step, rbuf)
+        ret = H5TBOwrite_records(
+          self.blosc2_support_write and (step == 1),
+          self.dataset_id,
+          self.type_id,
+          start,
+          nrecords,
+          step,
+          rbuf,
+        )
 
     if ret < 0:
       raise HDF5ExtError("Problems updating the records.")
@@ -658,9 +695,7 @@ cdef class Table(Leaf):
     self._dirtycache = True
     self._clean_chunk_addrs()
 
-
-  def _update_elements(self, hsize_t nrecords, ndarray coords,
-                       ndarray recarr):
+  def _update_elements(self, hsize_t nrecords, ndarray coords, ndarray recarr):
     cdef herr_t ret
     cdef void *rbuf
     cdef void *rcoords
@@ -686,11 +721,10 @@ cdef class Table(Leaf):
     self._dirtycache = True
     self._clean_chunk_addrs()
 
-
   def _read_records(self, hsize_t start, hsize_t nrecords, ndarray recarr):
     cdef void *rbuf
     cdef int ret
-    cdef bytes fname = self._v_file.filename.encode('utf8')
+    cdef bytes fname = self._v_file.filename.encode("utf8")
     cdef char* filename = fname
 
     if self.blosc2_support_read:
@@ -707,9 +741,14 @@ cdef class Table(Leaf):
 
     # Read the records from disk
     with nogil:
-        ret = H5TBOread_records(filename, self.blosc2_support_read, self.chunk_op,
-                                self.dataset_id, self.type_id, start,
-                                nrecords, rbuf)
+        ret = H5TBOread_records(
+          filename,
+          self.blosc2_support_read,
+          self.chunk_op,
+          self.dataset_id,
+          self.type_id, start,
+          nrecords, rbuf,
+        )
 
     if ret < 0:
       raise HDF5ExtError("Problems reading records.")
@@ -725,7 +764,7 @@ cdef class Table(Leaf):
     cdef int ret
     cdef void *rbuf
     cdef NumCache chunkcache
-    cdef bytes fname = self._v_file.filename.encode('utf8')
+    cdef bytes fname = self._v_file.filename.encode("utf8")
     cdef char* filename = fname
 
     if self.blosc2_support_read:
@@ -748,9 +787,15 @@ cdef class Table(Leaf):
     else:
       # Chunk is not in cache. Read it and put it in the LRU cache.
       with nogil:
-          ret = H5TBOread_records(filename, self.blosc2_support_read, self.chunk_op,
-                                  self.dataset_id, self.type_id, start,
-                                  nrecords, rbuf)
+          ret = H5TBOread_records(
+            filename,
+            self.blosc2_support_read,
+            self.chunk_op,
+            self.dataset_id,
+            self.type_id, start,
+            nrecords,
+            rbuf,
+          )
 
       if ret < 0:
         raise HDF5ExtError("Problems reading chunk records.")
@@ -786,7 +831,7 @@ cdef class Table(Leaf):
     cdef size_t rowsize
     cdef hsize_t nrecords=0, nrecords2
     cdef hsize_t i
-    cdef bytes fname = self._v_file.filename.encode('utf8')
+    cdef bytes fname = self._v_file.filename.encode("utf8")
     cdef char* filename = fname
 
     if step == 1:
@@ -800,7 +845,7 @@ cdef class Table(Leaf):
         raise HDF5ExtError("Problems deleting records.")
 
       self.nrows = self.nrows - nrecords
-      if self._v_file.params['PYTABLES_SYS_ATTRS']:
+      if self._v_file.params["PYTABLES_SYS_ATTRS"]:
         # Attach the NROWS attribute
         nrecords2 = self.nrows
         H5ATTRset_attribute(self.dataset_id, "NROWS", H5T_STD_I64,
@@ -857,7 +902,8 @@ cdef class Row:
   cdef npy_intp _stride
   cdef long _row, _unsaved_nrows, _mod_nrows
   cdef long long start, absstep
-  cdef long long stop, step, nextelement, _nrow, stopb  # has to be long long, not hsize_t, for negative step sizes
+  # has to be long long, not hsize_t, for negative step sizes
+  cdef long long stop, step, nextelement, _nrow, stopb
   cdef long long nrowsinbuf, nrows, nrowsread
   cdef long long chunksize, nchunksinbuf, totalchunks
   cdef long long startb, lenbuf
@@ -905,7 +951,6 @@ cdef class Row:
         return self._table_file._get_node(self._table_path)
 
   def __cinit__(self, table):
-    cdef int nfields, i
     # Location-dependent information.
     self._table_file = table._v_file
     self._table_path = table._v_pathname
@@ -916,7 +961,7 @@ cdef class Row:
     self._riterator = 0
     self._bufferinfo_done = 0
     # Some variables from table will be cached here
-    if table._v_file.mode == 'r':
+    if table._v_file.mode == "r":
       self.ro_filemode = 1
     else:
       self.ro_filemode = 0
@@ -973,8 +1018,14 @@ cdef class Row:
     self._rowsize = self.dtype.itemsize
     self.nrows = table.nrows  # This value may change
 
-  cdef _init_loop(self, long long start, long long stop, long long step,
-                 object coords, object chunkmap):
+  cdef _init_loop(
+    self,
+    long long start,
+    long long stop,
+    long long step,
+    object coords,
+    object chunkmap,
+  ):
     """Initialization for the __iter__ iterator"""
     cdef Table table = self.table
     self._riterator = 1   # We are inside a read iterator
@@ -1006,16 +1057,16 @@ cdef class Row:
       self.absstep = abs(step)
       return
     elif coords is not None and 0 > step:
-      #self.nrowsread = 0
-      #self.nextelement = start
-      #self.stop = min(stop, len(coords))
-      #self.stop = max(stop, start - len(coords))
+      # self.nrowsread = 0
+      # self.nextelement = start
+      # self.stop = min(stop, len(coords))
+      # self.stop = max(stop, start - len(coords))
       self.absstep = abs(step)
       return
 
     if table._where_condition:
       self.wherecond = 1
-      #self.condkwargs = {'ex_uses_vml': True}
+      # self.condkwargs = {'ex_uses_vml': True}
       self.condfunc, self.condargs, self.condkwargs = table._where_condition
       table._where_condition = None
 
@@ -1041,8 +1092,9 @@ cdef class Row:
     table._seqcache_key = None
     if self.seqcache_key is not None:
       self._write_to_seqcache = 1
-      self.iterseq_max_elements = table._v_file.params['ITERSEQ_MAX_ELEMENTS']
-      self.iterseq = [] # all the row indexes, unless it would be longer than ITERSEQ_MAX_ELEMENTS
+      self.iterseq_max_elements = table._v_file.params["ITERSEQ_MAX_ELEMENTS"]
+      # all the row indexes, unless it would be longer than ITERSEQ_MAX_ELEMENTS
+      self.iterseq = []
     else:
       self._write_to_seqcache = 0
       self.iterseq = None
@@ -1065,14 +1117,11 @@ cdef class Row:
   cdef __next__indexed(self):
     """The version of next() for indexed columns and a chunkmap."""
 
-    cdef long recout, j, cs, vlen, rowsize
+    cdef long recout, j, cs
     cdef long long nchunksread
     cdef object tmp_range
     cdef Table table
     cdef ndarray iobuf
-    cdef void *IObufData
-    cdef long nslot
-    cdef object seq
     cdef object seqcache
 
     assert self.nrowsinbuf >= self.chunksize
@@ -1085,10 +1134,12 @@ cdef class Row:
 
         table = self.table
         iobuf = self.iobuf
-        j = 0;  recout = 0;  cs = self.chunksize
+        j = 0
+        recout = 0
+        cs = self.chunksize
         nchunksread = self.nrowsread // cs
-        tmp_range = np.arange(0, cs, dtype='int64')
-        self.bufcoords = np.empty(self.nrowsinbuf, dtype='int64')
+        tmp_range = np.arange(0, cs, dtype="int64")
+        self.bufcoords = np.empty(self.nrowsinbuf, dtype="int64")
         # Fetch valid chunks until the I/O buffer is full
         while nchunksread < self.totalchunks:
           if self.chunkmap_data[nchunksread]:
@@ -1103,7 +1154,7 @@ cdef class Row:
             # user can easily change this parameter.
             recout = recout + table._read_chunk(nchunksread, iobuf, j*cs)
             j = j + 1
-          self.nrowsread = (nchunksread+1)*cs
+          self.nrowsread = (nchunksread+1) * cs
           if self.nrowsread > self.stop:
             self.nrowsread = self.stop
             break
@@ -1152,8 +1203,10 @@ cdef class Row:
         if (self._nrow < self.start or self._nrow >= self.stop):
           self.nextelement = self.nextelement + 1
           continue
-        if (self.step > 1 and
-            ((self._nrow - self.start) % self.step > 0)):
+        if (
+          self.step > 1 and
+          ((self._nrow - self.start) % self.step > 0)
+        ):
           self.nextelement = self.nextelement + 1
           continue
       # Return this row
@@ -1166,7 +1219,7 @@ cdef class Row:
   cdef __next__coords(self):
     """The version of next() for user-required coordinates"""
     cdef int recout
-    cdef long long lenbuf, nextelement
+    cdef long long lenbuf
     cdef object tmp
     if 0 < self.step:
       while self.nextelement < self.stop:
@@ -1197,13 +1250,15 @@ cdef class Row:
         # All the elements have been read for this mode
         self._finish_riterator()
     elif 0 > self.step:
-      #print("self.nextelement = ", self.nextelement, self.start, self.nrowsread, self.nextelement <  self.start - self.nrowsread + 1)
       while self.nextelement > self.stop:
         if self.nextelement < self.start - (<long long> self.nrowsread) + 1:
           if 0 > self.nextelement - (<long long> self.nrowsinbuf) + 1:
             tmp = self.coords[0:self.nextelement + 1]
           else:
-            tmp = self.coords[self.nextelement - (<long long> self.nrowsinbuf) + 1:self.nextelement + 1]
+            tmp = self.coords[
+              self.nextelement - (<long long> self.nrowsinbuf) + 1
+              : self.nextelement + 1
+            ]
           self.bufcoords = np.array(tmp, dtype="uint64")
           recout = self.table._read_elements(self.bufcoords, self.iobuf)
           self.bufcoords_data = <hsize_t*>PyArray_DATA(self.bufcoords)
@@ -1226,7 +1281,6 @@ cdef class Row:
     """The version of next() in case of in-kernel conditions"""
 
     cdef hsize_t recout, correct
-    cdef object numexpr_locals, colvar, col
     self.nextelement = self._nrow + self.step
     while self.nextelement < self.stop:
       if self.nextelement >= self.nrowsread:
@@ -1312,8 +1366,11 @@ cdef class Row:
       while self.nextelement - 1 > self.stop:
         if self.nextelement < self.start - self.nrowsread + 1:
           # Read a chunk
-          recout = self.table._read_records(self.nextelement - self.nrowsinbuf + 1,
-                                            self.nrowsinbuf, self.iobuf)
+          recout = self.table._read_records(
+            self.nextelement - self.nrowsinbuf + 1,
+            self.nrowsinbuf,
+            self.iobuf
+          )
           self.nrowsread = self.nrowsread + self.nrowsinbuf
           self._row = self.nrowsinbuf - 1
         else:
@@ -1329,7 +1386,6 @@ cdef class Row:
   cdef _finish_riterator(self):
     """Clean-up things after iterator has been done"""
     cdef ObjectCache seqcache
-    cdef Table table = self.table
 
     self.rfieldscache = {}     # empty rfields cache
     self.wfieldscache = {}     # empty wfields cache
@@ -1339,7 +1395,8 @@ cdef class Row:
       self.wrec[:] = self.iobuf[self._row]
     if self._write_to_seqcache:
       seqcache = self.table._seqcache
-      # Guessing iterseq size: Each element in self.iterseq should take at least 8 bytes
+      # Guessing iterseq size: Each element in self.iterseq should take at
+      # least 8 bytes
       seqcache.setitem_(self.seqcache_key, self.iterseq, len(self.iterseq) * 8)
     self._riterator = 0        # out of iterator
     self.iterseq = None        # empty seqcache-related things
@@ -1392,16 +1449,15 @@ cdef class Row:
         i = i + inrowsinbuf
     elif istep < 0:
       inrowsinbuf = self.nrowsinbuf
-      #istartb = self.startb
+      # istartb = self.startb
       istartb = self.nrowsinbuf - 1
-      #istopb = self.stopb - 1
+      # istopb = self.stopb - 1
       istopb = -1
       startr = 0
       i = istart
       inextelement = istart
       inrowsread = 0
       while i-1 > istop:
-        #if (inextelement <= inrowsread + inrowsinbuf):
         if (inextelement < i - inrowsinbuf):
           inrowsread = inrowsread + inrowsinbuf
           i = i - inrowsinbuf
@@ -1410,8 +1466,9 @@ cdef class Row:
         # (we know we are going backward so try to keep indices positive)
         stopr = startr + (1 - istopb + istartb) // (-istep)
         # Read a chunk
-        inrowsread = inrowsread + self.table._read_records(i - inrowsinbuf + 1,
-                                                           inrowsinbuf, self.iobuf)
+        inrowsread = inrowsread + self.table._read_records(
+          i - inrowsinbuf + 1, inrowsinbuf, self.iobuf
+        )
         # Assign the correct part to result
         fields = self.iobuf
         if field:
@@ -1423,12 +1480,11 @@ cdef class Row:
 
         # Compute some indexes for the next iteration
         startr = stopr
-        istartb = (i - istartb)%inrowsinbuf
+        istartb = (i - istartb) % inrowsinbuf
         inextelement = inextelement + istep
         i = i - inrowsinbuf
     self._riterator = 0  # out of iterator
     return
-
 
   def append(self):
     """Add a new row of data to the end of the dataset.
@@ -1479,9 +1535,12 @@ cdef class Row:
     # Commit the private record into the write buffer
     # self.iobuf[self._unsaved_nrows] = self.wrec
     # The next is faster
-    iobuf = <ndarray>self.iobuf; wrec = <ndarray>self.wrec
-    memcpy(PyArray_BYTES(iobuf) + self._unsaved_nrows * self._stride,
-           PyArray_BYTES(wrec), self._rowsize)
+    iobuf = <ndarray>self.iobuf
+    wrec = <ndarray>self.wrec
+    memcpy(
+      PyArray_BYTES(iobuf) + self._unsaved_nrows * self._stride,
+      PyArray_BYTES(wrec), self._rowsize,
+    )
     # Restore the defaults for the private record
     # self.wrec[:] = self.wreccpy
     # The next is faster
@@ -1498,10 +1557,8 @@ cdef class Row:
       # Reset the buffer unsaved counter
       self._unsaved_nrows = 0
 
-
   def _get_unsaved_nrows(self):
     return self._unsaved_nrows
-
 
   def update(self):
     """Change the data of the current row in the dataset.
@@ -1545,16 +1602,17 @@ cdef class Row:
 
     which just updates the rows with values bigger than 3 in the first
     column.
-
     """
-
     cdef ndarray iobufcpy, iobuf
 
     if self.ro_filemode:
       raise IOError("Attempt to write over a file opened in read-only mode")
 
     if not self._riterator:
-      raise NotImplementedError("You are only allowed to update rows through the Row.update() method if you are in the middle of a table iterator.")
+      raise NotImplementedError(
+        "You are only allowed to update rows through the Row.update() "
+        "method if you are in the middle of a table iterator."
+      )
 
     if self.mod_elements is None:
       # Initialize an array for keeping the modified elements
@@ -1568,9 +1626,12 @@ cdef class Row:
     # Copy the current buffer row in input to the output buffer
     # self.iobufcpy[self._mod_nrows] = self.iobuf[self._row]
     # The next is faster
-    iobufcpy = <ndarray>self.iobufcpy; iobuf = <ndarray>self.iobuf
-    memcpy(PyArray_BYTES(iobufcpy) + self._mod_nrows * self._stride,
-           PyArray_BYTES(iobuf) + self._row * self._stride, self._rowsize)
+    iobufcpy = <ndarray>self.iobufcpy
+    iobuf = <ndarray>self.iobuf
+    memcpy(
+      PyArray_BYTES(iobufcpy) + self._mod_nrows * self._stride,
+      PyArray_BYTES(iobuf) + self._row * self._stride, self._rowsize
+    )
     # Increase the modified buffer count by one
     self._mod_nrows = self._mod_nrows + 1
     # No point writing seqcache -- Table.flush will invalidate it
@@ -1591,15 +1652,12 @@ cdef class Row:
     # Mark the modified fields' indexes as dirty.
     table._mark_columns_as_dirty(self.modified_fields)
 
-
   def __contains__(self, item):
     """__contains__(item)
 
     A true value is returned if item is found in current row, false
     otherwise.
-
     """
-
     return item in self.fetch_all_fields()
 
   # This method is twice as faster than __getattr__ because there is
@@ -1648,12 +1706,14 @@ cdef class Row:
     if self._riterator:
       # If in the middle of an iterator loop, the user probably wants to
       # access the read buffer
-      fieldscache = self.rfieldscache; fields = self.rfields
+      fieldscache = self.rfieldscache
+      fields = self.rfields
       offset = <long>self._row
     else:
       # We are not in an iterator loop, so the user probably wants to access
       # the write buffer
-      fieldscache = self.wfieldscache; fields = self.wfields
+      fieldscache = self.wfieldscache
+      fields = self.wfields
       offset = 0
 
     try:
@@ -1675,7 +1735,9 @@ cdef class Row:
 
     if PyArray_NDIM(field) == 1:
       # For an scalar it is not needed a copy (immutable object)
-      return PyArray_GETITEM(field, PyArray_BYTES(field) + offset * self._stride)
+      return PyArray_GETITEM(
+        field, PyArray_BYTES(field) + offset * self._stride
+      )
     else:
       # Do a copy of the array, so that it can be overwritten by the user
       # without damaging the internal self.rfields buffer
@@ -1719,12 +1781,14 @@ cdef class Row:
     if self._riterator:
       # If in the middle of an iterator loop, or *after*, the user
       # probably wants to access the read buffer
-      fieldscache = self.rfieldscache; fields = self.rfields
+      fieldscache = self.rfieldscache
+      fields = self.rfields
       offset = <long>self._row
     else:
       # We are not in an iterator loop, so the user probably wants to access
       # the write buffer
-      fieldscache = self.wfieldscache; fields = self.wfields
+      fieldscache = self.wfieldscache
+      fields = self.wfields
       offset = 0
 
     # Check validity of enumerated value.
@@ -1744,7 +1808,9 @@ cdef class Row:
       # Optimization for scalar values. This can optimize the writes
       # between a 10% and 100%, depending on the number of columns modified
       if PyArray_NDIM(field) == 1:
-        ret = PyArray_SETITEM(field, PyArray_BYTES(field) + offset * self._stride, value)
+        ret = PyArray_SETITEM(
+          field, PyArray_BYTES(field) + offset * self._stride, value
+        )
         if ret < 0:
           PyErr_Clear()
           raise TypeError
@@ -1787,7 +1853,7 @@ cdef class Row:
       return (
         "Warning: Row iterator has not been initialized for table:\n"
         f"  {self.table}\n"
-              " You will normally want to use this object in iterator "
+        " You will normally want to use this object in iterator "
         "contexts."
       )
 

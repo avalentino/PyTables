@@ -21,4 +21,6 @@ from .definitions cimport hsize_t, hid_t, hobj_ref_t
 cdef hsize_t *malloc_dims(object)
 cdef hid_t get_native_type(hid_t) nogil
 cdef str cstr_to_pystr(const char*)
-cdef int load_reference(hid_t dataset_id, hobj_ref_t *refbuf, size_t item_size, ndarray nparr) except -1
+cdef int load_reference(
+    hid_t dataset_id, hobj_ref_t *refbuf, size_t item_size, ndarray nparr
+) except -1

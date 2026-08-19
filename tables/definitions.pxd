@@ -23,13 +23,13 @@ cdef extern from "time.h":
 from numpy cimport dtype
 from libc.stdio cimport FILE
 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 cdef extern from "numpy/arrayobject.h":
   object PyArray_Scalar(void *data, dtype descr, object itemsize)
 
 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 
 # Structs and types from HDF5
@@ -95,11 +95,11 @@ cdef extern from "hdf5.h" nogil:
 
   cdef enum H5FD_mem_t:
     H5FD_MEM_NOLIST     = -1,   # Data should not appear in the free list.
-                                # Must be negative.
+    #                           # Must be negative.
     H5FD_MEM_DEFAULT    = 0,    # Value not yet set.  Can also be the
-                                # datatype set in a larger allocation
-                                # that will be suballocated by the library.
-                                # Must be zero.
+    #                           # datatype set in a larger allocation
+    #                           # that will be suballocated by the library.
+    #                           # Must be zero.
     H5FD_MEM_SUPER      = 1,    # Superblock data
     H5FD_MEM_BTREE      = 2,    # B-tree data
     H5FD_MEM_DRAW       = 3,    # Raw data (content of datasets, etc.)
@@ -291,22 +291,21 @@ cdef extern from "hdf5.h" nogil:
     time_t              ctime       # Change time
     time_t              btime       # Birth time
     hsize_t             num_attrs   # number of attributes attached to object
-    #H5O_hdr_info_t      hdr         # Object header information
-    #struct {
-    #    H5_ih_info_t    obj
-    #    H5_ih_info_t    attr
-    #} meta_size
+    # H5O_hdr_info_t      hdr         # Object header information
+    # struct {
+    #     H5_ih_info_t    obj
+    #     H5_ih_info_t    attr
+    # } meta_size
 
-
-  #------------------------------------------------------------------
+  # -----------------------------------------------------------------
 
   # HDF5 API
 
   # Version functions
   herr_t H5get_libversion(unsigned *majnum, unsigned *minnum,
-                          unsigned *relnum )
+                          unsigned *relnum)
   herr_t H5check_version(unsigned majnum, unsigned minnum,
-                         unsigned relnum )
+                         unsigned relnum)
 
   # misc
   herr_t H5free_memory(void *buf)
@@ -332,7 +331,7 @@ cdef extern from "hdf5.h" nogil:
   # Operations with links
   herr_t H5Ldelete(hid_t file_id, char *name, hid_t lapl_id)
   herr_t H5Lmove(hid_t src_loc_id, char *src_name,
-                  hid_t dst_loc_id, char *dst_name, hid_t lcpl, hid_t lap)
+                 hid_t dst_loc_id, char *dst_name, hid_t lcpl, hid_t lap)
 
   # For dealing with datasets
   hid_t  H5Dopen(hid_t file_id, char *name, hid_t dapl_id)
@@ -371,7 +370,6 @@ cdef extern from "hdf5.h" nogil:
   herr_t H5Sselect_elements(hid_t space_id, H5S_seloper_t op,
                             size_t num_elements, hsize_t *coord)
   herr_t H5Sclose(hid_t space_id)
-
 
   # Functions for dealing with datatypes
   H5T_class_t H5Tget_class(hid_t type_id)
@@ -431,56 +429,56 @@ cdef extern from "hdf5.h" nogil:
 
   hid_t H5Pget_driver(hid_t plist_id)
   herr_t H5Pset_fapl_sec2(hid_t fapl_id)
-  #herr_t H5Pget_fapl_direct(hid_t fapl_id, size_t *alignment,
-  #                          size_t *block_size, size_t *cbuf_size)
-  #herr_t H5Pset_fapl_direct(hid_t fapl_id, size_t alignment,
-  #                          size_t block_size, size_t cbuf_size)
+  # herr_t H5Pget_fapl_direct(hid_t fapl_id, size_t *alignment,
+  #                           size_t *block_size, size_t *cbuf_size)
+  # herr_t H5Pset_fapl_direct(hid_t fapl_id, size_t alignment,
+  #                           size_t block_size, size_t cbuf_size)
   herr_t H5Pset_fapl_log(hid_t fapl_id, const char *logfile,
                          unsigned long long flags, size_t buf_size)
-  #herr_t H5Pset_fapl_windows(hid_t fapl_id)
+  # herr_t H5Pset_fapl_windows(hid_t fapl_id)
   herr_t H5Pset_fapl_stdio(hid_t fapl_id)
-  #herr_t H5Pget_fapl_core(hid_t fapl_id, size_t *increment,
-  #                        hbool_t *backing_store)
+  # herr_t H5Pget_fapl_core(hid_t fapl_id, size_t *increment,
+  #                         hbool_t *backing_store)
   herr_t H5Pset_fapl_core(hid_t fapl_id, size_t increment,
                           hbool_t backing_store)
-  #herr_t H5Pget_fapl_family(hid_t fapl_id, hsize_t *memb_size,
-  #                          hid_t *memb_fapl_id)
+  # herr_t H5Pget_fapl_family(hid_t fapl_id, hsize_t *memb_size,
+  #                           hid_t *memb_fapl_id)
   herr_t H5Pset_fapl_family(hid_t fapl_id, hsize_t memb_size,
                             hid_t memb_fapl_id)
-  #herr_t H5Pget_fapl_multi(hid_t fapl_id, H5FD_mem_t *memb_map,
-  #                         hid_t *memb_fapl, const char **memb_name,
-  #                         haddr_t *memb_addr, hbool_t *relax)
+  # herr_t H5Pget_fapl_multi(hid_t fapl_id, H5FD_mem_t *memb_map,
+  #                          hid_t *memb_fapl, const char **memb_name,
+  #                          haddr_t *memb_addr, hbool_t *relax)
   herr_t H5Pset_fapl_multi(hid_t fapl_id, H5FD_mem_t *memb_map,
                            hid_t *memb_fapl, char **memb_name,
                            haddr_t *memb_addr, hbool_t relax)
   herr_t H5Pset_fapl_split(hid_t fapl_id, char *meta_ext,
                            hid_t meta_plist_id, char *raw_ext,
                            hid_t raw_plist_id)
-  #herr_t H5Pget_fapl_mpio(hid_t fapl_id, MPI_Comm *comm, MPI_Info *info)
-  #herr_t H5Pset_fapl_mpio(hid_t fapl_id, MPI_Comm comm, MPI_Info info)
+  # herr_t H5Pget_fapl_mpio(hid_t fapl_id, MPI_Comm *comm, MPI_Info *info)
+  # herr_t H5Pset_fapl_mpio(hid_t fapl_id, MPI_Comm comm, MPI_Info info)
 
-  #herr_t H5Pget_fapl_mpiposix(hid_t fapl_id, MPI_Comm *comm,
-  #                            hbool_t *use_gpfs_hints)
-  #herr_t H5Pset_fapl_mpiposix(hid_t fapl_id, MPI_Comm comm,
-  #                            hbool_t use_gpfs_hints)
+  # herr_t H5Pget_fapl_mpiposix(hid_t fapl_id, MPI_Comm *comm,
+  #                             hbool_t *use_gpfs_hints)
+  # herr_t H5Pset_fapl_mpiposix(hid_t fapl_id, MPI_Comm comm,
+  #                             hbool_t use_gpfs_hints)
   herr_t H5Pset_file_image(hid_t fapl_id, void *buf_ptr, size_t buf_len)
   herr_t H5Pget_userblock(hid_t plist, hsize_t *size)
   herr_t H5Pset_userblock(hid_t plist, hsize_t size)
   herr_t H5Pget_obj_track_times(hid_t ocpl_id, hbool_t *track_times)
 
   # Error Handling Interface
-  #herr_t H5Eget_auto(hid_t estack_id, H5E_auto_t *func, void** data)
+  # herr_t H5Eget_auto(hid_t estack_id, H5E_auto_t *func, void** data)
   herr_t H5Eset_auto(hid_t estack_id, H5E_auto_t func, void *data)
   herr_t H5Eprint(hid_t estack_id, FILE *stream)
   herr_t H5Ewalk(hid_t estack_id, H5E_direction_t dir, H5E_walk_t func,
                  void *data)
-  #hid_t H5Eget_current_stack(void)
-  #herr_t H5Eclose_stack(hid_t estack_id)
-  #ssize_t H5Eget_num(hid_t estack_id)
+  # hid_t H5Eget_current_stack(void)
+  # herr_t H5Eclose_stack(hid_t estack_id)
+  # ssize_t H5Eget_num(hid_t estack_id)
   ssize_t H5Eget_msg(hid_t mesg_id, H5E_type_t* mesg_type, char* mesg,
                      size_t size)
-  #herr_t H5Eclose_msg(hid_t mesg_id)
-  #ssize_t H5Eget_class_name(hid_t class_id, char* name, size_t size)
+  # herr_t H5Eclose_msg(hid_t mesg_id)
+  # ssize_t H5Eget_class_name(hid_t class_id, char* name, size_t size)
 
   # Onject interface
   herr_t H5Oget_info(hid_t object_id, H5O_info_t *object_info)
@@ -488,16 +486,24 @@ cdef extern from "hdf5.h" nogil:
   # Operations with filters and compression interface
   ctypedef int H5Z_filter_t
 
-  #herr_t H5Zregister(const void *cls)
+  # herr_t H5Zregister(const void *cls)
   herr_t H5Zunregister(H5Z_filter_t id)
-  #htri_t H5Zfilter_avail(H5Z_filter_t id)
-  #herr_t H5Zget_filter_info(H5Z_filter_t, unsigned int*)
+  # htri_t H5Zfilter_avail(H5Z_filter_t id)
+  # herr_t H5Zget_filter_info(H5Z_filter_t, unsigned int*)
 
   # Operations on the references
   H5I_type_t H5Iget_type(hid_t id)
-  herr_t H5Rcreate(void *reference, hid_t loc_id, const char *name, H5R_type_t type, hid_t space_id)
-  hid_t H5Rdereference(hid_t dset, hid_t oapl_id, H5R_type_t rtype, const void *reference)
-  herr_t H5Oclose( hid_t object_id )
+  herr_t H5Rcreate(
+    void *reference,
+    hid_t loc_id,
+    const char *name,
+    H5R_type_t type,
+    hid_t space_id,
+  )
+  hid_t H5Rdereference(
+    hid_t dset, hid_t oapl_id, H5R_type_t rtype, const void *reference
+  )
+  herr_t H5Oclose(hid_t object_id)
 
 
 # Specific HDF5 functions for PyTables

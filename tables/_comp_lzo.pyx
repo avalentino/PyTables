@@ -1,4 +1,3 @@
-import sys
 from libc.stdlib cimport free
 
 
@@ -16,4 +15,4 @@ def register_():
     compinfo = (version, date)
     free(version)
     free(date)
-    return compinfo[0].decode('ascii'), compinfo[1].decode('ascii')
+    return compinfo[0].decode("ascii"), compinfo[1].decode("ascii")

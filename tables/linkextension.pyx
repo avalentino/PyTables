@@ -28,7 +28,7 @@ from .definitions cimport (
 from .hdf5extension cimport Node
 from .utilsextension cimport cstr_to_pystr
 
-#----------------------------------------------------------------------
+# ---------------------------------------------------------------------
 
 # External declarations
 
@@ -83,7 +83,7 @@ cdef extern from "H5Lpublic.h" nogil:
     hid_t lcpl_id, hid_t lapl_id)
 
 
-#----------------------------------------------------------------------
+# ---------------------------------------------------------------------
 
 # Helper functions
 
@@ -109,14 +109,12 @@ def _get_link_class(parent_id, name):
       return "UnImplemented"
 
 
-
-
 def _g_create_hard_link(parentnode, str name, targetnode):
   """Create a hard link in the file."""
 
   cdef herr_t ret
-  cdef bytes encoded_name = name.encode('utf-8')
-  cdef bytes encoded_v_name = targetnode._v_name.encode('utf-8')
+  cdef bytes encoded_name = name.encode("utf-8")
+  cdef bytes encoded_v_name = targetnode._v_name.encode("utf-8")
 
   ret = H5Lcreate_hard(targetnode._v_parent._v_objectid, encoded_v_name,
                        parentnode._v_objectid, <char*>encoded_name,
@@ -125,11 +123,9 @@ def _g_create_hard_link(parentnode, str name, targetnode):
     raise HDF5ExtError("failed to create HDF5 hard link")
 
 
-
-
-#----------------------------------------------------------------------
-
+# ---------------------------------------------------------------------
 # Public classes
+
 
 cdef class Link(Node):
   """Extension class from which all link extensions inherits."""
@@ -141,8 +137,8 @@ cdef class Link(Node):
     cdef object stats
     cdef bytes encoded_name, encoded_newname
 
-    encoded_name = self.name.encode('utf-8')
-    encoded_newname = newname.encode('utf-8')
+    encoded_name = self.name.encode("utf-8")
+    encoded_newname = newname.encode("utf-8")
 
     # @TODO: set property list --> utf-8
     ret = H5Lcopy(self.parent_id, encoded_name, newparent._v_objectid,
@@ -151,9 +147,9 @@ cdef class Link(Node):
       raise HDF5ExtError("failed to copy HDF5 link")
 
     # Update statistics if needed.
-    stats = kwargs.get('stats', None)
+    stats = kwargs.get("stats", None)
     if stats is not None:
-      stats['links'] += 1
+      stats["links"] += 1
 
     return newparent._v_file.get_node(newparent, newname)
 
@@ -165,8 +161,8 @@ cdef class SoftLink(Link):
     """Create the link in file."""
 
     cdef herr_t ret
-    cdef bytes encoded_name = self.name.encode('utf-8')
-    cdef bytes encoded_target = self.target.encode('utf-8')
+    cdef bytes encoded_name = self.name.encode("utf-8")
+    cdef bytes encoded_target = self.target.encode("utf-8")
 
     ret = H5Lcreate_soft(encoded_target, self.parent_id, encoded_name,
                          H5P_DEFAULT, H5P_DEFAULT)
@@ -184,7 +180,7 @@ cdef class SoftLink(Link):
     cdef char *clinkval
     cdef bytes encoded_name
 
-    encoded_name = self.name.encode('utf-8')
+    encoded_name = self.name.encode("utf-8")
 
     ret = H5Lget_info(self.parent_id, encoded_name, &link_buff, H5P_DEFAULT)
     if ret < 0:
@@ -214,11 +210,11 @@ cdef class ExternalLink(Link):
     cdef herr_t ret
     cdef bytes encoded_name, encoded_filename, encoded_target
 
-    encoded_name = self.name.encode('utf-8')
+    encoded_name = self.name.encode("utf-8")
 
     filename, target = self._get_filename_node()
-    encoded_filename = filename.encode('utf-8')
-    encoded_target = target.encode('utf-8')
+    encoded_filename = filename.encode("utf-8")
+    encoded_target = target.encode("utf-8")
 
     ret = H5Lcreate_external(<char*>encoded_filename, <char*>encoded_target,
                              self.parent_id, <char*>encoded_name,
@@ -241,7 +237,7 @@ cdef class ExternalLink(Link):
     cdef bytes encoded_name
     cdef str filename, obj_path
 
-    encoded_name = self.name.encode('utf-8')
+    encoded_name = self.name.encode("utf-8")
 
     ret = H5Lget_info(self.parent_id, encoded_name, &link_buff, H5P_DEFAULT)
     if ret < 0:
@@ -264,7 +260,7 @@ cdef class ExternalLink(Link):
     filename = cstr_to_pystr(cfilename)
     obj_path = cstr_to_pystr(c_obj_path)
 
-    self.target = filename+':'+obj_path
+    self.target = filename+":"+obj_path
 
     # Release resources
     free(clinkval)
