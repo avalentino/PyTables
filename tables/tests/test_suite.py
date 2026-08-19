@@ -54,7 +54,7 @@ def suite():
     for name in test_modules:
         # Unexpectedly, the following code doesn't seem to work anymore
         # in python 3
-        # exec('from %s import suite as test_suite' % name)
+        # exec(f"from {name} import suite as test_suite")
         __import__(name)
         test_suite = sys.modules[name].suite
 

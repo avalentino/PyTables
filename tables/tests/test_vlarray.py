@@ -71,7 +71,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_read..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_read...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -133,7 +133,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02a_getitem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02a_getitem...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -181,7 +181,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_getitem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_getitem...")
 
         if self.flavor != "numpy":
             # This test is only valid for NumPy
@@ -214,7 +214,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_append..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_append...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -411,7 +411,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_StringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -449,7 +449,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_StringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -486,9 +486,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test01a_2_StringAtom..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test01a_2_StringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -525,7 +523,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_StringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -562,7 +560,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01c_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01c_StringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -607,7 +605,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01d_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01d_StringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -647,7 +645,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_BoolAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_BoolAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -685,7 +683,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_BoolAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_BoolAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/",
@@ -737,7 +735,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         ]
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_IntAtom...")
 
         for atype in ttypes:
             vlarray = self.h5file.create_vlarray(
@@ -784,7 +782,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         }
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03a_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03a_IntAtom...")
 
         for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
@@ -837,7 +835,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         ]
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_IntAtom...")
 
         for atype in ttypes:
             vlarray = self.h5file.create_vlarray(
@@ -888,7 +886,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         }
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03c_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03c_IntAtom...")
 
         for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
@@ -947,7 +945,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         }
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03d_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03d_IntAtom...")
 
         byteorder = {"little": "big", "big": "little"}[sys.byteorder]
         for atype, vtype in ttypes.items():
@@ -1015,7 +1013,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_FloatAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_FloatAtom...")
 
         for atype in ttypes:
             vlarray = self.h5file.create_vlarray(
@@ -1063,7 +1061,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04a_FloatAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04a_FloatAtom...")
 
         for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
@@ -1115,7 +1113,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04b_FloatAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04b_FloatAtom...")
 
         for atype in ttypes:
             vlarray = self.h5file.create_vlarray(
@@ -1167,7 +1165,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04c_FloatAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04c_FloatAtom...")
 
         for atype, vtype in ttypes.items():
             vlarray = self.h5file.create_vlarray(
@@ -1227,7 +1225,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04d_FloatAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04d_FloatAtom...")
 
         byteorder = {"little": "big", "big": "little"}[sys.byteorder]
         for atype, vtype in ttypes.items():
@@ -1294,7 +1292,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_ComplexAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_ComplexAtom...")
 
         for atype in ttypes:
             vlarray = self.h5file.create_vlarray(
@@ -1346,9 +1344,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test04b_ComplexAtom..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test04b_ComplexAtom...")
 
         for atype in ttypes:
             vlarray = self.h5file.create_vlarray(
@@ -1398,9 +1394,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test05_VLStringAtom..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test05_VLStringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/", "VLStringAtom", atom=tb.VLStringAtom()
@@ -1441,9 +1435,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test05b_VLStringAtom..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test05b_VLStringAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/", "VLStringAtom", atom=tb.VLStringAtom()
@@ -1481,7 +1473,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06a_Object..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06a_Object...")
 
         vlarray = self.h5file.create_vlarray(
             "/", "Object", atom=tb.ObjectAtom()
@@ -1523,7 +1515,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06b_Object..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06b_Object...")
 
         vlarray = self.h5file.create_vlarray(
             "/", "Object", atom=tb.ObjectAtom()
@@ -1572,7 +1564,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06c_Object..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06c_Object...")
 
         vlarray = self.h5file.create_vlarray(
             "/", "Object", atom=tb.ObjectAtom()
@@ -1605,7 +1597,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06d_Object..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06d_Object...")
 
         vlarray = self.h5file.create_vlarray(
             "/", "Object", atom=tb.ObjectAtom()
@@ -1649,9 +1641,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test07_VLUnicodeAtom..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test07_VLUnicodeAtom...")
 
         vlarray = self.h5file.create_vlarray(
             "/", "VLUnicodeAtom", atom=tb.VLUnicodeAtom()
@@ -1693,7 +1683,7 @@ class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test07b_VLUnicodeAtom..." % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test07b_VLUnicodeAtom..."
             )
 
         vlarray = self.h5file.create_vlarray(
@@ -1753,7 +1743,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_StringAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -1791,7 +1781,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_StringAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -1826,7 +1816,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01c_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01c_StringAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -1872,7 +1862,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01d_StringAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01d_StringAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -1915,7 +1905,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_BoolAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_BoolAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -1953,7 +1943,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_BoolAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_BoolAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -1995,7 +1985,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02c_BoolAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02c_BoolAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2048,7 +2038,7 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_IntAtom...")
 
         # Create an string atom
         for atype in ttypes:
@@ -2095,14 +2085,14 @@ class MDTypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             if hasattr(tb, atomname):
                 ttypes.append(name)
         for itemsize in (192, 256):
-            atomname = "Complex%dAtom" % itemsize
+            atomname = f"Complex{itemsize}Atom"
             if hasattr(tb, atomname):
-                ttypes.append("complex%d" % (itemsize))
+                ttypes.append(f"complex{itemsize}")
 
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_FloatAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_FloatAtom...")
 
         # Create an string atom
         for atype in ttypes:
@@ -2156,7 +2146,7 @@ class AppendShapeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00_difinputs..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00_difinputs...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2194,7 +2184,7 @@ class AppendShapeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_toomanydims..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_toomanydims...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2227,7 +2217,7 @@ class AppendShapeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_zerodims..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_zerodims...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2260,7 +2250,7 @@ class AppendShapeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03a_cast..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03a_cast...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2292,7 +2282,7 @@ class AppendShapeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03b_cast..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03b_cast...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2342,9 +2332,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test01_EmptyVLArray..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test01_EmptyVLArray...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2372,9 +2360,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test01_EmptyVLArray..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test01_EmptyVLArray...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(
@@ -2399,7 +2385,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_BoolAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_BoolAtom...")
 
         # Create an string atom
         vlarray = self.h5file.create_vlarray(root, "Bool", tb.BoolAtom())
@@ -2457,7 +2443,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_IntAtom...")
 
         # Create an string atom
         for atype in ttypes:
@@ -2518,7 +2504,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_IntAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_IntAtom...")
 
         # Create an string atom
         for atype in ttypes:
@@ -2580,14 +2566,14 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 ttypes.append(name)
 
         for itemsize in (192, 256):
-            atomname = "Complex%dAtom" % itemsize
+            atomname = f"Complex{itemsize}Atom"
             if hasattr(tb, atomname):
-                ttypes.append("complex%d" % (itemsize))
+                ttypes.append(f"complex{itemsize}")
 
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_FloatAtom..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_FloatAtom...")
 
         # Create an string atom
         for atype in ttypes:
@@ -2672,7 +2658,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_start..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_start...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -2698,7 +2684,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_start..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_start...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -2724,7 +2710,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01np_start..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01np_start...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -2750,7 +2736,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_stop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_stop...")
 
         vlarray = self.h5file.root.vlarray
         # Choose a small value for buffer size
@@ -2787,7 +2773,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_stop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_stop...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -2825,7 +2811,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_startstop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_startstop...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -2863,7 +2849,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03b_startstop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03b_startstop...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -2901,9 +2887,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test04_startstopstep..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test04_startstopstep...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -2944,8 +2928,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test04np_startstopstep..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test04np_startstopstep..."
             )
 
         vlarray = self.h5file.root.vlarray
@@ -2986,7 +2969,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04b_slices..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04b_slices...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3030,7 +3013,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04bnp_slices..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04bnp_slices...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3070,9 +3053,7 @@ class ReadRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test05_out_of_range..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test05_out_of_range...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3118,7 +3099,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_start..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_start...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3146,7 +3127,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_start..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_start...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3172,7 +3153,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_stop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_stop...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3210,7 +3191,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_stop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_stop...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3248,7 +3229,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_startstop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_startstop...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3286,7 +3267,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03b_startstop..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03b_startstop...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3324,7 +3305,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_slices..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_slices...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3364,7 +3345,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04np_slices..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04np_slices...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3404,9 +3385,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test05_out_of_range..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test05_out_of_range...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3423,7 +3402,7 @@ class GetItemRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test05np_out_of_range..." % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test05np_out_of_range..."
             )
 
         vlarray = self.h5file.root.vlarray
@@ -3469,7 +3448,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_start..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_start...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3506,7 +3485,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01np_start..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01np_start...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3543,7 +3522,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_partial..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_partial...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3580,9 +3559,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test03a_several_rows..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test03a_several_rows...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3621,9 +3598,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test03b_several_rows..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test03b_several_rows...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3662,9 +3637,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test03c_several_rows..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test03c_several_rows...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3703,9 +3676,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test04_out_of_range..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test04_out_of_range...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3720,7 +3691,7 @@ class SetRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_value_error..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_value_error...")
 
         vlarray = self.h5file.root.vlarray
 
@@ -3739,7 +3710,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_copy...")
 
         # Create an Vlarray
         arr = tb.Int16Atom(shape=2)
@@ -3792,7 +3763,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_copy...")
 
         # Create an Vlarray
         arr = tb.VLStringAtom()
@@ -3845,7 +3816,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_copy...")
 
         # Create an VLArray
         arr = tb.Int16Atom(shape=2)
@@ -3898,7 +3869,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_copy...")
 
         # Create an VLArray
         atom = tb.Int16Atom(shape=2)
@@ -3943,7 +3914,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_copy...")
 
         # Create an VLArray
         atom = tb.Int16Atom(shape=2)
@@ -3984,7 +3955,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_copy...")
 
         # Create an Array
         atom = tb.Int16Atom(shape=2)
@@ -4028,7 +3999,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05b_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05b_copy...")
 
         # Create an VLArray
         atom = tb.Int16Atom(shape=2)
@@ -4083,7 +4054,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_index..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_index...")
 
         # Create an VLArray
         atom = tb.Int32Atom(shape=(2,))

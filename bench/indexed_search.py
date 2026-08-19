@@ -51,7 +51,7 @@ class DB:
 
     def get_db_size(self):
         sout = subprocess.run(
-            "sync;du -s %s" % self.filename,
+            f"sync;du -s {self.filename}",
             shell=True,
             stdout=subprocess.PIPE,
             check=True,
@@ -145,7 +145,7 @@ class DB:
         for colname in idx_cols:
             t1 = clock()
             self.index_col(self.con, colname, kind, optlevel, verbose)
-            self.print_mtime(t1, "Index time (%s)" % colname)
+            self.print_mtime(t1, f"Index time ({colname})")
 
     def query_db(
         self,
@@ -250,8 +250,7 @@ if __name__ == "__main__":
     except Exception:
         psyco_imported = 0
 
-    usage = (
-        """usage: %s [-T] [-P] [-v] [-f] [-k] [-p] [-m] [-c] [-q] [-i] [-I] [-S] [-x] [-z complevel] [-l complib] [-R range] [-N niter] [-n nrows] [-d datadir] [-O level] [-t kind] [-s] col -Q [suplim]
+    usage = f"""usage: {sys.argv[0]} [-T] [-P] [-v] [-f] [-k] [-p] [-m] [-c] [-q] [-i] [-I] [-S] [-x] [-z complevel] [-l complib] [-R range] [-N niter] [-n nrows] [-d datadir] [-O level] [-t kind] [-s] col -Q [suplim]
             -T use Pytables
             -P use Postgres
             -v verbose
@@ -276,8 +275,6 @@ if __name__ == "__main__":
             -s select a type column for operations ('int' or 'float'. def all)
             -Q do a repeteated query up to 10**value
             \n"""
-        % sys.argv[0]
-    )
 
     try:
         opts, pargs = getopt.getopt(
@@ -414,11 +411,11 @@ if __name__ == "__main__":
 
     if docreate:
         if verbose:
-            print("writing %s rows" % krows)
+            print(f"writing {krows} rows")
         db.create_db(dtype, kind, optlevel, verbose)
 
     if doquery:
-        print("Calling query_db() %s times" % niter)
+        print(f"Calling query_db() {niter} times")
         if doprofile:
             import pstats
             import cProfile

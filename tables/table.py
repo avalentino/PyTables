@@ -103,7 +103,7 @@ _npsizetype = np.array(SizeType(0)).dtype.type
 
 
 def _index_name_of(node: Node) -> str:
-    return "_i_%s" % node._v_name
+    return f"_i_{node._v_name}"
 
 
 def _index_pathname_of(node: Node) -> str:
@@ -121,7 +121,7 @@ def _index_pathname_of_column(table: Table, colpathname: str) -> str:
 
 
 def _index_name_of_(nodeName: str) -> str:  # noqa: N803
-    return "_i_%s" % nodeName
+    return f"_i_{nodeName}"
 
 
 def _index_pathname_of_(nodePath: str) -> str:  # noqa: N803
@@ -220,7 +220,7 @@ def _table__where_indexed(
             # Get the chunkmap from the index
             chunkmap = index.get_chunkmap()
         # Assign the chunkmap to the cmvars dictionary
-        cmvars["e%d" % i] = chunkmap
+        cmvars[f"e{i}"] = chunkmap
 
     if index.reduction == 1 and tcoords == 0:
         # No candidates found in any indexed expression component, so leave now
@@ -283,9 +283,9 @@ def _column__create_index(
     # Warn if the index already exists
     if index:
         raise ValueError(
-            "%s for column '%s' already exists. If you want to "
+            f"{index!s} for column '{self.pathname!s}' already exists. If you want to "
             "re-create it, please, try with reindex() method "
-            "better" % (str(index), str(self.pathname))
+            "better"
         )
 
     # Check that the datatype is indexable.
@@ -335,7 +335,7 @@ def _column__create_index(
         idgroup,
         name,
         atom=atom,
-        title="Index for %s column" % name,
+        title=f"Index for {name} column",
         kind=kind,
         optlevel=optlevel,
         filters=filters,
@@ -377,7 +377,7 @@ class _ColIndexes(dict):
     def __repr__(self) -> str:
         """Return a detailed Description column representation."""
         rep = [f'  "{k}": {v}' for k, v in self.items()]
-        return "{\n  %s}" % (",\n  ".join(rep))
+        return "{{\n  {}}}".format(",\n  ".join(rep))
 
 
 class Table(tableextension.Table, Leaf):
@@ -872,7 +872,7 @@ class Table(tableextension.Table, Leaf):
             except TypeError:
                 raise TypeError(
                     "`chunkshape` parameter must be an integer or sequence "
-                    "and you passed a %s" % type(chunkshape)
+                    f"and you passed a {type(chunkshape)}"
                 )
             if len(chunkshape) != 1:
                 raise ValueError(
@@ -940,12 +940,11 @@ class Table(tableextension.Table, Leaf):
 
         if oldindexes:  # this should only appear under 2.x Pro
             warnings.warn(
-                "table ``%s`` has column indexes with PyTables 1.x format. "
+                f"table ``{self._v_pathname}`` has column indexes with PyTables 1.x format. "
                 "Unfortunately, this format is not supported in "
                 "PyTables 2.x series. Note that you can use the "
                 "``ptrepack`` utility in order to recreate the indexes. "
-                "The 1.x indexed columns found are: %s"
-                % (self._v_pathname, self._listoldindexes),
+                f"The 1.x indexed columns found are: {self._listoldindexes}",
                 OldIndexWarning,
             )
 
@@ -1036,10 +1035,10 @@ very small/large chunksize, you may want to increase/decrease it.""",
         max_columns = self._v_file.params["MAX_COLUMNS"]
         if len(self.description._v_names) > max_columns:
             warnings.warn(
-                "table ``%s`` is exceeding the recommended "
-                "maximum number of columns (%d); "
+                f"table ``{self._v_pathname}`` is exceeding the recommended "
+                f"maximum number of columns ({max_columns}); "
                 "be ready to see PyTables asking for *lots* of memory "
-                "and possibly slow I/O" % (self._v_pathname, max_columns),
+                "and possibly slow I/O",
                 PerformanceWarning,
             )
 
@@ -1086,8 +1085,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
         if self._v_file.params["PYTABLES_SYS_ATTRS"]:
             set_attr = self._v_attrs._g__setattr
             for i, colobj in enumerate(self.description._f_walk(type="Col")):
-                fieldname = "FIELD_%d_FILL" % i
-                set_attr(fieldname, colobj.dflt)
+                set_attr(f"FIELD_{i}_FILL", colobj.dflt)
 
         return self._v_objectid
 
@@ -1126,16 +1124,15 @@ very small/large chunksize, you may want to increase/decrease it.""",
             for i, objcol in enumerate(self.description._f_walk(type="Col")):
                 colname = objcol._v_pathname
                 # Get the default values for each column
-                fieldname = "FIELD_%s_FILL" % i
+                fieldname = f"FIELD_{i}_FILL"
                 defval = get_attr(fieldname)
                 if defval is not None:
                     objcol.dflt = defval
                 else:
                     warnings.warn(
                         "could not load default value "
-                        "for the ``%s`` column of table ``%s``; "
-                        "using ``%r`` instead"
-                        % (colname, self._v_pathname, objcol.dflt)
+                        f"for the ``{colname}`` column of table ``{self._v_pathname}``; "
+                        f"using ``{objcol.dflt!r}`` instead"
                     )
                     defval = objcol.dflt
 
@@ -1208,8 +1205,8 @@ very small/large chunksize, you may want to increase/decrease it.""",
             )
         except AttributeError:
             raise KeyError(
-                "table ``%s`` does not have a column named ``%s``"
-                % (self._v_pathname, colpathname)
+                f"table ``{self._v_pathname}`` does not have a column named "
+                f"``{colpathname}``"
             )
 
     _check_column = _get_column_instance
@@ -1316,7 +1313,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
             elif uservars is None and var in user_globals:
                 val = user_globals[var]
             else:
-                raise NameError("name ``%s`` is not defined" % var)
+                raise NameError(f"name ``{var}`` is not defined")
 
             # Check the value.
             if hasattr(val, "pathname"):  # non-nested column
@@ -1386,8 +1383,8 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 except ValueError:
                     # This is more clear than the error given by Numexpr.
                     raise TypeError(
-                        "variable ``%s`` has data type ``%s``, "
-                        "not allowed in conditions" % (var, val.dtype.name)
+                        f"variable ``{var}`` has data type "
+                        f"``{val.dtype.name}``, not allowed in conditions"
                     )
         colnames, varnames = tuple(colnames), tuple(varnames)
         colpaths, vartypes = tuple(colpaths), tuple(vartypes)
@@ -2161,8 +2158,8 @@ very small/large chunksize, you may want to increase/decrease it.""",
             return self._colenums[colname]
         except KeyError:
             raise TypeError(
-                "column ``%s`` of table ``%s`` is not of an enumerated type"
-                % (colname, self._v_pathname)
+                f"column ``{colname}`` of table ``{self._v_pathname}`` "
+                "is not of an enumerated type"
             )
 
     def col(self, name: str) -> np.ndarray:
@@ -3147,10 +3144,10 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 # Flush any unindexed row
                 rowsadded = self.flush_rows_to_index(_lastrow=True)
                 assert rowsadded <= 0 or self._indexedrows == self.nrows, (
-                    "internal error: the number of indexed rows (%d) "
-                    "and rows in the table (%d) is not equal; "
+                    "internal error: the number of indexed rows "
+                    f"({self._indexedrows}) and rows in the table "
+                    f"({self.nrows}) is not equal; "
                     "please report this to the authors."
-                    % (self._indexedrows, self.nrows)
                 )
                 if self._dirtyindexes:
                     # Finally, re-index any dirty column
@@ -3705,7 +3702,7 @@ class Column:
             )
             return table.read(start, stop, step, self.pathname)
         else:
-            raise TypeError("'%s' key type is not valid in this context" % key)
+            raise TypeError(f"'{key}' key type is not valid in this context")
 
     def __iter__(self) -> Generator[np.ndarray]:
         """Iterate through all items in the column."""
@@ -3777,7 +3774,7 @@ class Column:
             )
             return table.modify_column(start, stop, step, value, self.pathname)
         else:
-            raise ValueError("Non-valid index or slice: %s" % key)
+            raise ValueError(f"Non-valid index or slice: {key}")
 
     def create_index(
         self,
@@ -3834,7 +3831,7 @@ class Column:
         """
         kinds = ["ultralight", "light", "medium", "full"]
         if kind not in kinds:
-            raise ValueError("Kind must have any of these values: %s" % kinds)
+            raise ValueError(f"Kind must have any of these values: {kinds}")
         if not isinstance(optlevel, int) or (optlevel < 0 or optlevel > 9):
             raise ValueError(
                 "Optimization level must be an integer in the range 0-9"
@@ -4011,7 +4008,7 @@ class ColumnAttributeSet:
     def _prefix(self, string: str) -> str:
         """Prefix keys with a special pattern for storing table attributes."""
         field_index = self.__dict__["_v_fieldindex"]
-        return "FIELD_%i_ATTR_%s" % (field_index, string)
+        return f"FIELD_{field_index}_ATTR_{string}"
 
     def __getattr__(self, key: str) -> Any:
         """Retrieve a PyTables attribute for this column."""

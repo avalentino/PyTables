@@ -729,24 +729,24 @@ class ReadTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Remove the platform-dependent information (i.e. byteorder)
         tblrepr = "\n".join(tblrepr.split("\n")[:-2]) + "\n"
         template = f"""/test (Table({np.int64(2)!r},)) {np.str_('test00')!r}
-  description := {{
+  description := {{{{
   "x": Int32Col(shape=({np.int64(2)!r},), dflt={np.int32(0)!r}, pos=0),
-  "Info": {{
+  "Info": {{{{
     "value": ComplexCol(itemsize=16, shape=(), dflt={np.complex128(0j)!r}, pos=0),
     "y2": Float64Col(shape=(), dflt={np.float64(1.0)!r}, pos=1),
-    "Info2": {{
+    "Info2": {{{{
       "name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b'')!r}, pos=0),
       "value": ComplexCol(itemsize=16, shape=({np.int64(2)!r},), dflt={np.complex128(0j)!r}, pos=1),
       "y3": Time64Col(shape=({np.int64(2)!r},), dflt={np.float64(1.0)!r}, pos=2),
-      "z3": EnumCol(enum=Enum({{%(value)s}}), dflt='%(default)s', base=Int32Atom(shape=(), dflt={np.int32(0)!r}), shape=({np.int64(2)!r},), pos=3)}},
+      "z3": EnumCol(enum=Enum({{{{{{value}}}}}}), dflt='{{default}}', base=Int32Atom(shape=(), dflt={np.int32(0)!r}), shape=({np.int64(2)!r},), pos=3)}}}},
     "name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b'')!r}, pos=3),
-    "z2": UInt8Col(shape=(), dflt={np.uint8(1)!r}, pos=4)}},
+    "z2": UInt8Col(shape=(), dflt={np.uint8(1)!r}, pos=4)}}}},
   "color": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b' ')!r}, pos=2),
-  "info": {{
+  "info": {{{{
     "Name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b'')!r}, pos=0),
-    "Value": ComplexCol(itemsize=16, shape=(), dflt={np.complex128(0j)!r}, pos=1)}},
+    "Value": ComplexCol(itemsize=16, shape=(), dflt={np.complex128(0j)!r}, pos=1)}}}},
   "y": Float64Col(shape=({np.int64(2)!r}, {np.int64(2)!r}), dflt={np.float64(1.0)!r}, pos=4),
-  "z": UInt8Col(shape=(), dflt={np.uint8(1)!r}, pos=5)}}
+  "z": UInt8Col(shape=(), dflt={np.uint8(1)!r}, pos=5)}}}}
 """
 
         # The problem here is that the order in which items are stored in a
@@ -778,7 +778,7 @@ class ReadTestCase(common.TempFileMixin, common.PyTablesTestCase):
         ]
         defaults = ("r", "b", "g")
         values = [
-            template % {"value": v, "default": d}
+            template.format(value=v, default=d)
             for v, d in itertools.product(enums, defaults)
         ]
         self.assertIn(tblrepr, values)
@@ -796,8 +796,8 @@ class ReadTestCase(common.TempFileMixin, common.PyTablesTestCase):
             tbl = self.h5file.root.test
 
         if common.verbose:
-            print("str(tbl.cols.y)-->'%s'" % str(tbl.cols.y))
-            print("repr(tbl.cols.y)-->'%s'" % repr(tbl.cols.y))
+            print(f"str(tbl.cols.y)-->'{tbl.cols.y!s}'")
+            print(f"repr(tbl.cols.y)-->'{tbl.cols.y!r}'")
 
         self.assertEqual(
             str(tbl.cols.y),
@@ -821,8 +821,8 @@ class ReadTestCase(common.TempFileMixin, common.PyTablesTestCase):
             tbl = self.h5file.root.test
 
         if common.verbose:
-            print("str(tbl.cols.Info.z2)-->'%s'" % str(tbl.cols.Info.z2))
-            print("repr(tbl.cols.Info.z2)-->'%s'" % repr(tbl.cols.Info.z2))
+            print(f"str(tbl.cols.Info.z2)-->'{tbl.cols.Info.z2!s}'")
+            print(f"repr(tbl.cols.Info.z2)-->'{tbl.cols.Info.z2!r}'")
 
         self.assertEqual(
             str(tbl.cols.Info.z2),

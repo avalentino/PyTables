@@ -66,7 +66,7 @@ def recreate_indexes(table, dstfileh, dsttable):
             )
         for colname in listoldindexes:
             if verbose:
-                print("[I]Indexing column: '%s'. Please wait..." % colname)
+                print(f"[I]Indexing column: '{colname}'. Please wait...")
             colobj = dsttable.cols._f_col(colname)
             # We don't specify the filters for the indexes
             colobj.create_index(filters=None)
@@ -313,8 +313,8 @@ def copy_children(
     except Exception:
         type_, value, _ = sys.exc_info()
         print(
-            "Problems doing the copy from '%s:%s' to '%s:%s'"
-            % (srcfile, srcgroup, dstfile, dstgroup)
+            f"Problems doing the copy from '{srcfile}:{srcgroup}' to "
+            f"'{dstfile}:{dstgroup}'"
         )
         print(f"The error was --> {type_}: {value}")
         print("The destination file looks like:\n", dstfileh)

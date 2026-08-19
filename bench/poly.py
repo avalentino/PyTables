@@ -160,7 +160,7 @@ if __name__ == "__main__":
     # for what in ["numpy", "numpy.memmap", "numexpr"]:
     for what in ["numpy", "numexpr"]:
         # break
-        print("Populating x using %s with %d points..." % (what, N))
+        print(f"Populating x using {what} with {N} points...")
         t0 = clock()
         if what == "numpy":
             populate_x_numpy()
@@ -186,7 +186,7 @@ if __name__ == "__main__":
                 # for clevel in (1,):
                 if not first and clevel == 0:
                     continue
-                print("Populating x using %s with %d points..." % (what, N))
+                print(f"Populating x using {what} with {N} points...")
                 populate_x_tables(clib, clevel)
                 print(f"*** Time elapsed populating: {clock() - t0:.3f}")
                 print(f"Computing: {expr!r} using {what}")

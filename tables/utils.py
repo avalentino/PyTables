@@ -279,7 +279,7 @@ def show_stats(explain: str, tref: float, encoding=None) -> float:
             vmexe = int(line.split()[1])
         elif line.startswith("VmLib:"):
             vmlib = int(line.split()[1])
-    print("Memory usage: ******* %s *******" % explain)
+    print(f"Memory usage: ******* {explain} *******")
     print(f"VmSize: {vmsize:>7} kB\tVmRSS: {vmrss:>7} kB")
     print(f"VmData: {vmdata:>7} kB\tVmStk: {vmstk:>7} kB")
     print(f"VmExe:  {vmexe:>7} kB\tVmLib: {vmlib:>7} kB")
@@ -352,7 +352,7 @@ def list_logged_instances(classes: str, file: TextIO = sys.stdout) -> None:
         for ref in tracked_classes[classname]:
             obj = ref()
             if obj is not None:
-                file.write("    %s\n" % repr(obj))
+                file.write(f"    {obj!r}\n")
 
 
 def dump_logged_instances(classes: str, file: TextIO = sys.stdout) -> None:

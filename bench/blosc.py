@@ -32,7 +32,7 @@ def create_file(kind, prec, synth):
         prefix = "cellzome/cellzome-"
 
     for clevel in range(10):
-        oname = "%s/%s-%s%d-%s.h5" % (dirname, prefix, kind, clevel, prec)
+        oname = f"{dirname}/{prefix}-{kind}{clevel}-{prec}.h5"
         # print "creating...", iname
         f2 = tb.open_file(oname, "w")
 
@@ -70,7 +70,7 @@ def create_synth(kind, prec):
 
     prefix = "synth/synth-"
     for clevel in range(10):
-        oname = "%s/%s-%s%d-%s.h5" % (dirname, prefix, kind, clevel, prec)
+        oname = f"{dirname}/{prefix}-{kind}{clevel}-{prec}.h5"
         # print "creating...", iname
         f2 = tb.open_file(oname, "w")
 
@@ -106,12 +106,12 @@ def process_file(kind, prec, clevel, synth):
         prefix = "synth/synth-"
     else:
         prefix = "cellzome/cellzome-"
-    iname = "%s/%s-%s%d-%s.h5" % (dirname, prefix, kind, clevel, prec)
+    iname = f"{dirname}/{prefix}-{kind}{clevel}-{prec}.h5"
     f = tb.open_file(iname, "r")
     a_ = f.root.maxarea
     b_ = f.root.mascotscore
 
-    oname = "%s/%s-%s%d-%s-r.h5" % (dirname, prefix, kind, clevel, prec)
+    oname = f"{dirname}/{prefix}-{kind}{clevel}-{prec}-r.h5"
     f2 = tb.open_file(oname, "w")
     if lib == "none":
         filters = None

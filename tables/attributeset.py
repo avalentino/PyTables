@@ -173,7 +173,7 @@ class AttributeSet(hdf5extension.AttributeSet):
     this::
 
         for name in node._v_attrs._f_list():
-            print("name: %s, value: %s" % (name, node._v_attrs[name]))
+            print(f"name: {name}, value: {node._v_attrs[name]}")
 
     Use whatever idiom you prefer to access the attributes.
 
@@ -513,10 +513,10 @@ class AttributeSet(hdf5extension.AttributeSet):
         max_node_attrs = nodefile.params["MAX_NODE_ATTRS"]
         if len(attrnames) >= max_node_attrs:
             warnings.warn(
-                """\
-node ``%s`` is exceeding the recommended maximum number of attributes (%d);\
-be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
-                % (self._v__nodepath, max_node_attrs),
+                f"node ``{self._v__nodepath}`` is exceeding the recommended "
+                f"maximum number of attributes ({max_node_attrs}); "
+                "be ready to see PyTables asking for *lots* of memory and "
+                "possibly slow I/O",
                 PerformanceWarning,
             )
 
@@ -577,8 +577,8 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
         # Check if attribute exists
         if name not in self._v_attrnames:
             raise AttributeError(
-                "Attribute ('%s') does not exist in node '%s'"
-                % (name, self._v__nodepath)
+                f"Attribute ('{name}') does not exist in "
+                f"node '{self._v__nodepath}'"
             )
 
         nodefile._check_writable()
@@ -596,8 +596,8 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
         except AttributeError:
             # Capture the AttributeError and re-raise a KeyError one
             raise KeyError(
-                "Attribute ('%s') does not exist in node '%s'"
-                % (name, self._v__nodepath)
+                f"Attribute ('{name}') does not exist in "
+                f"node '{self._v__nodepath}'"
             )
 
     def __setitem__(self, name: str, value: Any) -> None:
@@ -611,8 +611,8 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
         except AttributeError:
             # Capture the AttributeError and re-raise a KeyError one
             raise KeyError(
-                "Attribute ('%s') does not exist in node '%s'"
-                % (name, self._v__nodepath)
+                f"Attribute ('{name}') does not exist in "
+                f"node '{self._v__nodepath}'"
             )
 
     def __contains__(self, name: str) -> bool:

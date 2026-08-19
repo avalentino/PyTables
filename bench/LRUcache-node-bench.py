@@ -23,7 +23,7 @@ f = tb.open_file(filename, "w", node_cache_slots=NODE_CACHE_SLOTS)
 g = f.create_group("/", "NodeContainer")
 print("Creating nodes")
 for i in range(nodespergroup):
-    f.create_array(g, "arr%d" % i, [i])
+    f.create_array(g, f"arr{i}", [i])
 f.close()
 
 f = tb.open_file(filename)
@@ -36,7 +36,7 @@ def iternodes():
     indices = indices.astype("i4").clip(0, nodespergroup - 1)
     g = f.get_node("/", "NodeContainer")
     for i in indices:
-        _ = f.get_node(g, "arr%d" % i)
+        _ = f.get_node(g, f"arr{i}")
         # print("a-->", _)
 
 

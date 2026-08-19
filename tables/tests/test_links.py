@@ -409,11 +409,11 @@ class ExternalLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Create external links
         lgroup1 = self.h5file.create_external_link(
-            "/", "lgroup1", "%s:/group1" % self.extfname
+            "/", "lgroup1", f"{self.extfname}:/group1"
         )
         self.assertIsNotNone(lgroup1)
         larr1 = self.h5file.create_external_link(
-            group1, "larr1", "%s:/arr1" % self.extfname
+            group1, "larr1", f"{self.extfname}:/arr1"
         )
         self.assertIsNotNone(larr1)
         larr2 = self.h5file.create_external_link("/", "larr2", extarr2)

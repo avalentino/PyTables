@@ -74,15 +74,15 @@ def print_versions():
     """Print all the versions of software that PyTables relies on."""
 
     print("-=" * 38)
-    print("PyTables version:    %s" % tb.__version__)
-    print("HDF5 version:        %s" % which_lib_version("hdf5")[1])
-    print("NumPy version:       %s" % np.__version__)
+    print(f"PyTables version:    {tb.__version__}")
+    print(f"HDF5 version:        {which_lib_version('hdf5')[1]}")
+    print(f"NumPy version:       {np.__version__}")
     tinfo = which_lib_version("zlib")
     if ne.use_vml:
         # Get only the main version number and strip out all the rest
         vml_version = ne.get_vml_version()
         vml_version = re.findall("[0-9.]+", vml_version)[0]
-        vml_avail = "using VML/MKL %s" % vml_version
+        vml_avail = f"using VML/MKL {vml_version}"
     else:
         vml_avail = "not using Intel's VML/MKL"
     print(f"Numexpr version:     {ne.__version__} ({vml_avail})")
@@ -100,9 +100,9 @@ def print_versions():
         print(f"Blosc version:       {tinfo[1]} ({blosc_date})")
         blosc_cinfo = tb.blosc_get_complib_info()
         blosc_cinfo = [f"{k} ({v[1]})" for k, v in sorted(blosc_cinfo.items())]
-        print("Blosc compressors:   %s" % ", ".join(blosc_cinfo))
+        print("Blosc compressors:   {}".format(", ".join(blosc_cinfo)))
         blosc_finfo = ["shuffle", "bitshuffle"]
-        print("Blosc filters:       %s" % ", ".join(blosc_finfo))
+        print("Blosc filters:       {}".format(", ".join(blosc_finfo)))
     tinfo = which_lib_version("blosc2")
     if tinfo is not None:
         blosc2_date = tinfo[2].split()[1]
@@ -111,25 +111,25 @@ def print_versions():
         blosc2_cinfo = [
             f"{k} ({v[1]})" for k, v in sorted(blosc2_cinfo.items())
         ]
-        print("Blosc2 compressors:  %s" % ", ".join(blosc2_cinfo))
+        print("Blosc2 compressors:  {}".format(", ".join(blosc2_cinfo)))
         blosc2_finfo = ["shuffle", "bitshuffle"]
-        print("Blosc2 filters:      %s" % ", ".join(blosc2_finfo))
+        print("Blosc2 filters:      {}".format(", ".join(blosc2_finfo)))
     try:
         from Cython import __version__ as cython_version
 
-        print("Cython version:      %s" % cython_version)
+        print(f"Cython version:      {cython_version}")
     except ImportError:
         pass
-    print("Python version:      %s" % sys.version)
-    print("Platform:            %s" % platform.platform())
+    print(f"Python version:      {sys.version}")
+    print(f"Platform:            {platform.platform()}")
     # if os.name == 'posix':
     #     (sysname, nodename, release, version, machine) = os.uname()
-    #     print('Platform:          %s-%s' % (sys.platform, machine))
-    print("Byte-ordering:       %s" % sys.byteorder)
-    print("Detected cores:      %s" % tb.utils.detect_number_of_cores())
-    print("Default encoding:    %s" % sys.getdefaultencoding())
-    print("Default FS encoding: %s" % sys.getfilesystemencoding())
-    print("Default locale:      (%s, %s)" % locale.getdefaultlocale())
+    #     print(f"Platform:          {sys.platform}-{machine}")
+    print(f"Byte-ordering:       {sys.byteorder}")
+    print(f"Detected cores:      {tb.utils.detect_number_of_cores()}")
+    print(f"Default encoding:    {sys.getdefaultencoding()}")
+    print(f"Default FS encoding: {sys.getfilesystemencoding()}")
+    print(f"Default locale:      {locale.getdefaultlocale()}")
     print("-=" * 38)
 
     # This should improve readability when tests are run by CI tools
@@ -376,7 +376,7 @@ class ShowMemTime(PyTablesTestCase):
             elif line.startswith("VmLib:"):
                 vmlib = int(line.split()[1])
         print("\nWallClock time:", clock() - self.tref)
-        print("Memory usage: ******* %s *******" % self._getName())
+        print("Memory usage: ******* {self._getName()} *******")
         print(f"VmSize: {vmsize:>7} kB\tVmRSS: {vmrss:>7} kB")
         print(f"VmData: {vmdata:>7} kB\tVmStk: {vmstk:>7} kB")
         print(f"VmExe:  {vmexe:>7} kB\tVmLib: {vmlib:>7} kB")

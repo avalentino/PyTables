@@ -56,7 +56,7 @@ particle = table.row
 
 # Fill the table with 10 particles
 for i in range(10):
-    particle["name"] = "Particle: %6d" % (i)
+    particle["name"] = f"Particle: {i:6d}"
     particle["TDCcount"] = i % 256
     particle["ADCcount"] = (i * 256) % (1 << 16)
     particle["grid_i"] = i

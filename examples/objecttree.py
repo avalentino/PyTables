@@ -39,7 +39,7 @@ for table in (table1, table2):
     # Fill the table with 10 records
     for i in range(10):
         # First, assign the values to the Particle record
-        row["identity"] = "This is particle: %2d" % (i)
+        row["identity"] = f"This is particle: {i:2d}"
         row["idnumber"] = i
         row["speed"] = i * 2
         # This injects the Record values

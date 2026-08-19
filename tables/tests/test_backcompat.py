@@ -16,7 +16,7 @@ class BackCompatTablesTestCase(common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_readTable...")
 
         # Create an instance of an HDF5 Table
         with warnings.catch_warnings():
@@ -68,10 +68,10 @@ class Tables_LZO2_shuffle(BackCompatTablesTestCase):
 
 # Check read attributes from PyTables >= 1.0 properly
 class BackCompatAttrsTestCase(common.TestFileMixin, common.PyTablesTestCase):
-    FILENAME = "zerodim-attrs-%s.h5"
+    FILENAME = "zerodim-attrs-{}.h5"
 
     def setUp(self):
-        self.h5fname = common.test_filename(self.FILENAME % self.format)
+        self.h5fname = common.test_filename(self.FILENAME.format(self.format))
         super().setUp()
 
     def test01_readAttr(self):
@@ -79,7 +79,7 @@ class BackCompatAttrsTestCase(common.TestFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_readAttr..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_readAttr...")
 
         # Read old formats
         a = self.h5file.get_node("/a")

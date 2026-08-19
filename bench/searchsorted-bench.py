@@ -208,7 +208,7 @@ if __name__ == "__main__":
     except Exception:
         psyco_imported = 0
 
-    usage = """usage: %s [-v] [-p] [-R range] [-r] [-w] [-s recsize ] [-a
+    usage = f"""usage: {sys.argv[0]} [-v] [-p] [-R range] [-r] [-w] [-s recsize ] [-a
     atom] [-c level] [-l complib] [-S] [-F] [-i item] [-n nrows] [-x]
     [-k niter] file
             -v verbose
@@ -225,7 +225,7 @@ if __name__ == "__main__":
             -i item to search
             -n set the number of rows in tables
             -x don't make indexes
-            -k number of iterations for reading\n""" % sys.argv[0]
+            -k number of iterations for reading\n"""
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "vpSFR:rwxk:s:a:c:l:i:n:")

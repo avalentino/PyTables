@@ -688,7 +688,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             # F. Alted 2008-09-15
             idx = np.arange(0, len(arr), dtype="uint32")
         else:
-            idx = np.empty(len(arr), "uint%d" % (indsize * 8))
+            idx = np.empty(len(arr), f"uint{indsize * 8}")
             lbucket = self.lbucket
             # Fill the idx with the bucket indices
             offset = int(lbucket - ((nrow * (slicesize % lbucket)) % lbucket))
@@ -959,12 +959,12 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         sorted_lr = tmp.sortedLR
         indices_lr = tmp.indicesLR
         sremain = np.array([], dtype=self.dtype)
-        iremain = np.array([], dtype="u%d" % self.indsize)
+        iremain = np.array([], dtype=f"u{self.indsize}")
         starts = np.zeros(shape=nslices, dtype=np.int_)
         for i in range(nslices):
             # Find the overlapping elements for slice i
             sorted_ver = np.array([], dtype=self.dtype)
-            iover = np.array([], dtype="u%d" % self.indsize)
+            iover = np.array([], dtype=f"u{self.indsize}")
             prev_end = ranges[i, 1]
             for j in range(i + 1, nslices):
                 stj = starts[j]
@@ -1623,7 +1623,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         nelements_lr = self.nelementsILR
         # Create the buffer for reordering 2 slices at a time
         ssorted = np.empty(shape=ss * 2, dtype=self.dtype)
-        sindices = np.empty(shape=ss * 2, dtype=np.dtype("u%d" % self.indsize))
+        sindices = np.empty(shape=ss * 2, dtype=np.dtype(f"u{self.indsize}"))
 
         if self.indsize == 8:
             # Bootstrap the process for reordering
@@ -1901,7 +1901,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             if erange > 0:
                 toverlap = soverlap / erange
         if verbose and message != "init":
-            print("toverlap (%s):" % message, toverlap)
+            print(f"toverlap ({message}):", toverlap)
             print("multiplicity:\n", multiplicity, multiplicity.sum())
             print("overlaps:\n", overlaps, overlaps.sum())
         noverlaps = overlaps.sum()
@@ -1966,7 +1966,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             if erange > 0:
                 toverlap = soverlap / erange
         if verbose:
-            print("overlaps (%s):" % message, noverlaps, toverlap)
+            print(f"overlaps ({message}):", noverlaps, toverlap)
             print(multiplicity)
         # For full indexes, set the 'is_csi' flag
         if self.indsize == 8 and self._v_file._iswritable():
@@ -1998,7 +1998,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
         else:
             values = self.indices
             values_lr = self.indicesLR
-            buffer_ = np.empty(stop - start, dtype="u%d" % self.indsize)
+            buffer_ = np.empty(stop - start, dtype=f"u{self.indsize}")
         ss = self.slicesize
         nrow_start = start // ss
         istart = start % ss
@@ -2346,7 +2346,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             start = starts[nslice]
             stop = stops[nslice]
             if stop > start:
-                idx = np.empty(shape=stop - start, dtype="u%d" % indsize)
+                idx = np.empty(shape=stop - start, dtype=f"u{indsize}")
                 if nslice < nslices:
                     indices._read_index_slice(nslice, start, stop, idx)
                 else:
@@ -2491,10 +2491,10 @@ class IndexesDescG(NotLoggedMixin, Group):
 
     def _g_width_warning(self) -> None:
         warnings.warn(
-            "the number of indexed columns on a single description group "
-            "is exceeding the recommended maximum (%d); "
-            "be ready to see PyTables asking for *lots* of memory "
-            "and possibly slow I/O" % self._v_max_group_width,
+            "the number of indexed columns on a single description group is "
+            f"exceeding the recommended maximum ({self._v_max_group_width}); "
+            "be ready to see PyTables asking for *lots* of memory and "
+            "possibly slow I/O",
             PerformanceWarning,
         )
 
@@ -2521,17 +2521,16 @@ class IndexesTableG(NotLoggedMixin, Group):
 
     def _g_width_warning(self) -> None:
         warnings.warn(
-            "the number of indexed columns on a single table "
-            "is exceeding the recommended maximum (%d); "
-            "be ready to see PyTables asking for *lots* of memory "
-            "and possibly slow I/O" % self._v_max_group_width,
+            "the number of indexed columns on a single table is exceeding "
+            f"the recommended maximum ({self._v_max_group_width}); be ready to "
+            "see PyTables asking for *lots* of memory and possibly slow I/O",
             PerformanceWarning,
         )
 
     def _g_check_name(self, name: str) -> None:
         if not name.startswith("_i_"):
             raise ValueError(
-                "names of index groups must start with ``_i_``: %s" % name
+                f"names of index groups must start with ``_i_``: {name}"
             )
 
     @property

@@ -57,7 +57,7 @@ class DB:
 
     def get_db_size(self):
         sout = subprocess.Popen(
-            "sync;du -s %s" % self.filename, shell=True, stdout=subprocess.PIPE
+            f"sync;du -s {self.filename}", shell=True, stdout=subprocess.PIPE
         ).stdout
         line = sout[0]
         return int(line.split()[0])
@@ -163,8 +163,7 @@ if __name__ == "__main__":
     import sys
     import getopt
 
-    usage = (
-        """usage: %s [-v] [-m] [-c] [-q] [-x] [-z complevel] [-l complib] [-N niter] [-n nrows] [-d datadir] [-t] type [-s] chunksize
+    usage = f"""usage: {sys.argv[0]} [-v] [-m] [-c] [-q] [-x] [-z complevel] [-l complib] [-N niter] [-n nrows] [-d datadir] [-t] type [-s] chunksize
             -v verbose
             -m use random values to fill the array
             -q do a (random) lookup
@@ -178,8 +177,6 @@ if __name__ == "__main__":
             -t select the type for array ('int' or 'float'. def 'float')
             -s select the chunksize for array
             \n"""
-        % sys.argv[0]
-    )
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "vmcqxz:l:N:n:d:t:s:")
@@ -245,9 +242,9 @@ if __name__ == "__main__":
 
     if docreate:
         if verbose:
-            print("writing %s rows" % krows)
+            print(f"writing {krows} rows")
         db.create_db(verbose)
 
     if doquery:
-        print("Calling query_db() %s times" % niter)
+        print(f"Calling query_db() {niter} times")
         db.query_db(niter, avoidfscache, verbose)

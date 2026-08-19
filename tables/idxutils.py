@@ -338,7 +338,7 @@ infinityf = math.ldexp(1.0, 128)
 # elif sys.byteorder == "big":
 #     testNaN = struct.unpack("d", '\x7f\xf0\x00\x00\x00\x00\x00\x01')[0]
 # else:
-#     raise ValueError("Byteorder '%s' not supported!" % sys.byteorder)
+#     raise ValueError("Byteorder '{sys.byteorder}' not supported!")
 # This one seems better
 # testNaN = infinity - infinity
 
@@ -381,7 +381,7 @@ def inftype(
     try:
         return infinitymap[dtype.name][sign >= 0]
     except KeyError:
-        raise TypeError("Type %s is not supported" % dtype.name)
+        raise TypeError(f"Type {dtype.name} is not supported")
 
 
 def string_next_after(
@@ -493,4 +493,4 @@ def nextafter(
     #    else:
     #        return PyNextAfter(x,x + 1)
 
-    raise TypeError("data type ``%s`` is not supported" % dtype)
+    raise TypeError(f"data type ``{dtype}`` is not supported")

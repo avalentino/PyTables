@@ -355,7 +355,7 @@ class Leaf(Node):
             if byteorder not in (None, "little", "big"):
                 raise ValueError(
                     "the byteorder can only take 'little' or 'big' values "
-                    "and you passed: %s" % byteorder
+                    f"and you passed: {byteorder}"
                 )
             self.byteorder = byteorder
             """The byte ordering of the leaf data *on disk*."""
@@ -559,8 +559,8 @@ class Leaf(Node):
             # nrows == 0 is a special case for empty objects
             if 0 < nrows <= start:
                 raise IndexError(
-                    "start of range (%s) is greater than "
-                    "number of rows (%s)" % (start, nrows)
+                    f"start of range ({start}) is greater than "
+                    f"number of rows ({nrows})"
                 )
             step = 1
             if start == -1:  # corner case

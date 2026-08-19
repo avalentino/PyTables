@@ -61,16 +61,14 @@ def split_type(type_: str) -> tuple[str, int | None]:
     """
     match = _type_re.match(type_)
     if not match:
-        raise ValueError("malformed type: %r" % type_)
+        raise ValueError(f"malformed type: {type_!r}")
     kind, precision = match.groups()
     itemsize = None
     if precision:
         precision = int(precision)
         itemsize, remainder = divmod(precision, 8)
         if remainder:  # 0 could be a valid item size
-            raise ValueError(
-                "precision must be a multiple of 8: %d" % precision
-            )
+            raise ValueError(f"precision must be a multiple of 8: {precision}")
     return (kind, itemsize)
 
 
@@ -79,8 +77,8 @@ def _invalid_itemsize_error(
 ) -> ValueError:
     isizes = sorted(itemsizes)
     return ValueError(
-        "invalid item size for kind ``%s``: %r; "
-        "it must be one of ``%r``" % (kind, itemsize, isizes)
+        f"invalid item size for kind ``{kind}``: {itemsize!r}; "
+        f"it must be one of ``{isizes!r}``"
     )
 
 
@@ -88,7 +86,7 @@ def _normalize_shape(shape: Shape | np.integer | int) -> Shape:
     """Check that the `shape` is safe to be used and return it as a tuple."""
     if isinstance(shape, (np.integer, int)):
         if shape < 1:
-            raise ValueError("shape value must be greater than 0: %d" % shape)
+            raise ValueError(f"shape value must be greater than 0: {shape}")
         shape = (shape,)  # N is a shorthand for (N,)
     try:
         shape = tuple(shape)
@@ -367,10 +365,10 @@ class Atom(metaclass=MetaAtom):
         shape = tuple(SizeType(i) for i in dtype.shape)
         if basedtype.names:
             raise ValueError(
-                "compound data types are not supported: %r" % dtype
+                f"compound data types are not supported: {dtype!r}"
             )
         if basedtype.shape != ():
-            raise ValueError("nested data types are not supported: %r" % dtype)
+            raise ValueError(f"nested data types are not supported: {dtype!r}")
         if basedtype.kind == "S":  # can not reuse something like 'string80'
             itemsize = basedtype.itemsize
             return cls.from_kind("string", itemsize, shape, dflt)
@@ -465,14 +463,14 @@ class Atom(metaclass=MetaAtom):
         # smarter.  -- Ivan (2007-02-08)
         if kind in ["enum"]:
             raise ValueError(
-                "the ``%s`` kind is not supported; "
-                "please use the appropriate constructor" % kind
+                f"the ``{kind}`` kind is not supported; "
+                "please use the appropriate constructor"
             )
         # If no `itemsize` is given, try to get the default type of the
         # kind (which has a fixed item size).
         if itemsize is None:
             if kind not in deftype_from_kind:
-                raise ValueError("no default item size for kind ``%s``" % kind)
+                raise ValueError(f"no default item size for kind ``{kind}``")
             type_ = deftype_from_kind[kind]
             kind, itemsize = split_type(type_)
         kdata = atom_map[kind]
@@ -883,7 +881,7 @@ class ComplexAtom(Atom):
     ) -> None:
         if itemsize not in self._isizes:
             raise _invalid_itemsize_error("complex", itemsize, self._isizes)
-        self.type = "%s%d" % (self.kind, itemsize * 8)
+        self.type = f"{self.kind}{itemsize * 8}"
         Atom.__init__(self, self.type, shape, dflt)
 
 
@@ -1052,7 +1050,7 @@ class EnumAtom(Atom):
         if base.kind == "enum":
             raise TypeError(
                 "can not use an enumerated atom "
-                "as a storage atom: %r" % base
+                f"as a storage atom: {base!r}"
             )
 
         # Check whether the storage atom can represent concrete values
@@ -1211,7 +1209,7 @@ class PseudoAtom:
     base: Atom
 
     def __repr__(self) -> str:
-        return "%s()" % self.__class__.__name__
+        return f"{self.__class__.__name__}()"
 
     def toarray(self, object_: Any) -> NoReturn:
         """Convert an `object_` into an array of base atoms."""
@@ -1330,7 +1328,7 @@ class VLUnicodeAtom(_BufferedAtom):
         length = len(array)
         if length == 0:
             return ""  # ``array.view('U0')`` raises a `TypeError`
-        return array.view("U%d" % length).item()
+        return array.view(f"U{length}").item()
 
 
 class ObjectAtom(_BufferedAtom):

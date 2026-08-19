@@ -178,7 +178,7 @@ particle = table.row
 
 # Append 5 new particles to table
 for i in range(10, 15):
-    particle["name"] = "Particle: %6d" % (i)
+    particle["name"] = f"Particle: {i:6d}"
     particle["TDCcount"] = i % 256
     particle["ADCcount"] = (i * 256) % (1 << 16)
     particle["grid_i"] = i
@@ -194,15 +194,8 @@ table.flush()
 # Print the data using the table iterator:
 for r in table:
     print(
-        "%-16s | %11.1f | %11.4g | %6d | %6d | %8d |"
-        % (
-            r["name"],
-            r["pressure"],
-            r["energy"],
-            r["grid_i"],
-            r["grid_j"],
-            r["TDCcount"],
-        )
+        f"{r['name']:<16s} | {r['pressure']:11.1f} | {r['energy']:11.4g} | "
+        f"{r['grid_i']:6d} | {r['grid_j']:6d} | {r['TDCcount']:8d} |"
     )
 
 print()
@@ -276,26 +269,17 @@ print("Some columns in final table:")
 print()
 # Print the headers
 print(
-    "%-16s | %11s | %11s | %6s | %6s | %8s |"
-    % ("name", "pressure", "energy", "grid_i", "grid_j", "TDCcount")
+    f"{'name':<16s} | {'pressure':11s} | {'energy':11s} | "
+    f"{'grid_i':6s} | {'grid_j':6s} | {'TDCcount':8s} |"
 )
 
-print(
-    "%-16s + %11s + %11s + %6s + %6s + %8s +"
-    % ("-" * 16, "-" * 11, "-" * 11, "-" * 6, "-" * 6, "-" * 8)
-)
+print("-" * (16 + 11 + 11 + 6 + 6 + 8))
+
 # Print the data using the table iterator:
 for r in table.iterrows():
     print(
-        "%-16s | %11.1f | %11.4g | %6d | %6d | %8d |"
-        % (
-            r["name"],
-            r["pressure"],
-            r["energy"],
-            r["grid_i"],
-            r["grid_j"],
-            r["TDCcount"],
-        )
+        f"{r['name']:<16s} | {r['pressure']:11.1f} | {r['energy']:11.4g} | "
+        f"{r['grid_i']:6d} | {r['grid_j']:6d} | {r['TDCcount']:8d} |"
     )
 
 print()

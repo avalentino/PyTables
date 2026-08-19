@@ -677,7 +677,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test12_dir..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test12_dir...")
 
         attrset = self.group._v_attrs
 
@@ -1965,7 +1965,7 @@ class VlenStrAttrTestCase(common.PyTablesTestCase):
         v = self.h5file.get_node_attr("/", attr)
         self.assertEqual(v.ndim, 1)
         for idx, item in enumerate(v):
-            value = "%s_%d" % (attr, idx)
+            value = f"{attr}_{idx}"
             self.assertEqual(item, value.encode("ascii"))
 
     def test03_vlen_str_matrix(self):
@@ -1976,7 +1976,7 @@ class VlenStrAttrTestCase(common.PyTablesTestCase):
         self.assertEqual(m.ndim, 2)
         for row, rowdata in enumerate(m):
             for col, item in enumerate(rowdata):
-                value = "%s_%d%d" % (attr, row, col)
+                value = f"{attr}_{row}{col}"
                 self.assertEqual(item, value.encode("ascii"))
 
 

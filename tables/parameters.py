@@ -418,7 +418,7 @@ using the :meth:`tables.File.get_file_image` method.
 DRIVER_SPLIT_META_EXT = "-m.h5"
 """The extension for the metadata file used by the H5FD_SPLIT driver.
 
-If this option is passed to the :func:`tables.openFile` function along
+If this option is passed to the :func:`tables.open_file` function along
 with driver='H5FD_SPLIT', the extension is appended to the name passed
 as the first parameter to form the name of the metadata file. If the
 string '%s' is used in the extension, the metadata file name is formed

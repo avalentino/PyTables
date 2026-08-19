@@ -72,13 +72,13 @@ class Link(Node):
             def __getattr__(self, name: str) -> NoReturn:
                 raise KeyError(
                     "you cannot get attributes from this "
-                    "`%s` instance" % self.__class__.__name__
+                    f"`{self.__class__.__name__}` instance"
                 )
 
             def __setattr__(self, name: str, value: Any) -> NoReturn:
                 raise KeyError(
                     "you cannot set attributes to this "
-                    "`%s` instance" % self.__class__.__name__
+                    f"`{self.__class__.__name__}` instance"
                 )
 
             def _g_close(self) -> None:

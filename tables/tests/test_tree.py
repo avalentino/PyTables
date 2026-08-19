@@ -48,7 +48,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             d = table.row
             # Fill the table
             for i in range(self.expectedrows):
-                d["var1"] = "%04d" % (self.expectedrows - i)
+                d["var1"] = f"{self.expectedrows - i:04d}"
                 d["var2"] = i
                 d["var3"] = i % maxshort
                 d["var4"] = float(i)
@@ -74,7 +74,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00_getNode..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00_getNode...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         nodelist = ["/", "/table0", "/group0/var1", "/group0/group1/var4"]
@@ -179,9 +179,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test01_getNodeClass..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test01_getNodeClass...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
 
@@ -207,7 +205,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_listNodes..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_listNodes...")
 
         # Made the warnings to raise an error
         # warnings.filterwarnings("error", category=UserWarning)
@@ -335,7 +333,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_iterNodes..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_iterNodes...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
 
@@ -461,9 +459,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test03_TraverseTree..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test03_TraverseTree...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         groups = []
@@ -524,7 +520,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_walkNodes..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_walkNodes...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
 
@@ -600,7 +596,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_dir..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_dir...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
 
@@ -660,7 +656,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06_v_groups..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06_v_groups...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
 
@@ -711,18 +707,16 @@ class DeepTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         for depth in range(self.maxdepth):
             # Save it on the HDF5 file
             if common.verbose:
-                print("%3d," % (depth), end=" ")
+                print(f"{depth:3d},", end=" ")
             # Create a couple of arrays here
+            self.h5file.create_array(group, "array", [1, 1], f"depth: {depth}")
             self.h5file.create_array(
-                group, "array", [1, 1], "depth: %d" % depth
-            )
-            self.h5file.create_array(
-                group, "array2", [1, 1], "depth: %d" % depth
+                group, "array2", [1, 1], f"depth: {depth}"
             )
             # And also a group
-            self.h5file.create_group(group, "group2_" + str(depth))
+            self.h5file.create_group(group, f"group2_{depth}")
             # Finally, iterate over a new group
-            group = self.h5file.create_group(group, "group" + str(depth))
+            group = self.h5file.create_group(group, f"group{depth}")
 
         # Close the file
         self.h5file.close()
@@ -738,7 +732,7 @@ class DeepTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # Get the metadata on the previously saved arrays
             for depth in range(self.maxdepth):
                 if common.verbose:
-                    print("%3d," % (depth), end=" ")
+                    print(f"{depth:3d},", end=" ")
 
                 # Check the contents
                 self.assertEqual(group.array[:], [1, 1])
@@ -867,7 +861,7 @@ class WideTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00_wideTree..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00_wideTree...")
             print("Maximum number of children tested :", maxchildren)
 
         a = [1, 1]
@@ -875,9 +869,9 @@ class WideTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Children writing progress: ", end=" ")
         for child in range(maxchildren):
             if common.verbose:
-                print("%3d," % (child), end=" ")
+                print(f"{child:3d},", end=" ")
             self.h5file.create_array(
-                self.h5file.root, "array" + str(child), a, "child: %d" % child
+                self.h5file.root, "array" + str(child), a, f"child: {child}"
             )
         if common.verbose:
             print()
@@ -889,15 +883,15 @@ class WideTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self._reopen()
         if common.verbose:
             print(
-                "\nTime spent opening a file with %d arrays: %s s"
-                % (maxchildren, clock() - t1)
+                f"\nTime spent opening a file with {maxchildren} arrays: "
+                f"{clock() - t1} s"
             )
             print("\nChildren reading progress: ", end=" ")
 
         # Get the metadata on the previously saved arrays
         for child in range(maxchildren):
             if common.verbose:
-                print("%3d," % (child), end=" ")
+                print(f"{child:3d},", end=" ")
 
             # Create an array for later comparison
             # Get the actual array
@@ -929,16 +923,16 @@ class WideTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00_wideTree..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00_wideTree...")
             print("Maximum number of children tested :", maxchildren)
 
         if common.verbose:
             print("Children writing progress: ", end=" ")
         for child in range(maxchildren):
             if common.verbose:
-                print("%3d," % (child), end=" ")
+                print(f"{child:3d},", end=" ")
             self.h5file.create_group(
-                self.h5file.root, "group" + str(child), "child: %d" % child
+                self.h5file.root, f"group{child}", f"child: {child}"
             )
         if common.verbose:
             print()
@@ -949,19 +943,19 @@ class WideTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self._reopen()
         if common.verbose:
             print(
-                "\nTime spent opening a file with %d groups: %s s"
-                % (maxchildren, clock() - t1)
+                f"\nTime spent opening a file with {maxchildren} groups: "
+                f"{clock() - t1} s"
             )
             print("\nChildren reading progress: ", end=" ")
 
         # Get the metadata on the previously saved arrays
         for child in range(maxchildren):
             if common.verbose:
-                print("%3d," % (child), end=" ")
+                print(f"{child:3d},", end=" ")
             # Get the actual group
             group = getattr(self.h5file.root, "group" + str(child))
             # Arrays a and b must be equal
-            self.assertEqual(group._v_title, "child: %d" % child)
+            self.assertEqual(group._v_title, f"child: {child}")
 
         if common.verbose:
             print()  # This flush the stdout buffer
@@ -1010,12 +1004,12 @@ class HiddenTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         for vpath in self.visible:
             self.assertTrue(
                 vpath in objects,
-                "Missing visible node ``%s`` from ``File.objects``." % vpath,
+                f"Missing visible node ``{vpath}`` from ``File.objects``.",
             )
         for hpath in self.hidden:
             self.assertTrue(
                 hpath not in objects,
-                "Found hidden node ``%s`` in ``File.objects``." % hpath,
+                f"Found hidden node ``{hpath}`` in ``File.objects``.",
             )
 
         warnings.filterwarnings("default", category=DeprecationWarning)
@@ -1038,14 +1032,12 @@ class HiddenTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             self.assertEqual(
                 walkPaths,
                 dictPaths,
-                "nodes in ``%s`` do not match those from ``walk_nodes()``"
-                % dictName,
+                f"nodes in ``{dictName}`` do not match those from ``walk_nodes()``",
             )
             self.assertEqual(
                 len(walkPaths),
                 len(objects),
-                "length of ``%s`` differs from that of ``walk_nodes()``"
-                % dictName,
+                f"length of ``{dictName}`` differs from that of ``walk_nodes()``",
             )
 
         warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -1126,7 +1118,7 @@ class HiddenTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
 
         self.assertTrue(
-            found_node, "Hidden node ``%s`` was not listed." % node_to_find
+            found_node, f"Hidden node ``{node_to_find}`` was not listed."
         )
 
     def test05b_iterNodesHidden(self):
@@ -1145,7 +1137,7 @@ class HiddenTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
 
         self.assertTrue(
-            found_node, "Hidden node ``%s`` was not listed." % node_to_find
+            found_node, f"Hidden node ``{node_to_find}`` was not listed."
         )
 
     # The test behind commented out because the .objects dictionary

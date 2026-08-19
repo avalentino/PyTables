@@ -151,8 +151,7 @@ if __name__ == "__main__":
     except Exception:
         psyco_imported = 0
 
-    usage = (
-        """usage: %s [-v] [-p] [-m] [-c] [-q] [-i] [-z complevel] [-l complib] [-R range] [-n nrows] file
+    usage = f"""usage: {sys.argv[0]} [-v] [-p] [-m] [-c] [-q] [-i] [-z complevel] [-l complib] [-R range] [-n nrows] file
             -v verbose
             -p use "psyco" if available
             -m use random values to fill the table
@@ -164,8 +163,6 @@ if __name__ == "__main__":
             -R select a range in a field in the form "start,stop" (def "0,10")
             -n sets the number of rows (in krows) in each table
             \n"""
-        % sys.argv[0]
-    )
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "vpmcqiz:l:R:n:")
@@ -224,7 +221,7 @@ if __name__ == "__main__":
 
     if docreate:
         if verbose:
-            print("writing %s krows" % nrows)
+            print(f"writing {nrows} krows")
         if psyco_imported and usepsyco:
             psyco.bind(create_db)
         nrows *= 1000

@@ -46,7 +46,7 @@ def quantize(data, least_significant_digit):
 
 def get_db_size(filename):
     sout = subprocess.Popen(
-        "ls -sh %s" % filename, shell=True, stdout=subprocess.PIPE
+        f"ls -sh {filename}", shell=True, stdout=subprocess.PIPE
     ).stdout
     line = sout[0]
     return line.split()[0]
@@ -75,7 +75,7 @@ def bench(chunkshape, filters):
         print(f"Creation time: {clock() - t1:.3f}", end=" ")
         filesize = get_db_size(filename)
         filesize_bytes = Path(filename).stat().st_size
-        print("\t\tFile size: %d -- (%s)" % (filesize_bytes, filesize))
+        print(f"\t\tFile size: {filesize_bytes} -- ({filesize})")
 
         # Read in sequential mode:
         e = f.root.earray

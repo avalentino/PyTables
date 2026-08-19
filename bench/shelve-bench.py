@@ -85,7 +85,7 @@ def create_file(filename, totalrows, recsize):
             # Fill the table
             if recsize == "big" or recsize == "medium":
                 for i in range(totalrows):
-                    d.name = "Particle: %6d" % (i)
+                    d.name = f"Particle: {i:6d}"
                     # d.TDCcount = i % 256
                     d.ADCcount = (i * 256) % (1 << 16)
                     if recsize == "big":
@@ -152,9 +152,9 @@ if __name__ == "__main__":
     import getopt
     from time import perf_counter as clock
 
-    usage = """usage: %s [-f] [-s recsize] [-i iterations] file
+    usage = f"""usage: {sys.argv[0]} [-f] [-s recsize] [-i iterations] file
             -s use [big] record, [medium] or [small]
-            -i sets the number of rows in each table\n""" % sys.argv[0]
+            -i sets the number of rows in each table\n"""
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "s:fi:")

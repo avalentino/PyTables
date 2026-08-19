@@ -294,7 +294,7 @@ def read_file(filename, atom, riter, indexmode, dselect, verbose):
                     if float(rnd) <= p["var3"] < float(val)
                 ]
         else:
-            raise ValueError("Value for atom '%s' not supported." % atom)
+            raise ValueError(f"Value for atom '{atom}' not supported.")
         rowselected += len(results)
         # print "selected values-->", results
         if i == 0:
@@ -412,8 +412,7 @@ if __name__ == "__main__":
     except Exception:
         psyco_imported = 0
 
-    usage = (
-        """usage: %s [-v] [-p] [-R] [-r] [-w] [-c level] [-l complib] [-S] [-F] [-n nrows] [-x] [-b file] [-t] [-h] [-k riter] [-m indexmode] [-N range] [-d range] datafile
+    usage = f"""usage: {sys.argv[0]} [-v] [-p] [-R] [-r] [-w] [-c level] [-l complib] [-S] [-F] [-n nrows] [-x] [-b file] [-t] [-h] [-k riter] [-m indexmode] [-N range] [-d range] datafile
             -v verbose
             -p use "psyco" if available
             -R use Random values for filling
@@ -432,8 +431,6 @@ if __name__ == "__main__":
             -N introduce (uniform) noise within range into the values
             -d the interval for look values (int, float) at. Default is 3.
             -k number of iterations for reading\n"""
-        % sys.argv[0]
-    )
 
     try:
         opts, pargs = getopt.getopt(
@@ -500,8 +497,8 @@ if __name__ == "__main__":
             indexmode = option[1]
             if indexmode not in supported_imodes:
                 raise ValueError(
-                    "Indexmode should be any of '%s' and you passed '%s'"
-                    % (supported_imodes, indexmode)
+                    f"Indexmode should be any of '{supported_imodes}' and "
+                    f"you passed '{indexmode}'"
                 )
         elif option[0] == "-n":
             nrows = int(float(option[1]) * 1000)

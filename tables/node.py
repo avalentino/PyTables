@@ -382,10 +382,9 @@ class Node(metaclass=MetaNode):
         # Check if the node is too deep in the tree.
         if parentdepth >= self._v_maxtreedepth:
             warnings.warn(
-                """\
-node ``%s`` is exceeding the recommended maximum depth (%d);\
-be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
-                % (self._v_pathname, self._v_maxtreedepth),
+                f"node ``{self._v_pathname}`` is exceeding the recommended "
+                f"maximum depth ({self._v_maxtreedepth}); be ready to see "
+                "PyTables asking for *lots* of memory and possibly slow I/O",
                 PerformanceWarning,
             )
 
@@ -415,10 +414,9 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
         # Check if the node is too deep in the tree.
         if newdepth > self._v_maxtreedepth:
             warnings.warn(
-                """\
-moved descendent node is exceeding the recommended maximum depth (%d);\
-be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
-                % (self._v_maxtreedepth,),
+                "moved descendent node is exceeding the recommended maximum "
+                f"depth ({self._v_maxtreedepth}); be ready to see PyTables "
+                "asking for *lots* of memory and possibly slow I/O",
                 PerformanceWarning,
             )
 
@@ -811,8 +809,8 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
             srcpath = srcparent._v_pathname
             if dstpath == srcpath and dstname == srcname:
                 raise NodeError(
-                    "source and destination nodes are the same node: ``%s``"
-                    % self._v_pathname
+                    "source and destination nodes are the same node: "
+                    f"``{self._v_pathname}``"
                 )
 
             # Recursively copying into itself?
@@ -853,11 +851,11 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
         # Using class_name_dict avoids a circular import.
         if not isinstance(node, class_name_dict["Node"]):
             raise TypeError(
-                "new parent is not a registered node: %s" % node._v_pathname
+                f"new parent is not a registered node: {node._v_pathname}"
             )
         if not isinstance(node, class_name_dict["Group"]):
             raise TypeError(
-                "new parent node ``%s`` is not a group" % node._v_pathname
+                f"new parent node ``{node._v_pathname}`` is not a group"
             )
 
     def _g_check_not_contains(self, pathname: str) -> None:
@@ -869,8 +867,8 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
             or pathname.startswith(mypathname + "/")
         ):
             raise NodeError(
-                "can not move or recursively copy node ``%s`` "
-                "into itself" % mypathname
+                f"can not move or recursively copy node ``{mypathname}`` "
+                "into itself"
             )
 
     def _g_maybe_remove(
@@ -895,7 +893,7 @@ be ready to see PyTables asking for *lots* of memory and possibly slow I/O"""
         if name.startswith("_i_"):
             # This is reserved for table index groups.
             raise ValueError(
-                "node name starts with reserved prefix ``_i_``: %s" % name
+                f"node name starts with reserved prefix ``_i_``: {name}"
             )
 
     def _f_getattr(self, name: str) -> Any:

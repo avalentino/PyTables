@@ -146,7 +146,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Fill the recarray
         for i in range(self.expectedrows):
             tmplist = []
-            var1 = "%04d" % (self.expectedrows - i)
+            var1 = f"{self.expectedrows - i:04d}"
             tmplist.append(var1)
             var2 = i
             tmplist.append(var2)
@@ -241,10 +241,9 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 row = table.row
                 # Fill the table
                 for i in range(self.expectedrows):
-                    s = "%04d" % (self.expectedrows - i)
+                    s = f"{self.expectedrows - i:04d}"
                     row["var1"] = s.encode("ascii")
                     row["var7"] = s[-1].encode("ascii")
-                    # row['var7'] = ('%04d' % (self.expectedrows - i))[-1]
                     row["var2"] = i
                     row["var3"] = i % self.maxshort
                     if isinstance(row["var4"], np.ndarray):
@@ -332,12 +331,12 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Column names.
         fix_n_column = 10
-        expectedNames = ["var%d" % n for n in range(1, fix_n_column + 1)]
+        expectedNames = [f"var{n}" for n in range(1, fix_n_column + 1)]
         types = ("float16", "float96", "float128", "complex192", "complex256")
         for n, typename in enumerate(types, fix_n_column + 1):
             name = typename.capitalize() + "Col"
             if hasattr(tb, name):
-                expectedNames.append("var%d" % n)
+                expectedNames.append(f"var{n}")
 
         self.assertEqual(expectedNames, list(tbl.colnames))
         self.assertEqual(expectedNames, list(desc._v_names))
@@ -397,7 +396,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_readTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -444,8 +443,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test01a_fetch_all_fields..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test01a_fetch_all_fields..."
             )
 
         # Create an instance of an HDF5 Table
@@ -466,7 +464,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Last record in table ==>", rec)
             print("Total selected records in table ==> ", len(result))
         nrows = 20 - 1
-        strnrows = "%04d" % (self.expectedrows - nrows)
+        strnrows = f"{self.expectedrows - nrows:04d}"
         strnrows = strnrows.encode("ascii")
         self.assertEqual(
             (rec["var1"], rec["var2"], rec["var7"]), (strnrows, nrows, b"1")
@@ -498,7 +496,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_integer..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_integer...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -520,7 +518,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_extslice..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_extslice...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -536,7 +534,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Last record in table ==>", rec)
             print("Total selected records in table ==> ", len(result))
         nrows = 20 - 1
-        strnrows = "%04d" % (self.expectedrows - nrows)
+        strnrows = f"{self.expectedrows - nrows:04d}"
         strnrows = strnrows.encode("ascii")
         self.assertEqual(rec[:2], (strnrows, 19))
         self.assertEqual(rec[3], b"1")
@@ -567,7 +565,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_nofield..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_nofield...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -586,9 +584,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test01a_badtypefield..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test01a_badtypefield...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -607,7 +603,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_readTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -700,7 +696,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01c_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01c_readTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -722,7 +718,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01d_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01d_readTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -743,7 +739,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01e_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01e_readTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -766,7 +762,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01f_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01f_readTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -791,7 +787,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01g_readTable..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01g_readTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -813,7 +809,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.rootgroup = self.h5file.root
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_AppendRows..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_AppendRows...")
 
         # Get a table
         table = self.h5file.get_node("/group0/table1")
@@ -825,7 +821,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("Record Size ==>", table.rowsize)
         # Append some rows
         for i in range(self.appendrows):
-            s = "%04d" % (self.appendrows - i)
+            s = f"{self.appendrows - i:04d}"
             row["var1"] = s.encode("ascii")
             row["var7"] = s[-1].encode("ascii")
             row["var2"] = i
@@ -912,7 +908,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.rootgroup = self.h5file.root
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02a_AppendRows..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02a_AppendRows...")
 
         group = self.rootgroup
         for group_i in range(3):
@@ -928,7 +924,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 print("Record Size ==>", table.rowsize)
             # Append some rows
             for row_i in range(self.appendrows):
-                row["var1"] = "%04d" % (self.appendrows - row_i)
+                row["var1"] = f"{self.appendrows - row_i:04d}"
                 row["var7"] = row["var1"][-1]
                 row["var2"] = row_i
                 row["var3"] = row_i % self.maxshort
@@ -1027,7 +1023,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.rootgroup = self.h5file.root
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_AppendRows..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_AppendRows...")
 
         # Get a table
         table = self.h5file.get_node("/group0/table1")
@@ -1042,7 +1038,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Append some rows (3 * table.nrowsinbuf is enough for
         # checking purposes)
         for i in range(3 * table.nrowsinbuf):
-            s = "%04d" % (self.appendrows - i)
+            s = f"{self.appendrows - i:04d}"
             row["var1"] = s.encode("ascii")
             row["var7"] = s[-1].encode("ascii")
             # row['var7'] = table.cols['var1'][i][-1]
@@ -1217,7 +1213,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.rootgroup = self.h5file.root
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02d_AppendRows..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02d_AppendRows...")
 
         # Get a table
         table = self.h5file.get_node("/group0/table1")
@@ -1391,7 +1387,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.rootgroup = self.h5file.root.newgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02f_AppendRows..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02f_AppendRows...")
 
         if common.verbose:
             print("Nrows in old", table._v_pathname, ":", table.nrows)
@@ -1566,7 +1562,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.rootgroup = self.h5file.root.newgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02g_AppendRows..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02g_AppendRows...")
 
         if common.verbose:
             print("Nrows in old", table._v_pathname, ":", table.nrows)
@@ -1714,7 +1710,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_endianess..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_endianess...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -1741,7 +1737,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -1779,7 +1775,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -1817,7 +1813,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04b_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04b_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -1855,7 +1851,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04c_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04c_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -1888,7 +1884,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04d_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04d_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -1909,7 +1905,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Append some rows
         row = table.row
         for i in range(10, 15):
-            row["var1"] = "%04d" % (self.appendrows - i)
+            row["var1"] = f"{self.appendrows - i:04d}"
             # This line gives problems on Windows. Why?
             # row['var7'] = row['var1'][-1]
             row["var2"] = i
@@ -1987,7 +1983,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04e_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04e_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -2021,7 +2017,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04e_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04e_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -2055,7 +2051,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04e_delete..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04e_delete...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "a")
@@ -2091,9 +2087,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test05_filtersTable..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test05_filtersTable...")
 
         # Create an instance of an HDF5 Table
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -2176,8 +2170,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test08_AppendModifyRows..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test08_AppendModifyRows..."
             )
 
         if common.verbose:
@@ -3156,7 +3149,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
             # Fill the table
             for i in range(self.expectedrows):
-                row["var1"] = "%04d" % (self.expectedrows - i)
+                row["var1"] = f"{self.expectedrows - i:04d}"
                 row["var7"] = row["var1"][-1]
                 row["var2"] = i
                 row["var3"] = i % self.maxshort
@@ -3312,7 +3305,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_range...")
 
         # Case where step < nrowsinbuf < 2 * step
         self.nrows = 21
@@ -3328,7 +3321,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_range...")
 
         # Case where step < nrowsinbuf < 2 * step
         self.nrows = 21
@@ -3344,7 +3337,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_range...")
 
         # Case where step < nrowsinbuf < 10 * step
         self.nrows = 21
@@ -3360,7 +3353,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_range...")
 
         # Case where step < nrowsinbuf < 1.1 * step
         self.nrows = self.expectedrows
@@ -3376,7 +3369,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_range...")
 
         # Case where step == nrowsinbuf
         self.nrows = self.expectedrows
@@ -3392,7 +3385,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_range...")
 
         # Case where step > 1.1 * nrowsinbuf
         self.nrows = 21
@@ -3408,7 +3401,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06_range...")
 
         # Case where step > 3 * nrowsinbuf
         self.nrows = 3
@@ -3424,7 +3417,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07_range...")
 
         # Case where start == stop
         self.nrows = 2
@@ -3440,7 +3433,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test08_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test08_range...")
 
         # Case where start > stop
         self.nrows = 2
@@ -3456,7 +3449,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test09_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test09_range...")
 
         # Case where stop = None (last row)
         self.nrows = 100
@@ -3472,7 +3465,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10_range...")
 
         # Case where start < 0 and stop = None (last row)
         self.nrows = self.expectedrows
@@ -3490,7 +3483,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10a_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10a_range...")
 
         # Case where start < 0 and stop = 0
         self.nrows = self.expectedrows
@@ -3508,7 +3501,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test11_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test11_range...")
 
         # Case where start < 0 and stop < 0
         self.nrows = self.expectedrows
@@ -3526,7 +3519,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test12_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test12_range...")
 
         # Case where start < 0 and stop < 0 and start > stop
         self.nrows = self.expectedrows
@@ -3544,7 +3537,7 @@ class BasicRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test13_range..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test13_range...")
 
         # Case where step < 0
         self.step = -11
@@ -3589,8 +3582,7 @@ class GetColRangeTestCase(BasicRangeTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test01_nonexistentField..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test01_nonexistentField..."
             )
 
         # Create an instance of an HDF5 Table
@@ -3647,7 +3639,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
             # Fill the table
             for i in range(self.expectedrows):
-                row["var1"] = "%04d" % (self.expectedrows - i)
+                row["var1"] = f"{self.expectedrows - i:04d}"
                 row["var7"] = row["var1"][-1]
                 row["var2"] = i
                 row["var3"] = i % self.maxshort
@@ -3677,7 +3669,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_singleItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_singleItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3693,7 +3685,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_singleItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_singleItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3709,7 +3701,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01c_singleItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01c_singleItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3725,7 +3717,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01d_singleItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01d_singleItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3741,7 +3733,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01e_singleItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01e_singleItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3757,7 +3749,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01f_singleItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01f_singleItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3770,7 +3762,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_twoItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_twoItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3795,7 +3787,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_threeItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_threeItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3817,9 +3809,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test04_negativeStep..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test04_negativeStep...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3832,7 +3822,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test06a_singleItemCol..." % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test06a_singleItemCol..."
             )
 
         self.h5file = tb.open_file(self.h5fname, "r")
@@ -3848,7 +3838,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06b_singleItem..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06b_singleItem...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3862,7 +3852,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07_twoItemCol..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07_twoItemCol...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3885,9 +3875,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test08_threeItemCol..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test08_threeItemCol...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -3906,9 +3894,7 @@ class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test09_negativeStep..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test09_negativeStep...")
 
         self.h5file = tb.open_file(self.h5fname, "r")
         table = self.h5file.root.table0
@@ -4925,7 +4911,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00...")
 
         # Create a recarray
         r = np.rec.array(
@@ -4946,7 +4932,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01...")
 
         # Create a recarray
         r = np.rec.array(
@@ -4971,7 +4957,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02...")
 
         # Create a recarray
         r = np.rec.array(b"a" * 200_000, "f4,3i4,S5,i2", 3000)
@@ -4994,7 +4980,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03...")
 
         # Create a recarray
         r = np.rec.array(b"a" * 200_000, "f4,3i4,S5,i2", 3000)
@@ -5020,7 +5006,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04...")
 
         class Rec(tb.IsDescription):
             col1 = tb.IntCol(pos=1)
@@ -5063,7 +5049,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05...")
 
         # Save it in a table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5106,7 +5092,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06a..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06a...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5147,7 +5133,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06b..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06b...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5189,7 +5175,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07a..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07a...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5229,7 +5215,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07b..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07b...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5272,7 +5258,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07c..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07c...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5296,7 +5282,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test08a..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test08a...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5338,7 +5324,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test08a2..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test08a2...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5379,7 +5365,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test08b..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test08b...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5422,7 +5408,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test08b2..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test08b2...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5465,7 +5451,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test08c..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test08c...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5508,7 +5494,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test09a..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test09a...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5551,7 +5537,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test09b..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test09b...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5595,7 +5581,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test09c..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test09c...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5638,7 +5624,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test09d..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test09d...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5683,7 +5669,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10a..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10a...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5731,7 +5717,7 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10b..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10b...")
 
         # Create a new table:
         table = self.h5file.create_table(self.h5file.root, "recarray", Rec)
@@ -5807,7 +5793,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_copy...")
 
         # Create a recarray
         r = np.rec.array(
@@ -5893,7 +5879,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_copy...")
 
         # Create a recarray
         r = np.rec.array(
@@ -5973,7 +5959,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_copy...")
 
         # Create a recarray exceeding buffers capability
         # This works, but takes too much CPU for a test
@@ -6059,7 +6045,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_copy...")
 
         # Create a recarray
         r = np.rec.array(
@@ -6138,7 +6124,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_copy...")
 
         # Create a recarray
         r = np.rec.array(
@@ -6232,7 +6218,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05b_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05b_copy...")
 
         # Create a recarray
         r = np.rec.array(
@@ -6359,7 +6345,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_index..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_index...")
 
         # Create a recarray exceeding buffers capability
         r = np.rec.array(
@@ -6410,7 +6396,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_indexclosef..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_indexclosef...")
 
         # Create a recarray exceeding buffers capability
         r = np.rec.array(
@@ -6783,7 +6769,7 @@ class LengthTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_lengthrows..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_lengthrows...")
 
         # Number of rows
         assert len(self.table) == self.nrows
@@ -6793,7 +6779,7 @@ class LengthTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_lengthcols..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_lengthcols...")
 
         # Number of columns
         if self.record is Record:
@@ -6806,7 +6792,7 @@ class LengthTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_lengthcol..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_lengthcol...")
 
         # Number of rows for all columns column
         for colname in self.table.colnames:
@@ -7720,7 +7706,7 @@ class AccessClosedTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         row = self.table.row
         for i in range(10):
-            row["var1"] = "%04d" % i
+            row["var1"] = f"{i:04d}"
             row["var2"] = i
             row["var3"] = i % 3
             row.append()

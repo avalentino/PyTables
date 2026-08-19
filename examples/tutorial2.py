@@ -62,7 +62,7 @@ for tablename in ("TParticle1", "TParticle2", "TParticle3"):
     # Fill the table with 257 particles
     for i in range(257):
         # First, assign the values to the Particle record
-        particle["name"] = "Particle: %6d" % (i)
+        particle["name"] = f"Particle: {i:6d}"
         particle["lati"] = i
         particle["longi"] = 10 - i
         # Detectable errors start here. Play with them!
@@ -86,7 +86,7 @@ for tablename in ("TEvent1", "TEvent2", "TEvent3"):
     # Fill the table with 257 events
     for i in range(257):
         # First, assign the values to the Event record
-        event["name"] = "Event: %6d" % (i)
+        event["name"] = f"Event: {i:6d}"
         event["TDCcount"] = i % (1 << 8)  # Correct range
         # Detectable errors start here. Play with them!
         event["xcoor"] = float(i**2)  # Wrong spelling

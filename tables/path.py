@@ -87,9 +87,9 @@ def check_attribute_name(name: str) -> None:
     # Check whether `name` is a valid Python identifier.
     if not _python_id_re.match(name):
         warnings.warn(
-            "object name is not a valid Python identifier: %r; "
-            "it does not match the pattern ``%s``; %s"
-            % (name, _python_id_re.pattern, _warn_info),
+            f"object name is not a valid Python identifier: {name!r}; "
+            f"it does not match the pattern ``{_python_id_re.pattern}``; "
+            f"{_warn_info}",
             NaturalNameWarning,
             stacklevel=2,
         )
@@ -107,8 +107,8 @@ def check_attribute_name(name: str) -> None:
     # Still, names starting with reserved prefixes are not allowed.
     if _reserved_id_re.match(name):
         raise ValueError(
-            "object name starts with a reserved prefix: %r; "
-            "it matches the pattern ``%s``" % (name, _reserved_id_re.pattern)
+            f"object name starts with a reserved prefix: {name!r}; "
+            f"it matches the pattern ``{_reserved_id_re.pattern}``"
         )
 
     # ``__members__`` is the only exception to that rule.
@@ -151,7 +151,7 @@ def check_name_validity(name: str) -> None:
         raise ValueError("``.`` is not allowed as an object name")
     elif "/" in name:
         raise ValueError(
-            "the ``/`` character is not allowed " "in object names: %r" % name
+            "the ``/`` character is not allowed " f"in object names: {name!r}"
         )
 
 

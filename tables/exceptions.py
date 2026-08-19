@@ -121,7 +121,7 @@ class HDF5ExtError(RuntimeError):
                 "Invalid value for the environment variable "
                 "'PT_DEFAULT_H5_BACKTRACE_POLICY'.  The default "
                 "policy for HDF5 back trace management in PyTables "
-                "will be: '%s'" % oldvalue
+                f"will be: '{oldvalue}'"
             )
         else:
             cls.DEFAULT_H5_BACKTRACE_POLICY = newvalue

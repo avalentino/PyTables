@@ -34,7 +34,7 @@ def show_stats(explain, tref):
         elif line.startswith("VmLib:"):
             vmlib = int(line.split()[1])
     print("WallClock time:", clock() - tref)
-    print("Memory usage: ******* %s *******" % explain)
+    print(f"Memory usage: ******* {explain} *******")
     print(f"VmSize: {vmsize:>7} kB\tVmRSS: {vmrss:>7} kB")
     print(f"VmData: {vmdata:>7} kB\tVmStk: {vmstk:>7} kB")
     print(f"VmExe:  {vmexe:>7} kB\tVmLib: {vmlib:>7} kB")
@@ -42,9 +42,7 @@ def show_stats(explain, tref):
 
 def check_open_close():
     for i in range(niter):
-        print(
-            "------------------ open_close #%s -------------------------" % i
-        )
+        print(f"------------------ open_close #{i} -------------------------")
         tref = clock()
         fileh = tb.open_file(filename)
         fileh.close()
@@ -53,7 +51,7 @@ def check_open_close():
 
 def check_only_open():
     for i in range(niter):
-        print("------------------ only_open #%s -------------------------" % i)
+        print(f"------------------ only_open #{i} -------------------------")
         tref = clock()
         fileh = tb.open_file(filename)
         show_stats("Before closing file", tref)
@@ -62,7 +60,7 @@ def check_only_open():
 
 def check_full_browse():
     for i in range(niter):
-        print("------------------ full_browse #%s -----------------------" % i)
+        print(f"------------------ full_browse #{i} -----------------------")
         tref = clock()
         fileh = tb.open_file(filename)
         for node in fileh:
@@ -73,7 +71,7 @@ def check_full_browse():
 
 def check_partial_browse():
     for i in range(niter):
-        print("------------------ partial_browse #%s --------------------" % i)
+        print(f"------------------ partial_browse #{i} --------------------")
         tref = clock()
         fileh = tb.open_file(filename)
         for node in fileh.root.ngroup0.ngroup1:
@@ -84,7 +82,7 @@ def check_partial_browse():
 
 def check_full_browse_attrs():
     for i in range(niter):
-        print("------------------ full_browse_attrs #%s -----------------" % i)
+        print(f"------------------ full_browse_attrs #{i} -----------------")
         tref = clock()
         fileh = tb.open_file(filename)
         for node in fileh:
@@ -96,7 +94,7 @@ def check_full_browse_attrs():
 
 def check_partial_browse_attrs():
     for i in range(niter):
-        print("------------------ partial_browse_attrs #%s --------------" % i)
+        print(f"------------------ partial_browse_attrs #{i} --------------")
         tref = clock()
         fileh = tb.open_file(filename)
         for node in fileh.root.ngroup0.ngroup1:
@@ -108,7 +106,7 @@ def check_partial_browse_attrs():
 
 def check_open_group():
     for i in range(niter):
-        print("------------------ open_group #%s ------------------------" % i)
+        print(f"------------------ open_group #{i} ------------------------")
         tref = clock()
         fileh = tb.open_file(filename)
         group = fileh.root.ngroup0.ngroup1
@@ -120,7 +118,7 @@ def check_open_group():
 
 def check_open_leaf():
     for i in range(niter):
-        print("------------------ open_leaf #%s -----------------------" % i)
+        print(f"------------------ open_leaf #{i} -----------------------")
         tref = clock()
         fileh = tb.open_file(filename)
         leaf = fileh.root.ngroup0.ngroup1.array9
@@ -132,8 +130,7 @@ def check_open_leaf():
 
 if __name__ == "__main__":
 
-    usage = (
-        """usage: %s [-v] [-p] [-n niter] [-O] [-o] [-B] [-b] [-g] [-l] [-A] [-a] [-E] [-S] datafile
+    usage = f"""usage: {sys.argv[0]} [-v] [-p] [-n niter] [-O] [-o] [-B] [-b] [-g] [-l] [-A] [-a] [-E] [-S] datafile
               -v verbose  (total dump of profiling)
               -p do profiling
               -n number of iterations for reading
@@ -148,8 +145,6 @@ if __name__ == "__main__":
               -E Check everything
               -S Check everything as subprocess
               \n"""
-        % sys.argv[0]
-    )
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "vpn:OoBbAaglESs")
@@ -215,7 +210,7 @@ if __name__ == "__main__":
         for opt in options:
             opts = r"{} \-s {} {}".format(progname, opt, " ".join(args))
             # print "opts-->", opts
-            os.system("python2.4 %s" % opts)
+            os.system(f"python2.4 {opts}")
     else:
         if profile:
             for ifunc in func:

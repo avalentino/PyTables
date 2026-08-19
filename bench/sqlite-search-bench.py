@@ -146,7 +146,7 @@ CREATE INDEX ivar3 ON small(var3);
             var1 = np.array(None, shape=[j - i], dtype="s4")
             if not heavy:
                 for n in range(j - i):
-                    var1[n] = str("%.4s" % var2[n])
+                    var1[n] = str(f"{var2[n]:.4}")
             for n in range(j - i):
                 fields = (var1[n], var2[n], var3[n])
                 cursor.execute(SQL, fields)
@@ -361,8 +361,7 @@ if __name__ == "__main__":
     except Exception:
         psyco_imported = 0
 
-    usage = (
-        """usage: %s [-v] [-p] [-R] [-h] [-t] [-r] [-w] [-n nrows] [-b file] [-k riter] [-m indexmode] [-N range] datafile
+    usage = f"""usage: {sys.argv[0]} [-v] [-p] [-R] [-h] [-t] [-r] [-w] [-n nrows] [-b file] [-k riter] [-m indexmode] [-N range] datafile
             -v verbose
             -p use "psyco" if available
             -R use Random values for filling
@@ -375,8 +374,6 @@ if __name__ == "__main__":
             -N introduce (uniform) noise within range into the values
             -d the interval for look values (int, float) at. Default is 3.
             -k number of iterations for reading\n"""
-        % sys.argv[0]
-    )
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "vpRhtrwn:b:k:m:N:d:")
@@ -427,8 +424,8 @@ if __name__ == "__main__":
             indexmode = option[1]
             if indexmode not in supported_imodes:
                 raise ValueError(
-                    "Indexmode should be any of '%s' and you passed '%s'"
-                    % (supported_imodes, indexmode)
+                    f"Indexmode should be any of '{supported_imodes}' and "
+                    f"you passed '{indexmode}'"
                 )
         elif option[0] == "-n":
             nrows = int(float(option[1]) * 1000)

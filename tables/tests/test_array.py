@@ -24,7 +24,7 @@ class BasicTestCase(common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running test for array with type '%s'" % a.dtype.type, end=" "
+                f"Running test for array with type '{a.dtype.type}'", end=" "
             )
             print("for class check:", self.title)
 
@@ -106,7 +106,7 @@ class BasicTestCase(common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running test for array with type '%s'" % a.dtype.type, end=" "
+                f"Running test for array with type '{a.dtype.type}'", end=" "
             )
             print("for class check:", self.title)
 
@@ -164,7 +164,7 @@ class BasicTestCase(common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running test for array with type '%s'" % a.dtype.type, end=" "
+                f"Running test for array with type '{a.dtype.type}'", end=" "
             )
             print("for class check:", self.title)
 
@@ -689,8 +689,7 @@ class UnalignedAndComplexTestCase(
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "\nRunning test for array with type '%s'"
-                % testArray.dtype.type
+                f"\nRunning test for array with type '{testArray.dtype.type}'"
             )
 
         # Create the array under root and name 'somearray'
@@ -916,8 +915,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test00_iterativeGroups..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test00_iterativeGroups..."
             )
 
         # Get the root group
@@ -975,9 +973,9 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             if common.verbose:
                 print("Info from dataset:", dset._v_pathname)
                 print("  shape ==>", dset.shape, end=" ")
-                print("  type ==> %s" % dset.atom.dtype)
+                print(f"  type ==> {dset.atom.dtype}")
                 print("Array b read from file. Shape: ==>", b.shape, end=" ")
-                print(". Type ==> %s" % b.dtype)
+                print(f". Type ==> {b.dtype}")
             self.assertEqual(a.shape, b.shape)
             self.assertEqual(a.dtype, b.dtype)
             self.assertTrue(common.allequal(a, b))
@@ -999,8 +997,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test01_largeRankArrays..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test01_largeRankArrays..."
             )
             print("Maximum rank for tested arrays:", maxrank)
 
@@ -1011,8 +1008,8 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # Create an array of integers, with incrementally bigger ranges
             a = np.ones((1,) * rank, np.int32)
             if common.verbose:
-                print("%3d," % (rank), end=" ")
-            self.h5file.create_array(group, "array", a, "Rank: %s" % rank)
+                print(f"{rank:3d},", end=" ")
+            self.h5file.create_array(group, "array", a, f"Rank: {rank}")
             group = self.h5file.create_group(group, "group" + str(rank))
 
         # Reopen the file
@@ -1029,13 +1026,13 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # Get the actual array
             b = group.array.read()
             if common.verbose:
-                print("%3d," % (rank), end=" ")
+                print(f"{rank:3d},", end=" ")
             if common.verbose and not common.allequal(a, b):
                 print("Info from dataset:", group.array._v_pathname)
                 print("  Shape: ==>", group.array.shape, end=" ")
-                print("  typecode ==> %c" % group.array.typecode)
+                print(f"  typecode ==> {group.array.typecode:c}")
                 print("Array b read from file. Shape: ==>", b.shape, end=" ")
-                print(". Type ==> %c" % b.dtype)
+                print(f". Type ==> {b.dtype:c}")
 
             self.assertEqual(a.shape, b.shape)
             self.assertEqual(a.dtype, b.dtype)
@@ -1056,7 +1053,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_copy...")
 
         # Create an Array
         arr = np.array([[456, 2], [3, 457]], dtype="int16")
@@ -1095,7 +1092,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_copy...")
 
         # Create an Array
         arr = np.array([[456, 2], [3, 457]], dtype="int16")
@@ -1135,7 +1132,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_copy...")
 
         # Create an Array
         arr = np.array([[456, 2], [3, 457]], dtype="int16")
@@ -1165,7 +1162,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_copy...")
 
         # Create an Array
         arr = np.array([[456, 2], [3, 457]], dtype="int16")
@@ -1198,7 +1195,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05b_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05b_copy...")
 
         # Create an Array
         arr = np.array([[456, 2], [3, 457]], dtype="int16")
@@ -1242,7 +1239,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_index..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_index...")
 
         # Create a numpy
         r = np.arange(200, dtype="int32")
@@ -1277,7 +1274,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_indexclosef..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_indexclosef...")
 
         # Create a numpy
         r = np.arange(200, dtype="int32")

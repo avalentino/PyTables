@@ -140,7 +140,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         varnames = []
         for i in range(varnumber):
-            varnames.append("int%d" % i)
+            varnames.append(f"int{i}")
 
         # Build a dictionary with the types as values and varnames as keys
         recordDict = {}
@@ -187,7 +187,7 @@ class CreateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         varnames = []
         for i in range(varnumber):
-            varnames.append("int%d" % i)
+            varnames.append(f"int{i}")
 
         # Build a dictionary with the types as values and varnames as keys
         recordDict = {}
@@ -280,7 +280,7 @@ class FiltersTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
             d = table.row
             # Fill the table
             for i in range(self.nrows):
-                d["var1"] = "%04d" % (self.nrows - i)
+                d["var1"] = f"{self.nrows - i:04d}"
                 d["var2"] = i
                 d["var3"] = i * 2
                 d.append()  # This injects the Record values
@@ -330,9 +330,7 @@ class FiltersTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test00_checkFilters..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test00_checkFilters...")
 
         # First level check
         if common.verbose:
@@ -443,9 +441,7 @@ class FiltersTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test01_checkFilters..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test01_checkFilters...")
 
         # Close the file
         self._reopen()
@@ -771,7 +767,7 @@ class CopyGroupTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 d = table.row
                 # Fill the table
                 for row_i in range(self.nrows):
-                    d["var1"] = "%04d" % (self.nrows - row_i)
+                    d["var1"] = f"{self.nrows - row_i:04d}"
                     d["var2"] = row_i
                     d["var3"] = row_i * 2
                     d.append()  # This injects the Record values
@@ -826,9 +822,7 @@ class CopyGroupTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test00_nonRecursive..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test00_nonRecursive...")
 
         # Copy a group non-recursively
         srcgroup = self.h5file.root.group0.group1
@@ -929,7 +923,7 @@ class CopyGroupTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_Recursive..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_Recursive...")
 
         # Create the destination node
         group = self.h5file2.root
@@ -1074,7 +1068,7 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 d = table.row
                 # Fill the table
                 for row_i in range(self.nrows):
-                    d["var1"] = "%04d" % (self.nrows - row_i)
+                    d["var1"] = f"{self.nrows - row_i:04d}"
                     d["var2"] = row_i
                     d["var3"] = row_i * 2
                     d.append()  # This injects the Record values
@@ -1131,7 +1125,7 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00_overwrite..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00_overwrite...")
 
         # Create a temporary file
         Path(self.h5fname2).write_text("")
@@ -1172,9 +1166,7 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test00a_srcdstequal..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test00a_srcdstequal...")
 
         # Copy the file to the destination
         self.assertRaises(IOError, self.h5file.copy_file, self.h5file.filename)
@@ -1184,7 +1176,7 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00b_firstclass..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00b_firstclass...")
 
         # Close the temporary file
         self.h5file.close()
@@ -1224,7 +1216,7 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_copy...")
 
         # Copy the file to the destination
         self.h5file.copy_file(
@@ -1255,8 +1247,6 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print("The copied node list -->", nodelist2)
         self.assertEqual(srcgroup._v_nchildren, dstgroup._v_nchildren)
         self.assertEqual(nodelist1, nodelist2)
-        # print("_v_attrnames-->", self.h5file2.root._v_attrs._v_attrnames)
-        # print("--> <%s,%s>" % (self.h5file2.title, self.title))
         self.assertEqual(self.h5file2.title, self.title)
 
         # Check that user attributes has not been copied
@@ -1301,7 +1291,7 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_Attrs..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_Attrs...")
 
         # Copy the file to the destination
         self.h5file.copy_file(
@@ -1412,9 +1402,7 @@ class CopyFileCase10(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test01_notoverwrite..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test01_notoverwrite...")
 
         # Create two empty files:
         self.h5fname2 = tempfile.mktemp(".h5")
@@ -1502,13 +1490,13 @@ class GroupFiltersTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 self.assertEqual(
                     node_filters,
                     tb.Filters(),
-                    "node ``%s`` should have no filters" % node._v_pathname,
+                    f"node ``{node._v_pathname}`` should have no filters",
                 )
             elif node._v_name.endswith("_yes"):
                 self.assertEqual(
                     node_filters,
                     self.filters,
-                    "node ``%s`` should have filters" % node._v_pathname,
+                    f"node ``{node._v_pathname}`` should have filters",
                 )
 
     def test00_propagate(self):

@@ -199,10 +199,10 @@ if __name__ == "__main__":
     import getopt
     from time import perf_counter as clock
 
-    usage = """usage: %s [-v] [-s recsize] [-i iterations] file
+    usage = f"""usage: {sys.argv[0]} [-v] [-s recsize] [-i iterations] file
             -v verbose
             -s use [big] record, [medium] or [small]
-            -i sets the number of rows in each table\n""" % sys.argv[0]
+            -i sets the number of rows in each table\n"""
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "s:vi:")

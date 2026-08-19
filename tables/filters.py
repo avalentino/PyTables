@@ -218,10 +218,10 @@ class Filters:
                     if len(values) > 6:
                         if name == "blosc":
                             cname = blosc_compcode_to_compname(values[6])
-                            kwargs["complib"] = "blosc:%s" % cname
+                            kwargs["complib"] = f"blosc:{cname}"
                         else:
                             cname = blosc2_compcode_to_compname(values[6])
-                            kwargs["complib"] = "blosc2:%s" % cname
+                            kwargs["complib"] = f"blosc2:{cname}"
                 else:
                     kwargs["complevel"] = values[0]
             elif name in foreign_complibs:
@@ -336,14 +336,13 @@ bitshuffle=False, fletcher32=True, least_significant_digit=None)
             # These checks are not performed when loading filters from disk.
             if complib not in all_complibs:
                 raise ValueError(
-                    "compression library ``%s`` is not supported; "
-                    "it must be one of: %s"
-                    % (complib, ", ".join(all_complibs))
+                    f"compression library ``{complib}`` is not supported; "
+                    f"it must be one of: {', '.join(all_complibs)}"
                 )
             if utilsextension.which_lib_version(complib) is None:
                 warnings.warn(
-                    "compression library ``%s`` is not available; "
-                    "using ``%s`` instead" % (complib, default_complib),
+                    f"compression library ``{complib}`` is not available; "
+                    f"using ``{default_complib}`` instead",
                     FiltersWarning,
                 )
                 complib = default_complib  # always available

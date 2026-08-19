@@ -20,7 +20,7 @@ md_shape = (2, 2)
 _maxnvalue = row_period + np.prod(md_shape, dtype=tb.utils.SizeType) - 1
 _strlen = int(np.log10(_maxnvalue - 1)) + 1
 
-str_format = "%%0%dd" % _strlen
+str_format = f"0{_strlen}d"
 """Format of string values."""
 
 small_blocksizes = (300, 60, 20, 5)
@@ -47,7 +47,7 @@ type_info = {
     "time32": (np.int32, int),
     "time64": (np.float64, float),
     "enum": (np.uint8, int),  # just for these tests
-    "string": ("S%s" % _strlen, np.bytes_),  # just for these tests
+    "string": (f"S{_strlen}", np.bytes_),  # just for these tests
 }
 """NumPy and Numexpr type for each PyTables type that will be tested."""
 
@@ -87,7 +87,7 @@ nxtype_from_type = {type_: info[1] for (type_, info) in type_info.items()}
 heavy_types = frozenset(["uint8", "int16", "uint16", "float32", "complex64"])
 """PyTables types to be tested only in heavy mode."""
 
-enum = tb.Enum({"n%d" % i: i for i in range(_maxnvalue)})
+enum = tb.Enum({f"n{i}": i for i in range(_maxnvalue)})
 """Enumerated type to be used in tests."""
 
 
@@ -105,7 +105,7 @@ def append_columns(classdict, shape=()):
         if not heavy and type_ in heavy_types:
             continue  # skip heavy type in non-heavy mode
         colpos = itype + 1
-        colname = "c_%s" % type_
+        colname = f"c_{type_}"
         if type_ == "enum":
             base = tb.Atom.from_sctype(sctype_from_type[type_])
             col = tb.EnumCol(enum, enum(0), base, shape=shape, pos=colpos)
@@ -204,12 +204,14 @@ def fill_table(table, shape, nrows):
         for type_, sctype in sctype_from_type.items():
             if not heavy and type_ in heavy_types:
                 continue  # skip heavy type in non-heavy mode
-            colname = "c_%s" % type_
-            ncolname = "c_nested/%s" % colname
+            colname = f"c_{type_}"
+            ncolname = f"c_nested/{colname}"
             if type_ == "bool":
                 coldata = data > (row_period // 2)
             elif type_ == "string":
-                sdata = [str_format % x for x in range(value, value + size)]
+                sdata = [
+                    format(x, str_format) for x in range(value, value + size)
+                ]
                 coldata = np.array(sdata, dtype=sctype).reshape(shape)
             else:
                 coldata = np.asarray(data, dtype=sctype)
@@ -349,8 +351,8 @@ class TableDataTestCase(BaseTableQueryTestCase):
 
     """
 
-    _testfmt_light = "test_l%04d"
-    _testfmt_heavy = "test_h%04d"
+    _testfmt_light = "test_l{:04d}"
+    _testfmt_heavy = "test_h{:04d}"
 
 
 def _old_repr(o):
@@ -371,19 +373,19 @@ def create_test_method(type_, op, extracond, func=None):
     }
     for bname, bvalue in condvars.items():
         if type_ == "string":
-            bvalue = str_format % bvalue
+            bvalue = format(int(bvalue), str_format)
         bvalue = nxtype_from_type[type_](bvalue)
         condvars[bname] = bvalue
 
     # Compute the name of columns.
-    colname = "c_%s" % type_
-    ncolname = "c_nested/%s" % colname
+    colname = f"c_{type_}"
+    ncolname = f"c_nested/{colname}"
 
     # Compute the query condition.
     if not op:  # as is
         cond = colname
     elif op == "~":  # unary
-        cond = "~(%s)" % colname
+        cond = f"~({colname})"
     elif op == "<" and func is None:  # binary variable-constant
         cond = f'{colname} {op} {_old_repr(condvars["bound"])}'
     elif isinstance(op, tuple):  # double binary variable-constant
@@ -406,7 +408,7 @@ def create_test_method(type_, op, extracond, func=None):
                     msg = se.args[0]
                 else:
                     msg = "<skipped>"
-                common.verbosePrint("\nSkipped test: %s" % msg)
+                common.verbosePrint(f"\nSkipped test: {msg}")
             finally:
                 common.verbosePrint("")  # separator line between tests
 
@@ -414,7 +416,7 @@ def create_test_method(type_, op, extracond, func=None):
 
     @ignore_skipped
     def test_method(self):
-        common.verbosePrint("* Condition is ``%s``." % cond)
+        common.verbosePrint(f"* Condition is ``{cond}``.")
         # Replace bitwise operators with their logical counterparts.
         pycond = cond
         for ptop, pyop in [("&", "and"), ("|", "or"), ("~", "not")]:
@@ -504,7 +506,7 @@ def create_test_method(type_, op, extracond, func=None):
             self.assertTrue(np.all(ptrownos[0] == ptrownos[1]))
             self.assertTrue(np.all(ptfvalues[0] == ptfvalues[1]))
 
-    test_method.__doc__ = "Testing ``%s``." % cond
+    test_method.__doc__ = f"Testing ``{cond}``."
     return test_method
 
 
@@ -519,8 +521,8 @@ def add_test_method(type_, op, extracond="", func=None):
     tmethod = create_test_method(type_, op, extracond, func)
     # The test number is appended to the docstring to help
     # identify failing methods in non-verbose mode.
-    tmethod.__name__ = testfmt % testn
-    tmethod.__doc__ += testfmt % testn
+    tmethod.__name__ = testfmt.format(testn)
+    tmethod.__doc__ += testfmt.format(testn)
     setattr(TableDataTestCase, tmethod.__name__, tmethod)
     testn += 1
 
@@ -640,14 +642,10 @@ def iclassdata():
                     optlevel in heavy_itable_optvalues
                     or size in heavy_itable_sizes
                 )
-                classname = "%sI%sO%dTDTestCase" % (
-                    size[0],
-                    ckind[0],
-                    optlevel,
-                )
+                classname = f"{size[0]}I{ckind[0]}O{optlevel}TDTestCase"
                 cbasenames = (
-                    "%sSTableMixin" % size,
-                    "%sITableMixin" % ckind,
+                    f"{size}STableMixin",
+                    f"{ckind}ITableMixin",
                     "ScalarTableMixin",
                     "TableDataTestCase",
                 )

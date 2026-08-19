@@ -79,7 +79,7 @@ cparams = {
     "filters_meta": [0],
 }
 tables_filters = tables.Filters(
-    complevel=clevel, complib="blosc2:%s" % cname, shuffle=True
+    complevel=clevel, complib=f"blosc2:{cname}", shuffle=True
 )
 h5py_filters = hdf5plugin.Blosc2(
     clevel=clevel, cname=cname, filters=hdf5plugin.Blosc2.SHUFFLE

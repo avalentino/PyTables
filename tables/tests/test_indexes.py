@@ -68,9 +68,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test00_flushLastRow..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test00_flushLastRow...")
 
         # Open the HDF5 file in append mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -97,7 +95,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test00_update..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test00_update...")
 
         # Open the HDF5 file in append mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -129,7 +127,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_readIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_readIndex...")
 
         # Open the HDF5 file in read-only mode
         self.h5file = tb.open_file(self.h5fname, mode="r")
@@ -150,7 +148,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_readIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_readIndex...")
 
         # Open the HDF5 file in read-only mode
         self.h5file = tb.open_file(self.h5fname, mode="r")
@@ -174,7 +172,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_readIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_readIndex...")
 
         # Open the HDF5 file in read-only mode
         self.h5file = tb.open_file(self.h5fname, mode="r")
@@ -197,7 +195,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_readIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_readIndex...")
 
         # Open the HDF5 file in read-only mode
         self.h5file = tb.open_file(self.h5fname, mode="r")
@@ -225,9 +223,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test05_getWhereList..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test05_getWhereList...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -253,9 +249,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test06_getWhereList..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test06_getWhereList...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -284,9 +278,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test07_getWhereList..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test07_getWhereList...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -312,9 +304,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test08_getWhereList..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test08_getWhereList...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -340,9 +330,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test09a_removeIndex..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test09a_removeIndex...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -377,9 +365,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test09b_removeIndex..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test09b_removeIndex...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -419,7 +405,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10a_moveIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10a_moveIndex...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -457,7 +443,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10b_moveIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10b_moveIndex...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -500,7 +486,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10c_moveIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10c_moveIndex...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a", node_cache_slots=10)
@@ -538,7 +524,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10d_moveIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10d_moveIndex...")
 
         # Open the HDF5 file in read-write mode
         self.h5file = tb.open_file(self.h5fname, mode="a", node_cache_slots=0)
@@ -577,8 +563,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test11a_removeTableWithIndex..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test11a_removeTableWithIndex..."
             )
 
         # Open the HDF5 file in read-write mode
@@ -625,8 +610,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test11b_removeTableWithIndex..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test11b_removeTableWithIndex..."
             )
 
         self.h5file = tb.open_file(self.h5fname, mode="a")
@@ -676,8 +660,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test11c_removeTableWithIndex..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test11c_removeTableWithIndex..."
             )
 
         class Distance(tb.IsDescription):
@@ -1030,7 +1013,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_attrs..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_attrs...")
 
         table = self.table
         if self.iprops is DefaultProps:
@@ -1063,7 +1046,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_attrs..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_attrs...")
 
         table = self.table
 
@@ -1097,7 +1080,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03_counters..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03_counters...")
         table = self.table
 
         # Check the counters for indexes
@@ -1124,7 +1107,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_noauto..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_noauto...")
         table = self.table
 
         # Force a sync in indexes
@@ -1162,7 +1145,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_icounters..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_icounters...")
         table = self.table
 
         # Force a sync in indexes
@@ -1207,7 +1190,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test06_dirty..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test06_dirty...")
         table = self.table
 
         # Force a sync in indexes
@@ -1225,8 +1208,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
             for colname in table.colnames:
                 if table.cols._f_col(colname).index:
                     print(
-                        "dirty flag col %s: %s"
-                        % (colname, table.cols._f_col(colname).index.dirty)
+                        f"dirty flag col {colname}: {table.cols._f_col(colname).index.dirty}"
                     )
         # Check the flags
         for colname in table.colnames:
@@ -1245,7 +1227,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07_noauto..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07_noauto...")
         table = self.table
 
         # Force a sync in indexes
@@ -1284,8 +1266,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
             for colname in table.colnames:
                 if table.cols._f_col(colname).index:
                     print(
-                        "dirty flag col %s: %s"
-                        % (colname, table.cols._f_col(colname).index.dirty)
+                        f"dirty flag col {colname}: {table.cols._f_col(colname).index.dirty}"
                     )
         for colname in table.colnames:
             if table.cols._f_col(colname).index:
@@ -1303,7 +1284,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07b_noauto..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07b_noauto...")
         table = self.table
 
         # Force a sync in indexes
@@ -1340,7 +1321,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test07c_noauto..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test07c_noauto...")
         table = self.table
 
         # Force a sync in indexes
@@ -1373,7 +1354,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test08_dirty..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test08_dirty...")
         table = self.table
 
         # Force a sync in indexes
@@ -1404,8 +1385,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
             for colname in table.colnames:
                 if table.cols._f_col(colname).index:
                     print(
-                        "dirty flag col %s: %s"
-                        % (colname, table.cols._f_col(colname).index.dirty)
+                        f"dirty flag col {colname}: {table.cols._f_col(colname).index.dirty}"
                     )
         for colname in table.colnames:
             if table.cols._f_col(colname).index:
@@ -1428,7 +1408,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test09a_propIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test09a_propIndex...")
         table = self.table
 
         # Don't force a sync in indexes
@@ -1474,8 +1454,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
             for colname in table2.colnames:
                 if table2.cols._f_col(colname).index:
                     print(
-                        "dirty flag col %s: %s"
-                        % (colname, table2.cols._f_col(colname).index.dirty)
+                        f"dirty flag col {colname}: {table2.cols._f_col(colname).index.dirty}"
                     )
         for colname in table2.colnames:
             if table2.cols._f_col(colname).index:
@@ -1488,7 +1467,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test09b_propIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test09b_propIndex...")
         table = self.table
 
         # Don't force a sync in indexes
@@ -1526,7 +1505,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test10_propIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test10_propIndex...")
         table = self.table
 
         # Don't force a sync in indexes
@@ -1561,7 +1540,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test11_propIndex..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test11_propIndex...")
         table = self.table
 
         # Force a sync in indexes
@@ -1601,8 +1580,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
             for colname in table2.colnames:
                 if table2.cols._f_col(colname).index:
                     print(
-                        "dirty flag col %s: %s"
-                        % (colname, table2.cols._f_col(colname).index.dirty)
+                        f"dirty flag col {colname}: {table2.cols._f_col(colname).index.dirty}"
                     )
         for colname in table2.colnames:
             if table2.cols._f_col(colname).index and table2.autoindex:
@@ -1721,7 +1699,7 @@ class ManyNodesTestCase(common.TempFileMixin, common.PyTablesTestCase):
             for sn in range(5):
                 qchr = "chr" + str(qn)
                 name = "chr" + str(sn)
-                path = "/at/%s/pt" % (qchr)
+                path = f"/at/{qchr}/pt"
                 table = self.h5file.create_table(
                     path, name, IdxRecord, createparents=1
                 )
@@ -2676,7 +2654,7 @@ class Issue119Time32ColTestCase(common.TempFileMixin, common.PyTablesTestCase):
         tbl = self.table
         t = self.t
 
-        wherestr = "(when >= %d) & (when < %d)" % (t, t + 5)
+        wherestr = f"(when >= {t}) & (when < {t + 5})"
 
         no_index = tbl.read_where(wherestr)
 

@@ -59,8 +59,8 @@ table = fileh.create_table(fileh.root, "table", NestedDescr)
 row = table.row
 for i in range(10):
     row["color"] = colors[["red", "green", "blue"][i % 3]]
-    row["info1/name"] = "name1-%s" % i
-    row["info2/name"] = "name2-%s" % i
+    row["info1/name"] = f"name1-{i}"
+    row["info2/name"] = f"name2-{i}"
     row["info2/info3/y"] = i
     # All the rest will be filled with defaults
     row.append()

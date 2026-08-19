@@ -24,7 +24,7 @@ def show_mem(explain):
         elif line.startswith("VmLib:"):
             vmlib = int(line.split()[1])
 
-    print("\nMemory usage: ******* %s *******" % explain)
+    print(f"\nMemory usage: ******* {explain} *******")
     print(f"VmSize: {vmsize:>7} kB\tVmRSS: {vmrss:>7} kB")
     print(f"VmData: {vmdata:>7} kB\tVmStk: {vmstk:>7} kB")
     print(f"VmExe:  {vmexe:>7} kB\tVmLib: {vmlib:>7} kB")
@@ -38,9 +38,9 @@ def write_group(filename, nchildren, niter):
         fileh = tb.open_file(filename, mode="w")
         for child in range(nchildren):
             fileh.create_group(
-                fileh.root, "group" + str(child), "child: %d" % child
+                fileh.root, "group" + str(child), f"child: {child}"
             )
-        show_mem("After creating. Iter %s" % i)
+        show_mem(f"After creating. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -54,7 +54,7 @@ def read_group(filename, nchildren, niter):
             # flavor = node._v_attrs.CLASS
         # for child in fileh.walk_nodes():
         #     pass
-        show_mem("After reading metadata. Iter %s" % i)
+        show_mem(f"After reading metadata. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -64,9 +64,9 @@ def write_array(filename, nchildren, niter):
         fileh = tb.open_file(filename, mode="w")
         for child in range(nchildren):
             fileh.create_array(
-                fileh.root, "array" + str(child), [1, 1], "child: %d" % child
+                fileh.root, "array" + str(child), [1, 1], f"child: {child}"
             )
-        show_mem("After creating. Iter %s" % i)
+        show_mem(f"After creating. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -79,14 +79,7 @@ def read_array(filename, nchildren, niter):
             # flavor = node._v_attrs.FLAVOR
             data = node[:]  # Read data
             assert data is not None
-        show_mem("After reading data. Iter %s" % i)
-        # for child in range(nchildren):
-        #     node = fileh.get_node(fileh.root, 'array' + str(child))
-        #     flavor = node._v_attrs.FLAVOR
-        #     # flavor = node._v_attrs
-        # for child in fileh.walk_nodes():
-        #     pass
-        # show_mem("After reading metadata. Iter %s" % i)
+        show_mem(f"After reading data. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -97,12 +90,12 @@ def write_carray(filename, nchildren, niter):
         for child in range(nchildren):
             fileh.create_carray(
                 fileh.root,
-                "array" + str(child),
+                f"array{child}",
                 tb.IntAtom(),
                 (2,),
-                "child: %d" % child,
+                f"child: {child}",
             )
-        show_mem("After creating. Iter %s" % i)
+        show_mem(f"After creating. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -116,7 +109,7 @@ def read_carray(filename, nchildren, niter):
             data = node[:]  # Read data
             assert data is not None
             # print("data-->", data)
-        show_mem("After reading data. Iter %s" % i)
+        show_mem(f"After reading data. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -127,13 +120,13 @@ def write_earray(filename, nchildren, niter):
         for child in range(nchildren):
             ea = fileh.create_earray(
                 fileh.root,
-                "array" + str(child),
+                f"array{child}",
                 tb.IntAtom(),
                 shape=(0,),
-                title="child: %d" % child,
+                title=f"child: {child}",
             )
             ea.append([1, 2, 3])
-        show_mem("After creating. Iter %s" % i)
+        show_mem(f"After creating. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -147,7 +140,7 @@ def read_earray(filename, nchildren, niter):
             data = node[:]  # Read data
             assert data is not None
             # print("data-->", data)
-        show_mem("After reading data. Iter %s" % i)
+        show_mem(f"After reading data. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -158,12 +151,12 @@ def write_vlarray(filename, nchildren, niter):
         for child in range(nchildren):
             vl = fileh.create_vlarray(
                 fileh.root,
-                "array" + str(child),
+                f"array{child}",
                 tb.IntAtom(),
-                "child: %d" % child,
+                f"child: {child}",
             )
             vl.append([1, 2, 3])
-        show_mem("After creating. Iter %s" % i)
+        show_mem(f"After creating. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -177,7 +170,7 @@ def read_vlarray(filename, nchildren, niter):
             data = node[:]  # Read data
             assert data is not None
             # print("data-->", data)
-        show_mem("After reading data. Iter %s" % i)
+        show_mem(f"After reading data. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -193,10 +186,10 @@ def write_table(filename, nchildren, niter):
         fileh = tb.open_file(filename, mode="w")
         for child in range(nchildren):
             t = fileh.create_table(
-                fileh.root, "table" + str(child), Record, "child: %d" % child
+                fileh.root, "table" + str(child), Record, f"child: {child}"
             )
             t.append([[1, "2", 3.0]])
-        show_mem("After creating. Iter %s" % i)
+        show_mem(f"After creating. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -210,7 +203,7 @@ def read_table(filename, nchildren, niter):
             data = node[:]  # Read data
             assert data is not None
             # print("data-->", data)
-        show_mem("After reading data. Iter %s" % i)
+        show_mem(f"After reading data. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -226,11 +219,11 @@ def write_xtable(filename, nchildren, niter):
         fileh = tb.open_file(filename, mode="w")
         for child in range(nchildren):
             t = fileh.create_table(
-                fileh.root, "table" + str(child), Record, "child: %d" % child
+                fileh.root, "table" + str(child), Record, f"child: {child}"
             )
             t.append([[1, "2", 3.0]])
             t.cols.var1.create_index()
-        show_mem("After creating. Iter %s" % i)
+        show_mem(f"After creating. Iter {i}")
         fileh.close()
         show_mem("After close")
 
@@ -243,7 +236,7 @@ def read_xtable(filename, nchildren, niter):
             # klass = node._v_attrs.CLASS
             # data = node[:]  # Read data
             # print("data-->", data)
-        show_mem("After reading data. Iter %s" % i)
+        show_mem(f"After reading data. Iter {i}")
         fileh.close()
         show_mem("After close")
         del node

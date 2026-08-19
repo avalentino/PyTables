@@ -307,8 +307,7 @@ class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test05b_removeGroupRecursively..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test05b_removeGroupRecursively..."
             )
 
         # Delete a group with leafs
@@ -1277,8 +1276,8 @@ class CheckFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # When file has an HDF5 format, always returns 1
         if common.verbose:
             print(
-                "\nisHDF5File(%s) ==> %d"
-                % (self.h5fname, tb.is_hdf5_file(self.h5fname))
+                f"\nisHDF5File({self.h5fname}) ==> "
+                f"{tb.is_hdf5_file(self.h5fname)}"
             )
         self.assertEqual(tb.is_hdf5_file(self.h5fname), 1)
 
@@ -1322,7 +1321,7 @@ class CheckFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # greater
         if common.verbose:
             print()
-            print("\nPyTables format version number ==> %s" % version)
+            print(f"\nPyTables format version number ==> {version}")
         self.assertGreaterEqual(version, "1.0")
 
     def test03_isPyTablesFile(self):
@@ -1334,7 +1333,7 @@ class CheckFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # negative value
         if common.verbose:
             print()
-            print("\nPyTables format version number ==> %s" % version)
+            print(f"\nPyTables format version number ==> {version}")
         self.assertIsNone(version)
 
     def test04_openGenericHDF5File(self):
@@ -1974,7 +1973,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         """Copying a node with a deleted flavor (see #100)."""
 
         snames = [node._v_name for node in [self.array, self.scalar]]
-        dnames = ["%s_copy" % name for name in snames]
+        dnames = [f"{name}_copy" for name in snames]
         for name in snames:
             node = self.h5file.get_node("/", name)
             del node.flavor
@@ -1990,8 +1989,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 self.assertEqual(
                     node.flavor,
                     tb.flavor.internal_flavor,
-                    "flavor of node ``%s`` is not internal: %r"
-                    % (node._v_pathname, node.flavor),
+                    f"flavor of node ``{node._v_pathname}`` is not internal: {node.flavor!r}",
                 )
 
     def test07_restrict_flavors(self):
@@ -2339,7 +2337,7 @@ import tables as tb
 tb.silence_hdf5_messages(False)
 tb.silence_hdf5_messages()
 try:
-    tb.open_file(r'%s')
+    tb.open_file(r'{}')
 except tb.HDF5ExtError, e:
     pass
 """
@@ -2347,7 +2345,7 @@ except tb.HDF5ExtError, e:
         filename = tempfile.mktemp(prefix="hdf5-error-handling-", suffix=".py")
         try:
             with open(filename, "w") as fp:
-                fp.write(code % filename)
+                fp.write(code.format(filename))
 
             p = subprocess.Popen(
                 [sys.executable, filename],
@@ -2378,14 +2376,14 @@ import tables as tb
 tb.silence_hdf5_messages()
 tb.silence_hdf5_messages(False)
 try:
-    tb.open_file(r'%s')
+    tb.open_file(r'{}')
 except tb.HDF5ExtError as e:
     pass
 """
 
         filename = tempfile.mktemp(prefix="hdf5-error-handling-", suffix=".py")
         try:
-            Path(filename).write_text(code % filename)
+            Path(filename).write_text(code.format(filename))
 
             p = subprocess.Popen(
                 [sys.executable, filename],

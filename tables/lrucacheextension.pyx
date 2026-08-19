@@ -76,7 +76,7 @@ cdef class NodeCache:
     """
 
     if nslots < 0:
-      raise ValueError("Negative number (%s) of slots!" % nslots)
+      raise ValueError(f"Negative number ({nslots}) of slots!")
     self.nslots = nslots
     self.nextslot = 0
     self.nodes = []
@@ -178,7 +178,7 @@ cdef class NodeCache:
     return iter(copy)
 
   def __repr__(self):
-    return "<%s (%d elements)>" % (str(self.__class__), len(self.paths))
+    return f"<{self.__class__} ({len(self.paths)} elements)>"
 
 
 ########################################################################
@@ -191,7 +191,7 @@ cdef class BaseCache:
   def __init__(self, long nslots, object name):
 
     if nslots < 0:
-      raise ValueError("Negative number (%s) of slots!" % nslots)
+      raise ValueError(f"Negative number ({nslots}) of slots!")
     self.setcount = 0;  self.getcount = 0;  self.containscount = 0
     self.enablecyclecount = 0;  self.disablecyclecount = 0
     self.iscachedisabled = False  # Cache is enabled by default
@@ -282,8 +282,7 @@ cdef class BaseCache:
     return self.seqn_
 
   def __repr__(self):
-    return "<%s(%s) (%d elements)>" % (self.name, str(self.__class__),
-                                       self.nslots)
+    return f"<{self.name}({self.__class__}) ({self.nslots} elements)>"
 
 
 ########################################################################
@@ -300,8 +299,9 @@ cdef class ObjectNode:
     self.nslot = nslot
 
   def __repr__(self):
-    return "<%s %s (slot #%s) => %s>" % (self.__class__, self.key, self.nslot,
-                                         self.object)
+    return (
+      f"<{self.__class__} {self.key} (slot #{self.nslot}) => {self.object}>"
+    )
 
 
 ########################################################################
@@ -466,11 +466,11 @@ cdef class ObjectCache(BaseCache):
       hitratio = self.hitratio / self.nprobes
     else:
       hitratio = <double>self.getcount / self.containscount
-    return """<%s(%s)
-  (%d maxslots, %d slots used, %.3f KB cachesize,
-  hit ratio: %.3f, disabled? %s)>
-  """ % (self.name, str(self.__class__), self.nslots, self.nextslot,
-         self.cachesize / 1024., hitratio, self.iscachedisabled)
+    return f"""<{self.name}({self.__class__})
+  ({self.nslots} maxslots, {self.nextslot} slots used, \
+{self.cachesize / 1024.:.3f} KB cachesize,
+  hit ratio: {hitratio:.3f}, disabled? {self.iscachedisabled})>
+  """
 
 
 ###################################################################
@@ -633,16 +633,8 @@ cdef class NumCache(BaseCache):
       hitratio = <double>self.getcount / self.containscount
     else:
       hitratio = np.nan
-    return """<%s(%s)
-  (%d maxslots, %d slots used, %.3f KB cachesize,
-  hit ratio: %.3f, disabled? %s)>
-  """ % (self.name, str(self.__class__), self.nslots, self.nextslot,
-         cachesize, hitratio, self.iscachedisabled)
-
-
-## Local Variables:
-## mode: python
-## py-indent-offset: 2
-## tab-width: 2
-## fill-column: 78
-## End:
+    return f"""<{self.name}({self.__class__})
+  ({self.nslots} maxslots, {self.nextslot} slots used, \
+{cachesize:.3f} KB cachesize,
+  hit ratio: {hitratio:.3f}, disabled? {self.iscachedisabled})>
+  """

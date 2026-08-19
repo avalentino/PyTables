@@ -21,7 +21,7 @@ particle = table.row
 # Fill the table with 10 particles
 for i in range(10):
     # First, assign the values to the Particle record
-    particle["name"] = "Particle: %6d" % (i)
+    particle["name"] = f"Particle: {i:6d}"
     particle["lati"] = i
     particle["longi"] = 10 - i
     particle["pressure"] = float(i * i)
@@ -60,7 +60,7 @@ print()
 table = fileh.root.newgroup.table
 print("Object:", table)
 print(f"Table name: {table.name}. Table title: {table.title}")
-print("Rows saved on table: %d" % (table.nrows))
+print(f"Rows saved on table: {table.nrows}")
 
 print("Variable names on table with their type:")
 for name in table.colnames:

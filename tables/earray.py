@@ -119,7 +119,7 @@ class EArray(CArray):
 
         # Read the string ``EArray`` we have created on disk.
         for s in array_c:
-            print('array_c[%s] => %r' % (array_c.nrow, s))
+            print(f"array_c[{array_c.nrow}] => {s!r}")
         # Close the file.
         fileh.close()
 
@@ -198,21 +198,15 @@ class EArray(CArray):
         narank = len(nparr.shape) - len(self.atom.shape)
         if myrank != narank:
             raise ValueError(
-                (
-                    "the ranks of the appended object (%d) and the "
-                    "``%s`` EArray (%d) differ"
-                )
-                % (narank, self._v_pathname, myrank)
+                f"the ranks of the appended object ({narank}) and the "
+                f"``{self._v_pathname}`` EArray (myrank) differ"
             )
         for i in range(myrank):
             if i != self.extdim and self.shape[i] != nparr.shape[i]:
                 raise ValueError(
-                    (
-                        "the shapes of the appended object and the "
-                        "``%s`` EArray differ in non-enlargeable "
-                        "dimension %d"
-                    )
-                    % (self._v_pathname, i)
+                    "the shapes of the appended object and the "
+                    f"``{self._v_pathname}`` EArray differ in non-enlargeable "
+                    f"dimension {i}"
                 )
 
     def append(self, sequence: npt.ArrayLike) -> None:

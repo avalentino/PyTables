@@ -30,7 +30,7 @@ class WideTreeTestCase(unittest.TestCase):
 
         for k in range(ngroups):
             # Create the group
-            group = fileh.create_group("/", "group%04d" % k, "Group %d" % k)
+            group = fileh.create_group("/", f"group{k:04d}", f"Group {k}")
 
         fileh.close()
 
@@ -38,16 +38,16 @@ class WideTreeTestCase(unittest.TestCase):
         rowswritten = 0
         for k in range(ngroups):
             print("Filling tables in group:", k)
-            fileh = tb.open_file(filename, mode="a", root_uep="group%04d" % k)
+            fileh = tb.open_file(filename, mode="a", root_uep=f"group{k:04d}")
             # Get the group
             group = fileh.root
             for j in range(ntables):
                 # Create a table
                 table = fileh.create_table(
                     group,
-                    "table%04d" % j,
+                    f"table{j:04d}",
                     Test,
-                    "Table%04d" % j,
+                    f"Table{j:04d}",
                     tb.Filters(complevel, complib),
                     nrows,
                 )
@@ -71,7 +71,7 @@ class WideTreeTestCase(unittest.TestCase):
         rowsread = 0
         for ngroup in range(ngroups):
             fileh = tb.open_file(
-                filename, mode="r", root_uep="group%04d" % ngroup
+                filename, mode="r", root_uep=f"group{ngroup:04d}"
             )
             # Get the group
             group = fileh.root
@@ -93,8 +93,8 @@ class WideTreeTestCase(unittest.TestCase):
                         assert row["nrow"] == nrow
                     except Exception:
                         print(
-                            "Error in group: %d, table: %d, row: %d"
-                            % (ngroup, ntable, nrow)
+                            f"Error in group: {ngroup}, table: {ntable}, "
+                            f"row: {nrow}"
                         )
                         print("Record ==>", row)
 

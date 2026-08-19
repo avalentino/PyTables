@@ -371,11 +371,11 @@ class RawPyTablesIO(io.RawIOBase):
 
     def _check_mode(self, mode):
         if not isinstance(mode, str):
-            raise TypeError("invalid mode: %r" % mode)
+            raise TypeError(f"invalid mode: {mode!r}")
 
         modes = set(mode)
         if modes - set("arwb+tU") or len(mode) > len(modes):
-            raise ValueError("invalid mode: %r" % mode)
+            raise ValueError(f"invalid mode: {mode!r}")
 
         reading = "r" in modes
         writing = "w" in modes
@@ -584,7 +584,7 @@ class RAFileNode(FileNodeMixin, RawPyTablesIO):
             for kwarg in kwargs:
                 if kwarg not in self.__allowed_init_kwargs:
                     raise TypeError(
-                        "%s keyword argument is not allowed" % repr(kwarg)
+                        f"{kwarg!r} keyword argument is not allowed"
                     )
 
             # Turn 'expectedsize' into 'expectedrows'.
@@ -813,7 +813,7 @@ def read_from_filenode(
         if fnode is None:
             f.close()
             raise tb.NoSuchNodeError(
-                "A filenode '%s' cannot be found at " "'%s'" % (name, where)
+                f"A filenode '{name}' cannot be found at '{where}'"
             )
 
     # guess output filename if necessary
@@ -836,7 +836,7 @@ def read_from_filenode(
     if not os.access(path.parent, os.W_OK):
         if new_h5file:
             f.close()
-        raise OSError("The file '%s' cannot be written to" % filename)
+        raise OSError(f"The file '{filename}' cannot be written to")
 
     # read data from filenode
     data = fnode.read()

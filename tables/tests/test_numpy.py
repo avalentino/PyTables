@@ -39,8 +39,7 @@ class BasicTestCase(common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running test for array with typecode '%s'"
-                % testArray.dtype.char,
+                f"Running test for array with typecode '{testArray.dtype.char}'",
                 end=" ",
             )
             print("for class check:", self.title)
@@ -233,8 +232,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test00_iterativeGroups..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test00_iterativeGroups..."
             )
 
         # Get the root group
@@ -272,9 +270,9 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 print("Array a original. Data: ==>", a)
                 print("Info from dataset:", dset._v_pathname)
                 print("  shape ==>", dset.shape, end=" ")
-                print("  dtype ==> %s" % dset.dtype)
+                print(f"  dtype ==> {dset.dtype}")
                 print("Array b read from file. Shape: ==>", b.shape, end=" ")
-                print(". Type ==> %s" % b.dtype.char)
+                print(f". Type ==> {b.dtype.char}")
 
             self.assertEqual(a.shape, b.shape)
             if np.dtype("l").itemsize == 4:
@@ -323,8 +321,7 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                "Running %s.test01_largeRankArrays..."
-                % self.__class__.__name__
+                f"Running {self.__class__.__name__}.test01_largeRankArrays..."
             )
             print("Maximum rank for tested arrays:", maxrank)
 
@@ -335,8 +332,8 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # Create an array of integers, with incrementally bigger ranges
             a = np.ones((1,) * rank, "i")
             if common.verbose:
-                print("%3d," % (rank), end=" ")
-            self.h5file.create_array(group, "array", a, "Rank: %s" % rank)
+                print(f"{rank:3d},", end=" ")
+            self.h5file.create_array(group, "array", a, f"Rank: {rank}")
             group = self.h5file.create_group(group, "group" + str(rank))
 
         # Flush the buffers
@@ -355,14 +352,14 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # Get the actual array
             b = group.array.read()
             if common.verbose:
-                print("%3d," % (rank), end=" ")
+                print(f"{rank:3d},", end=" ")
             if a.tolist() != b.tolist() and common.verbose:
                 dset = group.array
                 print("Info from dataset:", dset._v_pathname)
                 print("  Shape: ==>", dset.shape, end=" ")
-                print("  typecode ==> %c" % dset.typecode)
+                print(f"  typecode ==> {dset.typecode:c}")
                 print("Array b read from file. Shape: ==>", b.shape, end=" ")
-                print(". Type ==> %c" % b.dtype.char)
+                print(f". Type ==> {b.dtype.char:c}")
             self.assertEqual(a.shape, b.shape)
             if a.dtype.char == "i":
                 # Special exception. We have no way to distinguish between
@@ -697,14 +694,14 @@ class TableNativeFlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         col = table.cols.Info[:9:3]
         self.assertIsInstance(col, np.ndarray)
         dtype = [
-            ("value", "%sc16" % byteorder),
-            ("y2", "%sf8" % byteorder),
+            ("value", f"{byteorder}c16"),
+            ("y2", f"{byteorder}f8"),
             (
                 "Info2",
                 [
                     ("name", "|S2"),
-                    ("value", "%sc16" % byteorder, (2,)),
-                    ("y3", "%sf8" % byteorder, (2,)),
+                    ("value", f"{byteorder}c16", (2,)),
+                    ("y3", f"{byteorder}f8", (2,)),
                 ],
             ),
             ("name", "|S2"),
@@ -784,14 +781,14 @@ class TableNativeFlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         """Checking the Table creation from a numpy recarray."""
 
         dtype = [
-            ("value", "%sc16" % byteorder),
-            ("y2", "%sf8" % byteorder),
+            ("value", f"{byteorder}c16"),
+            ("y2", f"{byteorder}f8"),
             (
                 "Info2",
                 [
                     ("name", "|S2"),
-                    ("value", "%sc16" % byteorder, (2,)),
-                    ("y3", "%sf8" % byteorder, (2,)),
+                    ("value", f"{byteorder}c16", (2,)),
+                    ("y3", f"{byteorder}f8", (2,)),
                 ],
             ),
             ("name", "|S2"),
@@ -940,14 +937,14 @@ class TableNativeFlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         table = self.h5file.root.table
         dtype = [
-            ("value", "%sc16" % byteorder),
-            ("y2", "%sf8" % byteorder),
+            ("value", f"{byteorder}c16"),
+            ("y2", f"{byteorder}f8"),
             (
                 "Info2",
                 [
                     ("name", "|S2"),
-                    ("value", "%sc16" % byteorder, (2,)),
-                    ("y3", "%sf8" % byteorder, (2,)),
+                    ("value", f"{byteorder}c16", (2,)),
+                    ("y3", f"{byteorder}f8", (2,)),
                 ],
             ),
             ("name", "|S2"),
@@ -983,14 +980,14 @@ class TableNativeFlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         table = self.h5file.root.table
         dtype = [
-            ("value", "%sc16" % byteorder),
-            ("y2", "%sf8" % byteorder),
+            ("value", f"{byteorder}c16"),
+            ("y2", f"{byteorder}f8"),
             (
                 "Info2",
                 [
                     ("name", "|S2"),
-                    ("value", "%sc16" % byteorder, (2,)),
-                    ("y3", "%sf8" % byteorder, (2,)),
+                    ("value", f"{byteorder}c16", (2,)),
+                    ("y3", f"{byteorder}f8", (2,)),
                 ],
             ),
             ("name", "|S2"),

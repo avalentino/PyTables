@@ -45,9 +45,8 @@ def undo(
         undo_del_attr(file_, args[0], args[1])
     else:
         raise NotImplementedError(
-            "the requested unknown operation %r can "
-            "not be undone; please report this to the "
-            "authors" % operation
+            f"the requested unknown operation {operation!r} can not be undone; "
+            "please report this to the authors"
         )
 
 
@@ -69,9 +68,8 @@ def redo(
         redo_del_attr(file_, args[0], args[1])
     else:
         raise NotImplementedError(
-            "the requested unknown operation %r can "
-            "not be redone; please report this to the "
-            "authors" % operation
+            f"the requested unknown operation {operation!r} can not be redone; "
+            "please report this to the authors"
         )
 
 

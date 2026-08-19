@@ -383,7 +383,7 @@ small_chunk_h5py_filter = np.array(
     ]
 )
 
-dimensions = ["dim%d" % d for d in range(4)]
+dimensions = [f"dim{d}" for d in range(4)]
 reduce = np.max  # np.average
 
 data_big_chunk = [

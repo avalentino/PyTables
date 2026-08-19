@@ -186,7 +186,7 @@ class CArray(Array):
             if not isinstance(atom, Atom):
                 raise ValueError(
                     "atom parameter should be an instance of "
-                    "tables.Atom and you passed a %s." % type(atom)
+                    f"tables.Atom and you passed a {type(atom)}."
                 )
             if shape is None:
                 raise ValueError("you must specify a non-empty shape")
@@ -195,7 +195,7 @@ class CArray(Array):
             except TypeError:
                 raise TypeError(
                     "`shape` parameter must be a sequence "
-                    "and you passed a %s" % type(shape)
+                    f"and you passed a {type(shape)}"
                 )
             self.shape = tuple(SizeType(s) for s in shape)
 
@@ -205,7 +205,7 @@ class CArray(Array):
                 except TypeError:
                     raise TypeError(
                         "`chunkshape` parameter must be a sequence "
-                        "and you passed a %s" % type(chunkshape)
+                        f"and you passed a {type(chunkshape)}"
                     )
                 if len(shape) != len(chunkshape):
                     raise ValueError(

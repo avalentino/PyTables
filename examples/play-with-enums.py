@@ -33,7 +33,7 @@ print("Value of 'red' and 'white':", (colors["red"], colors["white"]))
 print("Value of 'yellow':", colors["yellow"])
 
 COMMENT("Access names.")
-print("Name of value %s:" % colors.red, colors(colors.red))
+print(f"Name of value {colors.red}: {colors(colors.red)}")
 print("Name of value 1234:", colors(1234))
 
 
@@ -74,7 +74,7 @@ COMMENT("Now print them!")
 for r in tbl:
     ball_time = r["ballTime"]
     ball_color = colors(r["ballColor"])  # notice this
-    print("Ball extracted on %d is of color %s." % (ball_time, ball_color))
+    print(f"Ball extracted on {ball_time} is of color {ball_color}.")
 
 
 COMMENT("**** Enumerated arrays. ****")
@@ -96,7 +96,7 @@ earr.append([(wdays.Mon, 1234)])
 
 COMMENT("Print the values.")
 for d1, d2 in earr:
-    print("From %s to %s (%d days)." % (wdays(d1), wdays(d2), d2 - d1 + 1))
+    print(f"From {wdays(d1)} to {wdays(d2)} ({d2 - d1 + 1} days).")
 
 COMMENT("Close the PyTables file and remove it.")
 

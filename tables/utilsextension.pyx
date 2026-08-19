@@ -474,19 +474,6 @@ cdef herr_t e_walk_cb(unsigned n, const H5E_error_t *err, void *data) noexcept w
     if err == NULL:
         return -1
 
-    #msg_len = H5Eget_msg(err.maj_num, NULL, major_msg, 256)
-    #if msg_len < 0:
-    #    major_msg[0] = '\0'
-
-    #msg_len = H5Eget_msg(err.min_num, NULL, minor_msg, 256)
-    #if msg_len < 0:
-    #    minor_msg[0] = '\0'
-
-    #msg = "%s (MAJOR: %s, MINOR: %s)" % (
-    #                bytes(<char*>err.desc).decode('utf-8'),
-    #                bytes(<char*>major_msg).decode('utf-8'),
-    #                bytes(<char*>minor_msg).decode('utf-8'))
-
     msg = bytes(<char*>err.desc).decode('utf-8')
 
     bt.append((
@@ -672,7 +659,7 @@ def is_hdf5_file(object filename):
 
   ret = H5Fis_hdf5(encname)
   if ret < 0:
-    raise HDF5ExtError("problems identifying file ``%s``" % (filename,))
+    raise HDF5ExtError(f"problems identifying file ``{filename}``")
   return ret > 0
 
 
@@ -764,8 +751,10 @@ def which_lib_version(str name):
       (blosc_version_string, blosc_version_date) = blosc_version
       return (blosc_version, blosc_version_string, blosc_version_date)
   else:
-    raise ValueError("asked version of unsupported library ``%s``; "
-                     "supported library names are ``%s``" % (name, libnames))
+    raise ValueError(
+      f"asked version of unsupported library ``{name}``; "
+      f"supported library names are ``{libnames}``"
+    )
 
   # A supported library was specified, but no version is available.
   return None
@@ -1033,7 +1022,7 @@ def get_nested_field(recarray, fieldname):
       # Faster method for non-nested columns
       field = recarray[fieldname]
   except KeyError:
-    raise KeyError("no such column: %s" % (fieldname,))
+    raise KeyError(f"no such column: {fieldname}")
   return field
 
 
@@ -1286,7 +1275,7 @@ def atom_to_hdf5_type(atom, str byteorder):
     elif atom.kind == 'enum':
       tid = enum_to_hdf5(atom, byteorder)
   else:
-    raise TypeError("Invalid type for atom %s" % (atom,))
+    raise TypeError(f"Invalid type for atom {atom}")
   # Create an H5T_ARRAY in case of non-scalar atoms
   if atom.shape != ():
     dims = malloc_dims(atom.shape)
@@ -1418,8 +1407,10 @@ def hdf5_to_np_ext_type(hid_t type_id, pure_numpy_types=True, atom=False, ptpara
       stype = "c%s" % itemsize
     else:
       if atom:
-        raise TypeError("the HDF5 class ``%s`` is not supported yet"
-                        % hdf5_class_to_string[class_id])
+        raise TypeError(
+          f"the HDF5 class ``{hdf5_class_to_string[class_id]}`` is not "
+          "supported yet"
+        )
       desc = Description(hdf5_to_np_nested_type(type_id), ptparams=ptparams)
       # stype here is not exactly a string, but the NumPy dtype factory
       # will deal with this.
@@ -1430,18 +1421,24 @@ def hdf5_to_np_ext_type(hid_t type_id, pure_numpy_types=True, atom=False, ptpara
     stype = "S%s" % itemsize
   elif class_id == H5T_TIME:
     if pure_numpy_types:
-      raise TypeError("the HDF5 class ``%s`` is not supported yet"
-                      % hdf5_class_to_string[class_id])
-    stype = "t%s" % itemsize
+      raise TypeError(
+        f"the HDF5 class ``{hdf5_class_to_string[class_id]}`` is not "
+        "supported yet"
+      )
+    stype = f"t{itemsize}"
   elif class_id == H5T_ENUM:
     if pure_numpy_types:
-      raise TypeError("the HDF5 class ``%s`` is not supported yet"
-                      % hdf5_class_to_string[class_id])
+      raise TypeError(
+        f"the HDF5 class ``{hdf5_class_to_string[class_id]}`` is not "
+        "supported yet"
+      )
     stype = "e"
   elif class_id == H5T_VLEN:
     if pure_numpy_types:
-      raise TypeError("the HDF5 class ``%s`` is not supported yet"
-                      % hdf5_class_to_string[class_id])
+      raise TypeError(
+        f"the HDF5 class ``{hdf5_class_to_string[class_id]}`` is not "
+        "supported yet"
+      )
     # Get the variable length base component
     super_type_id = H5Tget_super(type_id)
     # Find the super member format
@@ -1451,8 +1448,10 @@ def hdf5_to_np_ext_type(hid_t type_id, pure_numpy_types=True, atom=False, ptpara
   elif class_id == H5T_REFERENCE:
     # only standard referenced objects (for atoms) are now supported
     if not atom or not H5Tequal(type_id, H5T_STD_REF_OBJ):
-      raise TypeError("the HDF5 class ``%s`` is not supported yet"
-                      % hdf5_class_to_string[class_id])
+      raise TypeError(
+        f"the HDF5 class ``{hdf5_class_to_string[class_id]}`` is not "
+        "supported yet"
+      )
     stype = "_ref_"
   elif class_id == H5T_ARRAY:
     # Get the array base component
@@ -1472,8 +1471,10 @@ def hdf5_to_np_ext_type(hid_t type_id, pure_numpy_types=True, atom=False, ptpara
     H5Tclose(super_type_id)
   else:
     # Other types are not supported yet
-    raise TypeError("the HDF5 class ``%s`` is not supported yet"
-                    % hdf5_class_to_string[class_id])
+    raise TypeError(
+      f"the HDF5 class ``{hdf5_class_to_string[class_id]}`` is not "
+      "supported yet"
+    )
 
   return stype, shape
 
@@ -1572,7 +1573,9 @@ cdef int load_reference(hid_t dataset_id, hobj_ref_t *refbuf, size_t item_size, 
     for i in range(<long>nelements):
       refobj_id = H5Rdereference(dataset_id, H5P_DEFAULT, H5R_OBJECT, &refbuf[i])
       if H5Iget_type(refobj_id) != H5I_DATASET:
-        raise ValueError('Invalid reference type %d %d' % (H5Iget_type(refobj_id), item_size))
+        raise ValueError(
+          f"Invalid reference type {H5Iget_type(refobj_id)} {item_size}"
+        )
       disk_type_id = H5Dget_type(refobj_id)
       reftype_id = get_native_type(disk_type_id)
       # Get the rank for this array object

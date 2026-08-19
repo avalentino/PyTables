@@ -33,7 +33,7 @@ def write(file, desc, indexed):
         row["y"] = 10.2 - i
         row["z"] = i
         row["color"] = colors[random.choice(["red", "green", "blue"])]
-        row["info/name"] = "name%s" % i
+        row["info/name"] = f"name{i}"
         row["info/info2/info3/z4"] = i
         # All the rest will be filled with defaults
         row.append()

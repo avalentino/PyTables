@@ -49,7 +49,7 @@ particle = table.row
 # Fill the table with 10 particles
 for i in range(10):
     # First, assign the values to the Particle record
-    particle["name"] = "Particle: %6d" % (i)
+    particle["name"] = f"Particle: {i:6d}"
     particle["TDCcount"] = i % 256
     particle["ADCcount"] = (i * 256) % (1 << 16)
     particle["grid_i"] = i
@@ -169,7 +169,7 @@ print("/detector/table ==>", table)
 print("Object:", table)
 print("Table name:", table.name)
 print("Table title:", table.title)
-print("Rows saved on table: %d" % (table.nrows))
+print(f"Rows saved on table: {table.nrows}")
 
 print("Variable names on table with their type:")
 for name in table.colnames:
@@ -223,7 +223,7 @@ table = h5file.root.detector.table
 particle = table.row
 for i in range(10, 15):
     # First, assign the values to the Particle record
-    particle["name"] = "Particle: %6d" % (i)
+    particle["name"] = f"Particle: {i:6d}"
     particle["TDCcount"] = i % 256
     particle["ADCcount"] = (i * 256) % (1 << 16)
     particle["grid_i"] = i

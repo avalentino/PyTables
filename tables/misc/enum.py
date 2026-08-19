@@ -306,7 +306,7 @@ class Enum:
 
         Examples
         --------
-        >>> len(Enum(['e%d' % i for i in range(10)]))
+        >>> len(Enum([f"e{i}" for i in range(10)]))
         10
 
         """

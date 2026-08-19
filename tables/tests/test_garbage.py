@@ -17,8 +17,8 @@ class GarbageTestCase(common.PyTablesTestCase):
     def test00(self):
         """Checking for uncollectable garbage."""
 
-        garbageLen = len(gc.garbage)
-        if garbageLen == 0:
+        garbage_len = len(gc.garbage)
+        if garbage_len == 0:
             return  # success
 
         if common.verbose:
@@ -31,10 +31,10 @@ class GarbageTestCase(common.PyTablesTestCase):
                 else:
                     classCount[objClass] = 1
             incidence = [
-                "``%s``: %d" % (cls, cnt) for (cls, cnt) in classCount.items()
+                f"``{cls}``: {cnt}" for (cls, cnt) in classCount.items()
             ]
             print("Class incidence:", ", ".join(incidence))
-        self.fail("Possible leak: %d uncollected objects." % garbageLen)
+        self.fail(f"Possible leak: {garbage_len} uncollected objects.")
 
 
 def suite():

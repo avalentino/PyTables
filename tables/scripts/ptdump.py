@@ -48,7 +48,7 @@ def dump_leaf(leaf):
         else:
             step = options.rng.step
         if leaf.shape == ():
-            print("[SCALAR] %s" % (leaf[()]))
+            print(f"[SCALAR] {leaf[()]}")
         else:
             for i in range(start, stop, step):
                 print(f"[{i}] {leaf[i]}")

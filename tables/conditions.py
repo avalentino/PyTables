@@ -42,7 +42,7 @@ def _unsupported_operation_error(exception: Exception) -> Exception:
     """
     message = exception.args[0]
     op, types = _no_matching_opcode.search(message).groups()
-    newmessage = "unsupported operand types for *%s*: " % op
+    newmessage = f"unsupported operand types for *{op}*: "
     newmessage += ", ".join(
         ne.necompiler.typecode_to_kind[t] for t in types[1:]
     )
@@ -310,9 +310,7 @@ def _get_idx_expr_recurse(
             if lenexprs == 1:
                 strexpr[:] = ["e0"]
             else:
-                strexpr[:] = [
-                    "(%s %s e%d)" % (strexpr[0], op_conv[op], lenexprs - 1)
-                ]
+                strexpr[:] = [f"({strexpr[0]} {op_conv[op]} e{lenexprs - 1})"]
 
     # Add expressions to the indexable list when they are and'ed, or
     # they are both indexable.
@@ -469,7 +467,7 @@ def compile_condition(
     expr = ne.necompiler.stringToExpression(condition, typemap, {})
     if expr.astKind != "bool":
         raise TypeError(
-            "condition ``%s`` does not have a boolean type" % condition
+            f"condition ``{condition}`` does not have a boolean type"
         )
     idxexprs = _get_idx_expr(expr, indexedcols)
     # Post-process the answer

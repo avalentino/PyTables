@@ -22,7 +22,7 @@ CHUNKX = 4320
 if __name__ == "__main__":
 
     # create dataset and add global attrs
-    file_path = "demofile_chunk%sx%d.h5" % (CHUNKY, CHUNKX)
+    file_path = f"demofile_chunk{CHUNKY}x{CHUNKX}.h5"
 
     with tb.open_file(
         file_path,

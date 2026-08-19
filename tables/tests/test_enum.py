@@ -64,7 +64,7 @@ class CreateColTestCase(common.PyTablesTestCase):
     def test02b_invalidDtypeTooNarrow(self):
         """Describing an enumerated column with a too narrow type."""
 
-        colors = ["e%d" % i for i in range(300)]
+        colors = [f"e{i}" for i in range(300)]
         self.assertRaises(TypeError, self._createCol, colors, "e0", "uint8")
 
     def test03a_validShapeMD(self):
@@ -81,11 +81,11 @@ class CreateColTestCase(common.PyTablesTestCase):
 
         # needed due to "Hash randomization" (default on python 3.3)
         template = (
-            "EnumCol(enum=Enum({%s}), dflt='red', base=UInt32Atom(shape=(), "
+            "EnumCol(enum=Enum({{{}}}), dflt='red', base=UInt32Atom(shape=(), "
             f"dflt={np.uint32(0)!r}), shape=(), pos=None)"
         )
         permitations = [
-            template % ", ".join(items)
+            template.format(", ".join(items))
             for items in itertools.permutations(
                 ("'blue': 2", "'green': 1", "'red': 0")
             )
@@ -175,7 +175,7 @@ class CreateAtomTestCase(common.PyTablesTestCase):
     def test02b_invalidDtypeTooNarrow(self):
         """Describing an enumerated atom with a too narrow type."""
 
-        colors = ["e%d" % i for i in range(300)]
+        colors = [f"e{i}" for i in range(300)]
         self.assertRaises(TypeError, self._createAtom, colors, "red", "uint8")
 
     def test03a_validShapeMD(self):
@@ -298,8 +298,7 @@ class EnumTableTestCase(common.TempFileMixin, common.PyTablesTestCase):
         tbl.flavor = "python"
         read = tbl.read()
         common.verbosePrint(
-            "* appended value: %s\n"
-            "* read value: %s\n" % (appended[:-1], read)
+            f"* appended value: {appended[:-1]}\n" f"* read value: {read}\n"
         )
         self.assertEqual(
             appended[:-1], read, "Written and read values differ."
@@ -319,7 +318,7 @@ class EnumTableTestCase(common.TempFileMixin, common.PyTablesTestCase):
         tbl.flavor = "python"
         read = tbl.read()
         common.verbosePrint(
-            "* appended value: %s\n" "* read value: %s\n" % (appended, read)
+            f"* appended value: {appended}\n" f"* read value: {read}\n"
         )
         self.assertEqual(appended, read, "Written and read values differ.")
 
@@ -338,7 +337,7 @@ class EnumTableTestCase(common.TempFileMixin, common.PyTablesTestCase):
         tbl.flavor = "python"
         read = tbl.read()
         common.verbosePrint(
-            "* written value: %s\n" "* read value: %s\n" % (written, read)
+            f"* written value: {written}\n" f"* read value: {read}\n"
         )
         self.assertEqual(written, read, "Written and read values differ.")
 
@@ -399,11 +398,10 @@ class EnumTableTestCase(common.TempFileMixin, common.PyTablesTestCase):
             for row in tbl.where("rcolor == v", {"v": self.valueInEnum})
         ]
         common.verbosePrint(
-            "* ``valueInEnum``: %s\n"
-            "* ``rcolor`` column: ``%s``\n"
-            "* ``searched``: %s\n"
-            "* Should look like: %s\n"
-            % (self.valueInEnum, tbl.cols.rcolor, searched, appended[:-1])
+            f"* ``valueInEnum``: {self.valueInEnum}\n"
+            f"* ``rcolor`` column: ``{tbl.cols.rcolor}``\n"
+            f"* ``searched``: {searched}\n"
+            f"* Should look like: {appended[:-1]}\n"
         )
         self.assertEqual(
             searched, appended[:-1], "Search returned incorrect results."
@@ -665,7 +663,7 @@ class EnumVLArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         vlarr.flush()
         read = vlarr.read()
         common.verbosePrint(
-            "* appended value: %s\n" "* read value: %s\n" % (appended, read)
+            f"* appended value: {appended}\n" f"* read value: {read}\n"
         )
         self.assertEqual(appended, read, "Written and read values differ.")
 
@@ -692,7 +690,7 @@ class EnumVLArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         vlarr.flush()
         read = vlarr.read()
         common.verbosePrint(
-            "* appended value: %s\n" "* read value: %s\n" % (appended, read)
+            f"* appended value: {appended}\n" f"* read value: {read}\n"
         )
         self.assertEqual(appended, read, "Written and read values differ.")
 
@@ -711,7 +709,7 @@ class EnumVLArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
         vlarr[0] = written
         read = vlarr.read()
         common.verbosePrint(
-            "* written value: %s\n" "* read value: %s\n" % (written, read)
+            f"* written value: {written}\n" f"* read value: {read}\n"
         )
         self.assertEqual(written, read[0], "Written and read values differ.")
 

@@ -79,7 +79,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 object = np.ndarray(
                     buffer=b"a" * self.objsize,
                     shape=self.shape,
-                    dtype="S%s" % carray.atom.itemsize,
+                    dtype=f"S{carray.atom.itemsize}",
                 )
             else:
                 object = np.arange(self.objsize, dtype=carray.atom.dtype)
@@ -116,7 +116,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_readCArray..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_readCArray...")
 
         # Create an instance of an HDF5 Table
         if self.reopen:
@@ -251,9 +251,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test02_getitemCArray..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test02_getitemCArray...")
 
         if not hasattr(self, "slices"):
             # If there is not a slices attribute, create it
@@ -315,9 +313,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print(
-                "Running %s.test03_setitemCArray..." % self.__class__.__name__
-            )
+            print(f"Running {self.__class__.__name__}.test03_setitemCArray...")
 
         if not hasattr(self, "slices"):
             # If there is not a slices attribute, create it
@@ -1437,7 +1433,7 @@ class OffsetStrideTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_String..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_String...")
 
         shape = (3, 2, 2)
         # Create a string atom
@@ -1473,7 +1469,7 @@ class OffsetStrideTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_String..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_String...")
 
         shape = (3, 2, 2)
 
@@ -1510,7 +1506,7 @@ class OffsetStrideTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02a_int..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02a_int...")
 
         shape = (3, 3)
 
@@ -1554,7 +1550,7 @@ class OffsetStrideTestCase(common.TempFileMixin, common.PyTablesTestCase):
         root = self.rootgroup
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02b_int..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02b_int...")
 
         shape = (3, 3)
 
@@ -1600,7 +1596,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01a_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01a_copy...")
 
         # Create an CArray
         shape = (2, 2)
@@ -1660,7 +1656,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01b_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01b_copy...")
 
         # Create an CArray
         shape = (2, 2)
@@ -1718,7 +1714,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01c_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01c_copy...")
 
         # Create an CArray
         shape = (5, 5)
@@ -1778,7 +1774,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_copy...")
 
         # Create an CArray
         shape = (5, 5)
@@ -1839,7 +1835,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03c_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03c_copy...")
 
         shape = (2, 2)
         atom = tb.Int16Atom()
@@ -1895,7 +1891,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03d_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03d_copy...")
 
         shape = (2, 2)
         atom = tb.StringAtom(itemsize=4)
@@ -1954,7 +1950,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test03e_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test03e_copy...")
 
         shape = (2, 2)
         atom = tb.StringAtom(itemsize=4)
@@ -2009,7 +2005,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test04_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test04_copy...")
 
         # Create an CArray
         shape = (2, 2)
@@ -2054,7 +2050,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05_copy...")
 
         # Create an CArray
         shape = (2, 2)
@@ -2102,7 +2098,7 @@ class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test05b_copy..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test05b_copy...")
 
         # Create an Array
         shape = (2, 2)
@@ -2162,7 +2158,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test01_index..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test01_index...")
 
         # Create an CArray
         shape = (100, 2)
@@ -2212,7 +2208,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running %s.test02_indexclosef..." % self.__class__.__name__)
+            print(f"Running {self.__class__.__name__}.test02_indexclosef...")
 
         # Create an CArray
         shape = (100, 2)

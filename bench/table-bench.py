@@ -282,8 +282,7 @@ if __name__ == "__main__":
     from time import perf_counter as clock
     from time import process_time as cpuclock
 
-    usage = (
-        """usage: %s [-v] [-P] [-R range] [-r] [-w] [-s recsize] [-f field] [-c level] [-l complib] [-n nrows] [-S] [-B] [-F] file
+    usage = f"""usage: {sys.argv[0]} [-v] [-P] [-R range] [-r] [-w] [-s recsize] [-f field] [-c level] [-l complib] [-n nrows] [-S] [-B] [-F] file
             -v verbose
             -P do profile
             -R select a range in a field in the form "start,stop,step"
@@ -297,8 +296,6 @@ if __name__ == "__main__":
             -F activate fletcher32 filter
             -l sets the compression library to be used ("zlib", "lzo", "blosc", "bzip2")
             -n sets the number of rows in each table\n"""
-        % sys.argv[0]
-    )
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "vPSBFR:rwf:s:c:l:n:")

@@ -454,7 +454,8 @@ class ReadlineTestCase(TempFileMixin, TestCase):
         fnode = filenode.new_node(self.h5file, where="/", name="test")
         # fnode.line_separator = linesep
         fnode.write(linesep)
-        data = "short line%sshort line%s%s" % ((linesep.decode("ascii"),) * 3)
+        sep = linesep.decode("ascii")
+        data = f"short line{sep}short line{sep}{sep}"
         data = data.encode("ascii")
         fnode.write(data)
         fnode.write(b"long line " * 20 + linesep)
@@ -595,7 +596,8 @@ class ReadlineTestCase(TempFileMixin, TestCase):
 
         linesep = self.line_separator
 
-        data = "%sshort line%sshort" % ((linesep.decode("ascii"),) * 2)
+        sep = linesep.decode("ascii")
+        data = f"{sep}short line{sep}short"
         data = data.encode("ascii")
         lines = self.fnode.readlines(len(data))
         # self.assertEqual(lines, [linesep, b'short line' + linesep, b'short'])
@@ -895,7 +897,7 @@ class OldVersionTestCase(TestCase):
         self.assertEqual(line, "a test file\n")
 
         line = self.fnode.readline()
-        self.assertEqual(line, "for FileNode version %d\n" % self.oldversion)
+        self.assertEqual(line, f"for FileNode version {self.oldversion}\n")
 
         line = self.fnode.readline()
         self.assertEqual(line, "")

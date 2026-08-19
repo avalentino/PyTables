@@ -258,7 +258,7 @@ class Array(hdf5extension.Array, Leaf):
         """
         if self.atom.kind != "enum":
             raise TypeError(
-                "array ``%s`` is not of an enumerated type" % self._v_pathname
+                f"array ``{self._v_pathname}`` is not of an enumerated type"
             )
 
         return self.atom.enum
@@ -400,7 +400,7 @@ class Array(hdf5extension.Array, Leaf):
                     dim += 1
             elif dim >= maxlen:
                 raise IndexError(
-                    "Too many indices for object '%s'" % self._v_pathname
+                    f"Too many indices for object '{self._v_pathname}'"
                 )
             elif is_idx(key):
                 key = operator.index(key)
@@ -420,7 +420,7 @@ class Array(hdf5extension.Array, Leaf):
                     key.start, key.stop, key.step, dim=dim
                 )
             else:
-                raise TypeError("Non-valid index or slice: %s" % key)
+                raise TypeError(f"Non-valid index or slice: {key}")
             if not ellipsis:
                 startl[dim] = start
                 stopl[dim] = stop
@@ -466,9 +466,9 @@ class Array(hdf5extension.Array, Leaf):
             try:
                 num = int(num)
             except TypeError:
-                raise TypeError("Illegal index: %r" % num)
+                raise TypeError(f"Illegal index: {num!r}")
             if num > length - 1:
-                raise IndexError("Index out of bounds: %d" % num)
+                raise IndexError(f"Index out of bounds: {num}")
 
         def expand_ellipsis(
             args: tuple[int | list[int], ...], rank: int
@@ -514,7 +514,7 @@ class Array(hdf5extension.Array, Leaf):
                 step = int(step)
 
             if step < 1:
-                raise IndexError("Step must be >= 1 (got %d)" % step)
+                raise IndexError(f"Step must be >= 1 (got {step})")
             if stop == start:
                 raise IndexError("Zero-length selections are not allowed")
             if stop < start:
@@ -526,11 +526,11 @@ class Array(hdf5extension.Array, Leaf):
 
             if not 0 <= start <= (length - 1):
                 raise IndexError(
-                    "Start index %s out of range (0-%d)" % (start, length - 1)
+                    f"Start index {start} out of range (0-{length - 1})"
                 )
             if not 1 <= stop <= length:
                 raise IndexError(
-                    "Stop index %s out of range (1-%d)" % (stop, length)
+                    f"Stop index {stop} out of range (1-{length})"
                 )
 
             count = (stop - start) // step

@@ -32,7 +32,7 @@ class TrackTimesMixin:
         d = table.row
         # Fill the table
         for i in range(self.nrows):
-            d["var1"] = "%04d" % (self.nrows - i)
+            d["var1"] = f"{self.nrows - i:04d}"
             d["var2"] = i
             d["var3"] = i * 2
             d.append()  # This injects the Record values

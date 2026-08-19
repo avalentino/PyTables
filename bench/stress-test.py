@@ -31,17 +31,17 @@ def create_file_arr(filename, ngroups, ntables, nrows):
 
     for k in range(ngroups):
         # Create the group
-        fileh.create_group("/", "group%04d" % k, "Group %d" % k)
+        fileh.create_group("/", f"group{k:04d}", f"Group {k}")
 
     fileh.close()
 
     # Now, create the arrays
     arr = np.arange(nrows)
     for k in range(ngroups):
-        fileh = tb.open_file(filename, mode="a", root_uep="group%04d" % k)
+        fileh = tb.open_file(filename, mode="a", root_uep=f"group{k:04d}")
         for j in range(ntables):
             # Create the array
-            fileh.create_array("/", "array%04d" % j, arr, "Array %d" % j)
+            fileh.create_array("/", f"array{j:04d}", arr, f"Array {j}")
         fileh.close()
 
     return (ngroups * ntables * nrows, 4)
@@ -51,7 +51,7 @@ def read_file_arr(filename, ngroups, recsize, verbose):
 
     rowsread = 0
     for ngroup in range(ngroups):
-        fileh = tb.open_file(filename, mode="r", root_uep="group%04d" % ngroup)
+        fileh = tb.open_file(filename, mode="r", root_uep=f"group{ngroup:04d}")
         # Get the group
         group = fileh.root
         if verbose:
@@ -82,7 +82,7 @@ def create_file(
 
     for k in range(ngroups):
         # Create the group
-        group = fileh.create_group("/", "group%04d" % k, "Group %d" % k)
+        group = fileh.create_group("/", f"group{k:04d}", f"Group {k}")
 
     fileh.close()
 
@@ -93,7 +93,7 @@ def create_file(
 
     for k in range(ngroups):
         print("Filling tables in group:", k)
-        fileh = tb.open_file(filename, mode="a", root_uep="group%04d" % k)
+        fileh = tb.open_file(filename, mode="a", root_uep=f"group{k:04d}")
         # Get the group
         group = fileh.root
         for j in range(ntables):
@@ -101,9 +101,9 @@ def create_file(
             # table = fileh.create_table(group, 'table%04d'% j, Test,
             table = fileh.create_table(
                 group,
-                "table%04d" % j,
+                f"table{j:04d}",
                 TestDict,
-                "Table%04d" % j,
+                f"Table{j:04d}",
                 complevel,
                 complib,
                 nrows,
@@ -134,7 +134,7 @@ def read_file(filename, ngroups, recsize, verbose):
     buffersize = 0
     rowsread = 0
     for ngroup in range(ngroups):
-        fileh = tb.open_file(filename, mode="r", root_uep="group%04d" % ngroup)
+        fileh = tb.open_file(filename, mode="r", root_uep=f"group{ngroup:04d}")
         # Get the group
         group = fileh.root
 
@@ -159,8 +159,8 @@ def read_file(filename, ngroups, recsize, verbose):
                         assert row["nrow"] == nrow
                     except Exception:
                         print(
-                            "Error in group: %d, table: %d, row: %d"
-                            % (ngroup, ntable, nrow)
+                            f"Error in group: {ngroup}, table: {ntable}, "
+                            f"row: {nrow}"
                         )
                         print("Record ==>", row)
                     nrow += 1
@@ -219,7 +219,7 @@ class TrackRefs:
         ct.reverse()
         for delta1, delta2, t in ct:
             if delta1 or delta2:
-                print("%-55s %8d %8d" % (t, delta1, delta2))
+                print(f"{t:-55s} {delta1:8d} {delta2:8d}")
 
         self.type2count = type2count
         self.type2all = type2all
@@ -241,8 +241,7 @@ def dump_refs(preheat=10, iter1=10, iter2=10, *testargs):
     rc2 = sys.gettotalrefcount()
     track.update()
     print(
-        "Inc refs in function testMethod --> %5d" % (rc2 - rc1),
-        file=sys.stderr,
+        f"Inc refs in function testMethod --> {rc2 - rc1:5d}", file=sys.stderr
     )
     for i in range(iter2):
         test_method(*testargs)
@@ -252,8 +251,7 @@ def dump_refs(preheat=10, iter1=10, iter2=10, *testargs):
     rc3 = sys.gettotalrefcount()
 
     print(
-        "Inc refs in function testMethod --> %5d" % (rc3 - rc2),
-        file=sys.stderr,
+        f"Inc refs in function testMethod --> {rc3 - rc2:5d}", file=sys.stderr
     )
 
 

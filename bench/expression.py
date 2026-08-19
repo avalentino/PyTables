@@ -122,14 +122,14 @@ if __name__ == "__main__":
     import sys
     import getopt
 
-    usage = """usage: %s [-T] [-M] [-c] [-w] [-v] [-z complib]
+    usage = f"""usage: {sys.argv[0]} [-T] [-M] [-c] [-w] [-v] [-z complib]
            -T use tables.Expr
            -M use numpy.memmap
            -c do the computation only
            -w write inputs only
            -v verbose mode
            -z select compression library ('zlib' or 'lzo').  Default is None.
-""" % sys.argv[0]
+"""
 
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], "TMcwvz:")
@@ -162,7 +162,7 @@ if __name__ == "__main__":
             if complib not in ("blosc", "lzo", "zlib"):
                 print(
                     "complib must be 'lzo' or 'zlib' "
-                    "and you passed: '%s'" % complib
+                    f"and you passed: '{complib}'"
                 )
                 sys.exit(1)
 

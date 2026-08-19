@@ -18,7 +18,7 @@ def timed(func, *args, **kwargs):
 
 def create_table(output_path):
     print("creating array...", end=" ")
-    dt = np.dtype([("field%d" % i, int) for i in range(32)])
+    dt = np.dtype([(f"field{i}", int) for i in range(32)])
     a = np.zeros(N, dtype=dt)
     print("done.")
 

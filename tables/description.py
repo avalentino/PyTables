@@ -184,11 +184,11 @@ class Col(atom.Atom):
     @classmethod
     def _subclass_from_prefix(cls, prefix: str) -> type[Col]:
         """Get a column subclass for the given `prefix`."""
-        cname = "%sCol" % prefix
+        cname = f"{prefix}Col"
         class_from_prefix = cls._class_from_prefix
         if cname in class_from_prefix:
             return class_from_prefix[cname]
-        atombase = getattr(atom, "%sAtom" % prefix)
+        atombase = getattr(atom, f"{prefix}Atom")
 
         class NewCol(cls, atombase):
             """Defines a non-nested column of a particular type.
@@ -284,7 +284,7 @@ def _generate_col_classes() -> Generator[type[Col]]:
 
 # Create all column classes.
 # for _newclass in _generate_col_classes():
-#     exec('%s = _newclass' % _newclass.__name__)
+#     exec(f"{_newclass.__name__} = _newclass")
 # del _newclass
 
 StringCol = Col._subclass_from_prefix("String")
@@ -795,7 +795,8 @@ class Description:
             f'{"  " * self._v_nestedlvl}"{k}": {self._v_colobjects[k]!r}'
             for k in self._v_names
         ]
-        return "{\n  %s}" % (",\n  ".join(rep))
+        lines = ",\n  ".join(rep)
+        return f"{{\n  {lines}}}"
 
     def __str__(self) -> str:
         """Give a brief Description representation."""
@@ -903,8 +904,8 @@ def descr_from_dtype(
             col._v_offset = offset
         else:
             raise NotImplementedError(
-                "structured arrays with columns with type description ``%s`` "
-                "are not supported yet, sorry" % dtype
+                "structured arrays with columns with type description "
+                f"``{dtype}`` are not supported yet, sorry"
             )
         fields[name] = col
 

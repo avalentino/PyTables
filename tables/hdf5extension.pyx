@@ -398,15 +398,15 @@ cdef object get_dtype_scalar(hid_t type_id, H5T_class_t class_id,
     # Get the sign
     sign = H5Tget_sign(type_id)
     if (sign > 0):
-      stype = "i%s" % (itemsize)
+      stype = f"i{itemsize}"
     else:
-      stype = "u%s" % (itemsize)
+      stype = f"u{itemsize}"
   elif class_id ==  H5T_FLOAT:
-    stype = "f%s" % (itemsize)
+    stype = f"f{itemsize}"
   elif class_id ==  H5T_STRING:
     if H5Tis_variable_str(type_id):
       raise TypeError("variable length strings are not supported yet")
-    stype = "S%s" % (itemsize)
+    stype = f"S{itemsize}"
 
   # Try to get a NumPy type.  If this can't be done, return None.
   try:
@@ -454,8 +454,10 @@ cdef class File:
     # Check if we can handle the driver
     driver = params["DRIVER"]
     if driver is not None and driver not in _supported_drivers:
-      raise ValueError("Invalid or not supported driver: '%s'" % driver)
+      raise ValueError(f"Invalid or not supported driver: '{driver}'")
     if driver == "H5FD_SPLIT":
+      # Cannot use "format string syntax" here because DRIVER_SPLIT_META_EXT
+      # and DRIVER_SPLIT_RAW_EXT are part of an interface
       meta_ext = params.get("DRIVER_SPLIT_META_EXT", "-m.h5")
       raw_ext = params.get("DRIVER_SPLIT_RAW_EXT", "-r.h5")
       meta_name = meta_ext % name if "%s" in meta_ext else name + meta_ext
@@ -476,15 +478,16 @@ cdef class File:
     self._isPTFile = True  # assume a PyTables file by default
     # """Does this HDF5 file have a PyTables format?"""
 
-    assert pymode in ('r', 'r+', 'a', 'w'), ("an invalid mode string ``%s`` "
-           "passed the ``check_file_access()`` test; "
-           "please report this to the authors" % pymode)
+    assert pymode in ('r', 'r+', 'a', 'w'), (
+      f"an invalid mode string ``{pymode}`` passed the ``check_file_access()`` "
+      "test; please report this to the authors"
+    )
 
     image = params.get('DRIVER_CORE_IMAGE')
     if image:
       if driver != "H5FD_CORE":
         warnings.warn("The DRIVER_CORE_IMAGE parameter will be ignored by "
-                      "the '%s' driver" % driver)
+                      f"the '{driver}' driver")
       elif not PyBytes_Check(image):
         raise TypeError("The DRIVER_CORE_IMAGE must be a string of bytes")
 
@@ -611,7 +614,7 @@ cdef class File:
                                access_plist)
 
     if self.file_id < 0:
-        e = HDF5ExtError("Unable to open/create file '%s'" % name)
+        e = HDF5ExtError(f"Unable to open/create file '{name}'")
         H5Pclose(create_plist)
         H5Pclose(access_plist)
         raise e
@@ -726,7 +729,7 @@ cdef class File:
     err = H5Fget_vfd_handle(self.file_id, H5P_DEFAULT, &file_handle)
     if err < 0:
       raise HDF5ExtError(
-        "Problems getting file descriptor for file ``%s``" % self.name)
+        f"Problems getting file descriptor for file ``{self.name}``")
     # Convert the 'void *file_handle' into an 'int *descriptor'
     descriptor = <uintptr_t *>file_handle
     return descriptor[0]
@@ -751,7 +754,7 @@ cdef class File:
       # Close the HDF5 file because user didn't do that!
       ret = H5Fclose(self.file_id)
       if ret < 0:
-        raise HDF5ExtError("Problems closing the file '%s'" % self.name)
+        raise HDF5ExtError(f"Problems closing the file '{self.name}'")
 
 
 cdef class AttributeSet:
@@ -819,8 +822,9 @@ cdef class AttributeSet:
       ret = H5ATTRset_attribute(dset_id, cname, type_id,
                                 PyArray_NDIM(ndv), dims, PyArray_BYTES(ndv))
       if ret < 0:
-        raise HDF5ExtError("Can't set attribute '%s' in node:\n %s." %
-                           (name, self._v_node))
+        raise HDF5ExtError(
+          f"Can't set attribute '{name}' in node:\n {self._v_node}."
+        )
       # Release resources
       free(<void *>dims)
       H5Tclose(type_id)
@@ -838,9 +842,9 @@ cdef class AttributeSet:
 
       ret = H5ATTRset_attribute_string(dset_id, cname, value, len(value), cset)
       if ret < 0:
-        raise HDF5ExtError("Can't set attribute '%s' in node:\n %s." %
-                           (name, self._v_node))
-
+        raise HDF5ExtError(
+          f"Can't set attribute '{name}' in node:\n {self._v_node}."
+        )
 
   # Get attributes
   def _g_getattr(self, node, attrname):
@@ -877,8 +881,9 @@ cdef class AttributeSet:
     ret = H5ATTRget_type_ndims(dset_id, cattrname, &type_id, &class_id,
                                &type_size, &rank )
     if ret < 0:
-      raise HDF5ExtError("Can't get type info on attribute %s in node %s." %
-                         (attrname, self.name))
+      raise HDF5ExtError(
+        f"Can't get type info on attribute {attrname} in node {self.name}."
+      )
 
     # Call a fast function for scalar values and typical class types
     if (rank == 0 and class_id == H5T_STRING):
@@ -912,9 +917,11 @@ cdef class AttributeSet:
     elif (rank == 0 and class_id in (H5T_BITFIELD, H5T_INTEGER, H5T_FLOAT)):
       dtype_ = get_dtype_scalar(type_id, class_id, type_size)
       if dtype_ is None:
-        warnings.warn("Unsupported type for attribute '%s' in node '%s'. "
-                      "Offending HDF5 class: %d" % (attrname, self.name,
-                                                    class_id), DataTypeWarning)
+        warnings.warn(
+          f"Unsupported type for attribute '{attrname}' in node '{self.name}'. "
+          f"Offending HDF5 class: {class_id}",
+          DataTypeWarning
+        )
         self._v_unimplemented.append(attrname)
         return None
       shape = ()
@@ -925,8 +932,9 @@ cdef class AttributeSet:
       dims = <hsize_t *>malloc(rank * sizeof(hsize_t))
       ret = H5ATTRget_dims(dset_id, cattrname, dims)
       if ret < 0:
-        raise HDF5ExtError("Can't get dims info on attribute %s in node %s." %
-                           (attrname, self.name))
+        raise HDF5ExtError(
+          f"Can't get dims info on attribute {attrname} in node {self.name}."
+        )
       shape = getshape(rank, dims)
       # dims is not needed anymore
       free(<void *> dims)
@@ -940,8 +948,9 @@ cdef class AttributeSet:
           nelements = H5ATTRget_attribute_vlen_string_array(dset_id, cattrname,
                                                             &str_values, &cset)
           if nelements < 0:
-            raise HDF5ExtError("Can't read attribute %s in node %s." %
-                               (attrname, self.name))
+            raise HDF5ExtError(
+              f"Can't read attribute {attrname} in node {self.name}."
+            )
 
           # The following generator expressions do not work with Cython 0.15.1
           if cset == H5T_CSET_UTF8:
@@ -973,9 +982,11 @@ cdef class AttributeSet:
         # This class is not supported. Instead of raising a TypeError, issue a
         # warning explaining the problem. This will allow to continue browsing
         # native HDF5 files, while informing the user about the problem.
-        warnings.warn("Unsupported type for attribute '%s' in node '%s'. "
-                      "Offending HDF5 class: %d" % (attrname, self.name,
-                                                    class_id), DataTypeWarning)
+        warnings.warn(
+          f"Unsupported type for attribute '{attrname}' in node '{self.name}'. "
+          f"Offending HDF5 class: {class_id}",
+          DataTypeWarning
+        )
         self._v_unimplemented.append(attrname)
         return None
 
@@ -986,8 +997,9 @@ cdef class AttributeSet:
     # Actually read the attribute from disk
     ret = H5ATTRget_attribute(dset_id, cattrname, type_id, rbuf)
     if ret < 0:
-      raise HDF5ExtError("Attribute %s exists in node %s, but can't get it." %
-                         (attrname, self.name))
+      raise HDF5ExtError(
+        f"Attribute {attrname} exists in node {self.name}, but can't get it."
+      )
     H5Tclose(type_id)
 
     if rank > 0:    # multidimensional case
@@ -1013,8 +1025,10 @@ cdef class AttributeSet:
 
     ret = H5Adelete(dset_id, cattrname)
     if ret < 0:
-      raise HDF5ExtError("Attribute '%s' exists in node '%s', but cannot be "
-                         "deleted." % (attrname, self.name))
+      raise HDF5ExtError(
+        f"Attribute '{attrname}' exists in node '{self.name}', but cannot be "
+        "deleted."
+      )
 
 
 cdef class Node:
@@ -1035,7 +1049,7 @@ cdef class Node:
     # Delete this node
     ret = H5Ldelete(parent._v_objectid, encoded_name, H5P_DEFAULT)
     if ret < 0:
-      raise HDF5ExtError("problems deleting the node ``%s``" % self.name)
+      raise HDF5ExtError(f"problems deleting the node ``{self.name}``")
     return ret
 
   def __dealloc__(self):
@@ -1047,8 +1061,7 @@ cdef class Node:
 
     ret = H5Oget_info(self._v_objectid, &oinfo)
     if ret < 0:
-      raise HDF5ExtError("Unable to get object info for '%s'" %
-                         self. _v_pathname)
+      raise HDF5ExtError(f"Unable to get object info for '{self._v_pathname}'")
 
     return ObjInfo(oinfo.addr, oinfo.rc)
 
@@ -1058,8 +1071,7 @@ cdef class Node:
 
     ret = H5Oget_info(self._v_objectid, &oinfo)
     if ret < 0:
-      raise HDF5ExtError("Unable to get object info for '%s'" %
-                         self. _v_pathname)
+      raise HDF5ExtError(f"Unable to get object info for '{self._v_pathname}'")
 
     return ObjTimestamps(oinfo.atime, oinfo.mtime, oinfo.ctime,
                          oinfo.btime)
@@ -1080,7 +1092,7 @@ cdef class Group(Node):
     ret = H5Gcreate(self.parent_id, encoded_name, H5P_DEFAULT, H5P_DEFAULT,
                     H5P_DEFAULT)
     if ret < 0:
-      raise HDF5ExtError("Can't create the group %s." % self.name)
+      raise HDF5ExtError(f"Can't create the group {self.name}.")
     self.group_id = ret
     return self.group_id
 
@@ -1092,7 +1104,7 @@ cdef class Group(Node):
 
     ret = H5Gopen(self.parent_id, encoded_name, H5P_DEFAULT)
     if ret < 0:
-      raise HDF5ExtError("Can't open the group: '%s'." % self.name)
+      raise HDF5ExtError(f"Can't open the group: '{self.name}'.")
     self.group_id = ret
     return self.group_id
 
@@ -1163,8 +1175,9 @@ cdef class Group(Node):
     retvalue = None  # Default value
     gchild_id = H5Gopen(self.group_id, encoded_group_name, H5P_DEFAULT)
     if gchild_id < 0:
-      raise HDF5ExtError("Non-existing node ``%s`` under ``%s``" %
-                         (group_name, self._v_pathname))
+      raise HDF5ExtError(
+        f"Non-existing node ``{group_name}`` under ``{self._v_pathname}``"
+      )
     retvalue = get_attribute_string_or_none(gchild_id, encoded_attr_name)
     # Close child group
     H5Gclose(gchild_id)
@@ -1190,8 +1203,9 @@ cdef class Group(Node):
     # Open the dataset
     leaf_id = H5Dopen(self.group_id, encoded_leaf_name, H5P_DEFAULT)
     if leaf_id < 0:
-      raise HDF5ExtError("Non-existing node ``%s`` under ``%s``" %
-                         (leaf_name, self._v_pathname))
+      raise HDF5ExtError(
+        f"Non-existing node ``{leaf_name}`` under ``{self._v_pathname}``"
+      )
     retvalue = get_attribute_string_or_none(leaf_id, encoded_attr_name)
     # Close the dataset
     H5Dclose(leaf_id)
@@ -1208,7 +1222,7 @@ cdef class Group(Node):
 
     ret = H5Gclose(self.group_id)
     if ret < 0:
-      raise HDF5ExtError("Problems closing the Group %s" % self.name)
+      raise HDF5ExtError(f"Problems closing the Group {self.name}")
     self.group_id = 0  # indicate that this group is closed
 
 
@@ -1223,8 +1237,9 @@ cdef class Group(Node):
     ret = H5Lmove(oldparent, encoded_oldname, newparent, encoded_newname,
                   H5P_DEFAULT, H5P_DEFAULT)
     if ret < 0:
-      raise HDF5ExtError("Problems moving the node %s to %s" %
-                         (oldpathname, newpathname) )
+      raise HDF5ExtError(
+        f"Problems moving the node {oldpathname} to {newpathname}"
+      )
     return ret
 
 
@@ -1251,18 +1266,22 @@ cdef class Leaf(Node):
       hbool_t track_times = True
 
     if self.dataset_id < 0:
-      raise ValueError('Invalid dataset id %s' % self.dataset_id)
+      raise ValueError(f"Invalid dataset id {self.dataset_id}")
 
     plist_id = H5Dget_create_plist(self.dataset_id)
     if plist_id < 0:
-      raise HDF5ExtError("Could not get dataset creation property list "
-                         "from dataset id %s" % self.dataset_id)
+      raise HDF5ExtError(
+        "Could not get dataset creation property list from dataset "
+        f"id {self.dataset_id}"
+      )
 
     try:
       # Get track_times boolean for dataset
       if H5Pget_obj_track_times(plist_id, &track_times) < 0:
-        raise HDF5ExtError("Could not get dataset track_times property "
-                           "from dataset id %s" % self.dataset_id)
+        raise HDF5ExtError(
+          "Could not get dataset track_times property from dataset "
+          f"id {self.dataset_id}"
+        )
     finally:
       H5Pclose(plist_id)
 
@@ -1296,8 +1315,9 @@ cdef class Leaf(Node):
       ret = H5Dget_chunk_info_by_coord(self.dataset_id, offset,
                                        &filter_mask, &addr, &size)
     if ret < 0:
-      raise HDF5ExtError("Problems getting chunk info for ``%s``"
-                         % self._v_pathname)
+      raise HDF5ExtError(
+        f"Problems getting chunk info for ``{self._v_pathname}``"
+      )
     return ((filter_mask, addr, size) if addr != HADDR_UNDEF
             else (None, None, None))
 
@@ -1327,8 +1347,7 @@ cdef class Leaf(Node):
       ret = H5Dread_chunk(self.dataset_id, H5P_DEFAULT, offset,
                           &filters, rbuf)
     if ret < 0:
-      raise HDF5ExtError("Problems reading chunk from ``%s``"
-                         % self._v_pathname)
+      raise HDF5ExtError(f"Problems reading chunk from ``{self._v_pathname}``")
     return rarr
 
   def _g_write_chunk(self, ndarray coords, ndarray data, uint32_t filters):
@@ -1350,8 +1369,7 @@ cdef class Leaf(Node):
       ret = H5Dwrite_chunk(self.dataset_id, H5P_DEFAULT, filters,
                            offset, data_size, wbuf)
     if ret < 0:
-      raise HDF5ExtError("Problems writing chunk to ``%s``"
-                         % self._v_pathname)
+      raise HDF5ExtError(f"Problems writing chunk to ``{self._v_pathname}``")
 
   cdef _get_type_ids(self):
     """Get the disk and native HDF5 types associated with this leaf.
@@ -1403,7 +1421,7 @@ cdef class Leaf(Node):
 
     ret = truncate_dset(self.dataset_id, self.maindim, size)
     if ret < 0:
-      raise HDF5ExtError("Problems truncating the leaf: %s" % self)
+      raise HDF5ExtError(f"Problems truncating the leaf: {self}")
 
     classname = self.__class__.__name__
     if classname in ('EArray', 'CArray'):
@@ -1416,7 +1434,7 @@ cdef class Leaf(Node):
     elif classname in ('Table', 'VLArray'):
       self.nrows = size
     else:
-      raise ValueError("Unexpected classname: %s" % classname)
+      raise ValueError(f"Unexpected classname: {classname}")
 
   def _g_flush(self):
     # Flush the dataset (in fact, the entire buffers in file!)
@@ -1490,8 +1508,9 @@ cdef class Array(Leaf):
     self.disk_type_id = atom_to_hdf5_type(atom_, self.byteorder)
     if self.disk_type_id < 0:
       raise HDF5ExtError(
-        "Problems creating the %s: invalid disk type ID for atom %s" % (
-            self.__class__.__name__, atom_))
+        f"Problems creating the {self.__class__.__name__}: "
+        f"invalid disk type ID for atom {atom_}"
+      )
 
     # Allocate space for the dimension axis info and fill it
     dims = np.array(shape, dtype=np.intp)
@@ -1516,7 +1535,7 @@ cdef class Array(Leaf):
                                   self._want_track_times,
                                   rbuf)
     if self.dataset_id < 0:
-      raise HDF5ExtError("Problems creating the %s." % self.__class__.__name__)
+      raise HDF5ExtError(f"Problems creating the {self.__class__.__name__}.")
 
     if self._v_file.params['PYTABLES_SYS_ATTRS']:
       cset = H5T_CSET_UTF8
@@ -1593,7 +1612,7 @@ cdef class Array(Leaf):
                                   self._want_track_times,
                                   rbuf)
     if self.dataset_id < 0:
-      raise HDF5ExtError("Problems creating the %s." % self.__class__.__name__)
+      raise HDF5ExtError(f"Problems creating the {self.__class__.__name__}.")
 
     if self._v_file.params['PYTABLES_SYS_ATTRS']:
       # Set the conforming array attributes
@@ -1635,8 +1654,10 @@ cdef class Array(Leaf):
     # Open the dataset
     self.dataset_id = H5Dopen(self.parent_id, encoded_name, H5P_DEFAULT)
     if self.dataset_id < 0:
-      raise HDF5ExtError("Non-existing node ``%s`` under ``%s``" %
-                         (self.name, self._v_parent._v_pathname))
+      raise HDF5ExtError(
+        f"Non-existing node ``{self.name}`` under "
+        f"``{self._v_parent._v_pathname}``"
+      )
     # Get the datatype handles
     self.disk_type_id, self.type_id = self._get_type_ids()
     # Get the atom for this type
@@ -1822,8 +1843,10 @@ cdef class Array(Leaf):
                                 start, stop, step, rbuf)
     try:
       if ret < 0:
-        raise HDF5ExtError("Internal error reading the elements "
-                           "(H5ARRAYOreadSlice returned errorcode %i)" % ret)
+        raise HDF5ExtError(
+          "Internal error reading the elements (H5ARRAYOreadSlice returned "
+          f"errorcode {ret})"
+        )
 
       # Get the pointer to the buffer data area
       if self.atom.kind == "reference":
@@ -2047,8 +2070,9 @@ cdef class Array(Leaf):
                                     start, step, count, rbuf)
 
     if ret < 0:
-      raise HDF5ExtError("Internal error modifying the elements "
-                         "(H5ARRAYwrite_records returned errorcode %i)" % ret)
+      raise HDF5ExtError(
+        "Internal error modifying the elements (H5ARRAYwrite_records "
+        f"returned errorcode {ret})")
 
     return
 
@@ -2181,8 +2205,9 @@ cdef class VLArray(Leaf):
     self.base_type_id = atom_to_hdf5_type(scatom, self.byteorder)
     if self.base_type_id < 0:
       raise HDF5ExtError(
-        "Problems creating the %s: invalid base type ID for atom %s" % (
-            self.__class__.__name__, scatom))
+        f"Problems creating the {self.__class__.__name__}: "
+        f"invalid base type ID for atom {scatom}"
+      )
 
     # Allocate space for the dimension axis info
     rank = len(atom.shape)
@@ -2240,8 +2265,10 @@ cdef class VLArray(Leaf):
     # Open the dataset
     self.dataset_id = H5Dopen(self.parent_id, encoded_name, H5P_DEFAULT)
     if self.dataset_id < 0:
-      raise HDF5ExtError("Non-existing node ``%s`` under ``%s``" %
-                         (self.name, self._v_parent._v_pathname))
+      raise HDF5ExtError(
+        f"Non-existing node ``{self.name}`` under "
+        f"``{self._v_parent._v_pathname}``"
+      )
     # Get the datatype handles
     self.disk_type_id, self.type_id = self._get_type_ids()
     # Get the atom for this type

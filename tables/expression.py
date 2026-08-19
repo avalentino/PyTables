@@ -196,10 +196,10 @@ class Expr:
                 if hasattr(var, "dtype"):
                     # Quacks like a NumPy object
                     continue
-                raise TypeError("Unsupported variable type: %r" % var)
+                raise TypeError(f"Unsupported variable type: {var!r}")
             objname = var.__class__.__name__
             if objname not in ("Array", "CArray", "EArray", "Column"):
-                raise TypeError("Unsupported variable type: %r" % var)
+                raise TypeError(f"Unsupported variable type: {var!r}")
 
         # NumPy arrays to be copied? (we don't need to worry about
         # PyTables objects, as the reads always return contiguous and
@@ -311,14 +311,14 @@ class Expr:
             elif uservars is None and var in user_globals:
                 val = user_globals[var]
             else:
-                raise NameError("name ``%s`` is not defined" % var)
+                raise NameError(f"name ``{var}`` is not defined")
 
             # Check the value.
             if hasattr(val, "dtype") and val.dtype.str[1:] == "u8":
                 raise NotImplementedError(
-                    "variable ``%s`` refers to "
+                    f"variable ``{var}`` refers to "
                     "a 64-bit unsigned integer object, that is "
-                    "not yet supported in expressions, sorry; " % var
+                    "not yet supported in expressions, sorry; "
                 )
             elif hasattr(val, "_v_colpathnames"):  # nested column
                 # This branch is never reached because the compile step
@@ -326,8 +326,8 @@ class Expr:
                 # columns, but that could change in the future.  So it
                 # is best to let this here.
                 raise TypeError(
-                    "variable ``%s`` refers to a nested column, "
-                    "not allowed in expressions" % var
+                    f"variable ``{var}`` refers to a nested column, "
+                    "not allowed in expressions"
                 )
             reqvars[var] = val
         return reqvars

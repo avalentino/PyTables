@@ -25,7 +25,7 @@ def show_stats(explain, tref):
             vmexe = int(line.split()[1])
         elif line.startswith("VmLib:"):
             vmlib = int(line.split()[1])
-    print("Memory usage: ******* %s *******" % explain)
+    print(f"Memory usage: ******* {explain} *******")
     print(f"VmSize: {vmsize:>7} kB\tVmRSS: {vmrss:>7} kB")
     print(f"VmData: {vmdata:>7} kB\tVmStk: {vmstk:>7} kB")
     print(f"VmExe:  {vmexe:>7} kB\tVmLib: {vmlib:>7} kB")

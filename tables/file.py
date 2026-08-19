@@ -159,15 +159,15 @@ _action_log_name = "actionlog"
 _action_log_path = join_path(_action_log_parent, _action_log_name)
 
 _trans_parent = _trans_group_path
-_trans_name = "t%d"  # %d -> transaction number
+_trans_name = "t{}"  # -> transaction number
 _trans_path = join_path(_trans_parent, _trans_name)
 
 _mark_parent = _trans_path
-_mark_name = "m%d"  # %d -> mark number
+_mark_name = "m{}"  # -> mark number
 _mark_path = join_path(_mark_parent, _mark_name)
 
 _shadow_parent = _mark_path
-_shadow_name = "a%d"  # %d -> action number
+_shadow_name = "a{}"  # -> action number
 _shadow_path = join_path(_shadow_parent, _shadow_name)
 
 
@@ -289,14 +289,10 @@ def open_file(
         # even in read-only mode
         if filename in _open_files:
             raise ValueError(
-                "The file '%s' is already opened.  "
+                f"The file '{filename}' is already opened.  "
                 "Please close it before reopening.  "
-                "HDF5 v.%s, FILE_OPEN_POLICY = '%s'"
-                % (
-                    filename,
-                    utilsextension.get_hdf5_version(),
-                    _FILE_OPEN_POLICY,
-                )
+                f"HDF5 v.{utilsextension.get_hdf5_version()}, "
+                f"FILE_OPEN_POLICY = '{_FILE_OPEN_POLICY}'"
             )
     else:
         for filehandle in _open_files.get_handlers_by_name(filename):
@@ -304,21 +300,21 @@ def open_file(
             # 'r' is incompatible with everything except 'r' itself
             if mode == "r" and omode != "r":
                 raise ValueError(
-                    "The file '%s' is already opened, but "
-                    "not in read-only mode (as requested)." % filename
+                    f"The file '{filename}' is already opened, but "
+                    "not in read-only mode (as requested)."
                 )
             # 'a' and 'r+' are compatible with everything except 'r'
             elif mode in ("a", "r+") and omode == "r":
                 raise ValueError(
-                    "The file '%s' is already opened, but "
+                    f"The file '{filename}' is already opened, but "
                     "in read-only mode.  Please close it before "
-                    "reopening in append mode." % filename
+                    "reopening in append mode."
                 )
             # 'w' means that we want to destroy existing contents
             elif mode == "w":
                 raise ValueError(
-                    "The file '%s' is already opened.  Please "
-                    "close it before reopening in write mode." % filename
+                    f"The file '{filename}' is already opened.  Please "
+                    "close it before reopening in write mode."
                 )
 
     # Finally, create the File instance, and return it
@@ -350,7 +346,7 @@ class _NoCache:
 class _DictCache(dict):
     def __init__(self, nslots: int) -> None:
         if nslots < 1:
-            raise ValueError("Invalid number of slots: %d" % nslots)
+            raise ValueError(f"Invalid number of slots: {nslots}")
         self.nslots = nslots
         super().__init__()
 
@@ -359,8 +355,8 @@ class _DictCache(dict):
         if len(self) > self.nslots:
             warnings.warn(
                 "the dictionary of node cache is exceeding the recommended "
-                "maximum number (%d); be ready to see PyTables asking for "
-                "*lots* of memory and possibly slow I/O." % (self.nslots),
+                f"maximum number ({self.nslots}); be ready to see PyTables "
+                "asking for *lots* of memory and possibly slow I/O.",
                 PerformanceWarning,
             )
         super().__setitem__(key, value)
@@ -399,7 +395,7 @@ class NodeManager:
             elif self.registry[key] is not node:
                 raise RuntimeError(
                     "trying to register a node with an "
-                    "existing key: ``%s``" % key
+                    f"existing key: ``{key}``"
                 )
         else:
             self.registry[key] = node
@@ -415,7 +411,7 @@ class NodeManager:
             if oldnode is not node and oldnode._v_isopen:
                 raise RuntimeError(
                     "trying to cache a node with an "
-                    "existing key: ``%s``" % key
+                    f"existing key: ``{key}``"
                 )
 
         self.cache[key] = node
@@ -429,7 +425,7 @@ class NodeManager:
                 return node
             else:
                 # this should not happen
-                warnings.warn("a closed node found in the cache: ``%s``" % key)
+                warnings.warn(f"a closed node found in the cache: ``{key}``")
 
         if key in self.registry:
             node = self.registry[key]
@@ -437,7 +433,7 @@ class NodeManager:
                 # this should not happen since WeakValueDictionary drops all
                 # dead weakrefs
                 warnings.warn(
-                    "None is stored in the registry for key: " "``%s``" % key
+                    "None is stored in the registry for key: " f"``{key}``"
                 )
             elif node._v_isopen:
                 self.cache_node(node, key)
@@ -445,7 +441,7 @@ class NodeManager:
             else:
                 # this should not happen
                 warnings.warn(
-                    "a closed node found in the registry: " "``%s``" % key
+                    "a closed node found in the registry: " f"``{key}``"
                 )
                 del self.registry[key]
                 node = None
@@ -490,7 +486,7 @@ class NodeManager:
             # interpreter is shut down
             warnings.warn(
                 "dropping a node that is not in the registry: "
-                "``%s``" % nodepath
+                f"``{nodepath}``"
             )
 
             node._g_pre_kill_hook()
@@ -511,7 +507,7 @@ class NodeManager:
         for path in closed_keys:
             # self.cache.pop(path, None)
             if path in self.cache:
-                warnings.warn("closed node the cache: ``%s``" % path)
+                warnings.warn(f"closed node the cache: ``{path}``")
                 self.cache.pop(path, None)
             self.registry.pop(path)
 
@@ -538,14 +534,6 @@ class NodeManager:
                         node._f_close()
                     del node
                 except ClosedNodeError:
-                    # import traceback
-                    # type_, value, tb = sys.exc_info()
-                    # exception_dump = ''.join(
-                    #     traceback.format_exception(type_, value, tb))
-                    # warnings.warn(
-                    #     "A '%s' exception occurred trying to close a node "
-                    #     "that was supposed to be open.\n"
-                    #     "%s" % (type_.__name__, exception_dump))
                     pass
 
     def close_subtree(self, prefix: str = "/") -> None:
@@ -775,8 +763,8 @@ class File(hdf5extension.File):
 
         if mode not in ("r", "r+", "a", "w"):
             raise ValueError(
-                "invalid mode string ``%s``. Allowed modes are: "
-                "'r', 'r+', 'a' and 'w'" % mode
+                f"invalid mode string ``{mode}``. Allowed modes are: "
+                "'r', 'r+', 'a' and 'w'"
             )
 
         # Get all the parameters in parameter file(s)
@@ -1080,7 +1068,7 @@ class File(hdf5extension.File):
         """
         if obj is not None:
             if not isinstance(obj, np.ndarray):
-                raise TypeError("invalid obj parameter %r" % obj)
+                raise TypeError(f"invalid obj parameter {obj!r}")
 
             descr, _ = descr_from_dtype(obj.dtype, ptparams=self.params)
             if (
@@ -1737,7 +1725,7 @@ class File(hdf5extension.File):
             return self.root
 
         node = self._node_manager.get_node(nodepath)
-        assert node is not None, "unable to instantiate node ``%s``" % nodepath
+        assert node is not None, f"unable to instantiate node ``{nodepath}``"
 
         return node
 
@@ -1807,9 +1795,9 @@ class File(hdf5extension.File):
                 # This error message is right since it can never be shown
                 # for ``classname in [None, 'Node']``.
                 raise NoSuchNodeError(
-                    "could not find a ``%s`` node at ``%s``; "
-                    "instead, a ``%s`` node has been found there"
-                    % (classname, npathname, nclassname)
+                    f"could not find a ``{classname}`` node at "
+                    f"``{npathname}``; instead, a ``{nclassname}`` node "
+                    "has been found there"
                 )
 
         return node
@@ -2377,11 +2365,16 @@ class File(hdf5extension.File):
         self, troot: TransactionGroupG, tid: int
     ) -> TransactionG:
         return TransactionG(
-            troot, _trans_name % tid, f"Transaction number {tid}", new=True
+            troot,
+            _trans_name.format(tid),
+            f"Transaction number {tid}",
+            new=True,
         )
 
     def _create_mark(self, trans: TransactionG, mid: int) -> MarkG:
-        return MarkG(trans, _mark_name % mid, "Mark number %d" % mid, new=True)
+        return MarkG(
+            trans, _mark_name.format(mid), f"Mark number {mid}", new=True
+        )
 
     _DEFAULT_ENABLE_UNDO_FILTERS: Filters = Filters(complevel=1)
 
@@ -2470,7 +2463,7 @@ class File(hdf5extension.File):
             # The group seems to exist already
             # Get the default transaction
             self._trans = tgroup._f_get_child(
-                _trans_name % self._curtransaction
+                _trans_name.format(self._curtransaction)
             )
             # Open the action log and go to the end of it
             self._actionlog = tgroup.actionlog
@@ -2544,12 +2537,12 @@ class File(hdf5extension.File):
             if not isinstance(name, str):
                 raise TypeError(
                     "Only strings are allowed as mark names. "
-                    "You passed object: '%s'" % name
+                    f"You passed object: '{name}'"
                 )
             if name in self._markers:
                 raise UndoRedoError(
-                    "Name '%s' is already used as a marker "
-                    "name. Try another one." % name
+                    f"Name '{name}' is already used as a marker name. "
+                    "Try another one."
                 )
 
             # The file is going to be changed.
@@ -2590,13 +2583,13 @@ class File(hdf5extension.File):
             )
             # Reset the current marker group
             mnode = self.get_node(
-                _mark_path % (self._curtransaction, self._curmark)
+                _mark_path.format(self._curtransaction, self._curmark)
             )
             mnode._g_reset()
             # Delete the marker groups with backup objects
             for mark in range(self._curmark + 1, self._nmarks):
                 mnode = self.get_node(
-                    _mark_path % (self._curtransaction, mark)
+                    _mark_path.format(self._curtransaction, mark)
                 )
                 mnode._g_remove(recursive=1)
             # Update the new number of marks
@@ -2605,8 +2598,8 @@ class File(hdf5extension.File):
 
         if action not in _op_to_code:  # INTERNAL
             raise UndoRedoError(
-                "Action ``%s`` not in ``_op_to_code`` "
-                "dictionary: %r" % (action, _op_to_code)
+                f"Action ``{action}`` not in ``_op_to_code`` "
+                f"dictionary: {_op_to_code!r}"
             )
 
         arg1 = ""
@@ -2622,8 +2615,7 @@ class File(hdf5extension.File):
             ).with_traceback(args)
         if len(arg1) > maxundo or len(arg2) > maxundo:  # INTERNAL
             raise UndoRedoError(
-                "Parameter arg1 or arg2 is too long: "
-                "(%r, %r)" % (arg1, arg2)
+                f"Parameter arg1 or arg2 is too long: ({arg1!r}, {arg2!r})"
             )
         # print("Logging-->", (action, arg1, arg2))
         self._actionlog.append(
@@ -2641,13 +2633,13 @@ class File(hdf5extension.File):
                 raise UndoRedoError(
                     "The mark that you have specified has not "
                     "been found in the internal marker list: "
-                    "%r" % lmarkers
+                    f"{lmarkers!r}"
                 )
             markid = self._markers[mark]
         else:
             raise TypeError(
                 "Parameter mark can only be an integer or a "
-                "string, and you passed a type <%s>" % type(mark)
+                f"string, and you passed a type <{type(mark)}>"
             )
         # print("markid, self._nmarks:", markid, self._nmarks)
         return markid
@@ -2738,8 +2730,6 @@ class File(hdf5extension.File):
         self._check_open()
         self._check_undo_enabled()
 
-        #         print("(pre)UNDO: (curaction, curmark) = (%s,%s)" % \
-        #               (self._curaction, self._curmark))
         if mark is None:
             markid = self._curmark
             # Correction if we are settled on top of a mark
@@ -2753,8 +2743,8 @@ class File(hdf5extension.File):
         finalaction = self._get_final_action(markid)
         if finalaction > self._curaction:
             raise UndoRedoError(
-                "Mark ``%s`` is newer than the current mark. "
-                "Use `redo()` or `goto()` instead." % (mark,)
+                f"Mark ``{mark}`` is newer than the current mark. "
+                "Use `redo()` or `goto()` instead."
             )
 
         # The file is going to be changed.
@@ -2765,9 +2755,6 @@ class File(hdf5extension.File):
         if self._curaction < self._actionlog.nrows - 1:
             self._curaction += 1
         self._curmark = int(self._actionlog.cols.arg1[self._curaction])
-
-    #         print("(post)UNDO: (curaction, curmark) = (%s,%s)" % \
-    #               (self._curaction, self._curmark))
 
     def redo(self, mark: int | str | None = None) -> None:
         """Go to a future state of the database.
@@ -2785,8 +2772,6 @@ class File(hdf5extension.File):
         self._check_open()
         self._check_undo_enabled()
 
-        #         print("(pre)REDO: (curaction, curmark) = (%s, %s)" % \
-        #               (self._curaction, self._curmark))
         if self._curaction >= self._actionlog.nrows - 1:
             # We are at the end of log, so no action
             return
@@ -2800,8 +2785,8 @@ class File(hdf5extension.File):
         finalaction = self._get_final_action(markid)
         if finalaction < self._curaction + 1:
             raise UndoRedoError(
-                "Mark ``%s`` is older than the current mark. "
-                "Use `redo()` or `goto()` instead." % (mark,)
+                f"Mark ``{mark}`` is older than the current mark. "
+                "Use `redo()` or `goto()` instead."
             )
 
         # The file is going to be changed.
@@ -2816,9 +2801,6 @@ class File(hdf5extension.File):
         if self._curmark < self._nmarks - 1:
             self._curmark += 1
         self._curaction = min(self._curaction, self._actionlog.nrows - 1)
-
-        # print("(post)REDO: (curaction, curmark) = (%s,%s)" % \
-        #       (self._curaction, self._curmark))
 
     def goto(self, mark: int | str) -> None:
         """Go to a specific mark of the database.
@@ -2869,9 +2851,9 @@ class File(hdf5extension.File):
 
         """
         parent = self.get_node(
-            _shadow_parent % (self._curtransaction, self._curmark)
+            _shadow_parent.format(self._curtransaction, self._curmark)
         )
-        name = _shadow_name % (self._curaction,)
+        name = _shadow_name.format(self._curaction)
 
         return (parent, name)
 
@@ -2908,17 +2890,15 @@ class File(hdf5extension.File):
         self._node_manager.shutdown()
 
         # Post-conditions
-        assert (
-            len(self._node_manager.cache) == 0
-        ), "cached nodes remain after closing: %s" % list(
-            self._node_manager.cache
+        assert len(self._node_manager.cache) == 0, (
+            "cached nodes remain after closing: "
+            f"{list(self._node_manager.cache)}"
         )
 
         # No other nodes should have been revived.
-        assert (
-            len(self._node_manager.registry) == 0
-        ), "alive nodes remain after closing: %s" % list(
-            self._node_manager.registry
+        assert len(self._node_manager.registry) == 0, (
+            "alive nodes remain after closing: "
+            f"{list(self._node_manager.registry)}"
         )
 
         # Close the file

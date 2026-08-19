@@ -8,7 +8,7 @@ from tables.tests import common
 def WriteRead(filename, testTuple):
     if common.verbose:
         print("\n", "-=" * 30)
-        print("Running test for object %s" % type(testTuple))
+        print(f"Running test for object {type(testTuple)}")
 
     # Create an instance of HDF5 Table
     fileh = tb.open_file(filename, mode="w")
@@ -136,7 +136,7 @@ class ExceptionTestCase(common.PyTablesTestCase):
 
         if common.verbose:
             print("\n", "-=" * 30)
-            print("Running test for %s" % (self.title))
+            print(f"Running test for {self.title}")
         a = self.charList
         with self.assertRaises((ValueError, TypeError)):
             WriteRead(self.h5fname, a)

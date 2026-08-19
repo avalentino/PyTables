@@ -142,7 +142,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
         # Now, read it through an iterator:
         print('-->', vlarray.title)
         for x in vlarray:
-            print('%s[%d]--> %s' % (vlarray.name, vlarray.nrow, x))
+            print(f"{vlarray.name}[{vlarray.nrow}]--> {x}")
 
         # Now, do the same with native Python strings.
         vlarray2 = fileh.create_vlarray(
@@ -161,7 +161,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
 
         # Now, read it through an iterator:
         for x in vlarray2:
-            print('%s[%d]--> %s' % (vlarray2.name, vlarray2.nrow, x))
+            print(f"{vlarray2.name}[{vlarray2.nrow}]--> {x}")
 
         # Close the file.
         fileh.close()
@@ -342,7 +342,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
             except TypeError:
                 raise TypeError(
                     "`chunkshape` parameter must be an integer or sequence "
-                    "and you passed a %s" % type(chunkshape)
+                    f"and you passed a {type(chunkshape)}"
                 )
             if len(chunkshape) != 1:
                 raise ValueError(
@@ -446,7 +446,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
             elif kind == "object":
                 atom = ObjectAtom()
             else:
-                raise ValueError("pseudo-atom name ``%s`` not known." % kind)
+                raise ValueError(f"pseudo-atom name ``{kind}`` not known.")
         elif self._v_file.format_version[:1] == "1":
             flavor1x = self.attrs.FLAVOR
             if flavor1x == "VLString":
@@ -489,9 +489,9 @@ class VLArray(hdf5extension.VLArray, Leaf):
             nobjects = shape[0]
         else:
             raise ValueError(
-                "The object '%s' is composed of elements with "
-                "shape '%s', which is not compatible with the "
-                "atom shape ('%s')." % (nparr, shape, atom_shape)
+                f"The object '{nparr}' is composed of elements with "
+                f"shape '{shape}', which is not compatible with the "
+                f"atom shape ('{atom_shape}')."
             )
         return nobjects
 
@@ -505,7 +505,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
         """
         if self.atom.kind != "enum":
             raise TypeError(
-                "array ``%s`` is not of an enumerated type" % self._v_pathname
+                f"array ``{self._v_pathname}`` is not of an enumerated type"
             )
 
         return self.atom.enum
@@ -568,7 +568,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
         ::
 
             for row in vlarray.iterrows(step=4):
-                print('%s[%d]--> %s' % (vlarray.name, vlarray.nrow, row))
+                print(f"{vlarray.name}[{vlarray.nrow}]--> {row}")
 
         .. versionchanged:: 3.0
            If the *start* parameter is provided and *stop* is None then the
@@ -716,17 +716,17 @@ class VLArray(hdf5extension.VLArray, Leaf):
             nobjects = len(nparr)
             if len(value) > nobjects:
                 raise ValueError(
-                    "Length of value (%s) is larger than number "
-                    "of elements in row (%s)" % (len(value), nobjects)
+                    f"Length of value ({len(value)}) is larger than number "
+                    f"of elements in row ({nobjects})"
                 )
             try:
                 nparr[:] = value
             except Exception as exc:  # XXX
                 raise ValueError(
-                    "Value parameter:\n'%r'\n"
+                    f"Value parameter:\n'{value!r}'\n"
                     "cannot be converted into an array object "
-                    "compliant vlarray[%s] row: \n'%r'\n"
-                    "The error was: <%s>" % (value, nrow, nparr[:], exc)
+                    f"compliant vlarray[{nrow}] row: \n'{nparr[:]!r}'\n"
+                    f"The error was: <{exc}>"
                 )
 
             if nparr.size > 0:

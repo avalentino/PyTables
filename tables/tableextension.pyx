@@ -314,27 +314,32 @@ cdef class Table(Leaf):
       ret = H5ATTRset_attribute_string(self.dataset_id, "CLASS", class_,
                                        len(class_), cset)
       if ret < 0:
-        raise HDF5ExtError("Can't set attribute '%s' in table:\n %s." %
-                           ("CLASS", self.name))
+        raise HDF5ExtError(
+          f"Can't set attribute 'CLASS' in table:\n {self.name}."
+        )
       # Attach the VERSION attribute
       ret = H5ATTRset_attribute_string(self.dataset_id, "VERSION", cobversion,
                                        len(encoded_obversion), cset)
       if ret < 0:
-        raise HDF5ExtError("Can't set attribute '%s' in table:\n %s." %
-                           ("VERSION", self.name))
+        raise HDF5ExtError(
+          f"Can't set attribute 'VERSION' in table:\n {self.name}."
+        )
       # Attach the TITLE attribute
       ret = H5ATTRset_attribute_string(self.dataset_id, "TITLE", ctitle,
                                        len(encoded_title), cset)
       if ret < 0:
-        raise HDF5ExtError("Can't set attribute '%s' in table:\n %s." %
-                           ("TITLE", self.name))
+        raise HDF5ExtError(
+          f"Can't set attribute 'TITLE' in table:\n {self.name}."
+        )
       # Attach the NROWS attribute
       nrows = self.nrows
-      ret = H5ATTRset_attribute(self.dataset_id, "NROWS", H5T_STD_I64,
-                                0, NULL, <char *>&nrows)
+      ret = H5ATTRset_attribute(
+        self.dataset_id, "NROWS", H5T_STD_I64, 0, NULL, <char *>&nrows
+      )
       if ret < 0:
-        raise HDF5ExtError("Can't set attribute '%s' in table:\n %s." %
-                           ("NROWS", self.name))
+        raise HDF5ExtError(
+          f"Can't set attribute 'NROWS' in table:\n {self.name}."
+        )
 
       # Attach the FIELD_N_NAME attributes
       # We write only the first level names
@@ -345,8 +350,9 @@ cdef class Table(Leaf):
                                          encoded_name, len(encoded_name),
                                          cset)
       if ret < 0:
-        raise HDF5ExtError("Can't set attribute '%s' in table:\n %s." %
-                           (fieldname, self.name))
+        raise HDF5ExtError(
+          f"Can't set attribute 'fieldname' in table:\n {self.name}."
+        )
 
     # If created in PyTables, the table is always chunked
     self._chunked = True  # Accessible from python
@@ -419,8 +425,8 @@ cdef class Table(Leaf):
         except TypeError as terr:
           # Re-raise TypeError again with more info
           raise TypeError(
-            ("table ``%s``, column ``%s``: %%s" % (self.name, colname))
-            % terr.args[0])
+            f"table ``{self.name}``, column ``{colname}``: {terr.args[0]}"
+          )
         desc[colname] = colobj
         # For time kinds, save the byteorder of the column
         # (useful for conversion of time datatypes later on)
@@ -480,14 +486,18 @@ cdef class Table(Leaf):
     encoded_name = self.name.encode('utf-8')
     self.dataset_id = H5Dopen(self.parent_id, encoded_name, H5P_DEFAULT)
     if self.dataset_id < 0:
-      raise HDF5ExtError("Non-existing node ``%s`` under ``%s``" %
-                         (self.name, self._v_parent._v_pathname))
+      raise HDF5ExtError(
+        f"Non-existing node ``{self.name}`` under "
+        f"``{self._v_parent._v_pathname}``"
+      )
 
     # Get the datatype on disk
     self.disk_type_id = H5Dget_type(self.dataset_id)
     if H5Tget_class(self.disk_type_id) != H5T_COMPOUND:
-        raise ValueError("Node ``%s`` is not a Table object" %
-                         (self._v_parent._v_leaves[self.name]._v_pathname))
+        raise ValueError(
+          f"Node ``{self._v_parent._v_leaves[self.name]._v_pathname}`` "
+          "is not a Table object"
+        )
     # Get the number of rows
     space_id = H5Dget_space(self.dataset_id)
     H5Sget_simple_extent_dims(space_id, dims, NULL)
@@ -515,7 +525,7 @@ cdef class Table(Leaf):
     desc, offset = self.get_nested_type(self.disk_type_id, self.type_id, "", [])
 
     if desc == {}:
-      raise HDF5ExtError("Problems getting description for table %s", self.name)
+      raise HDF5ExtError(f"Problems getting description for table {self.name}")
 
     if offset < type_size:
       # Trailing padding, set the itemsize to the correct type_size (see #765)
@@ -1456,11 +1466,15 @@ cdef class Row:
       raise IOError("Attempt to write over a file opened in read-only mode")
 
     if not self.chunked:
-      raise HDF5ExtError("You cannot append rows to a non-chunked table.",
-                         h5tb=False)
+      raise HDF5ExtError(
+        "You cannot append rows to a non-chunked table.", h5tb=False
+      )
 
     if self._riterator:
-      raise NotImplementedError("You cannot append rows when in middle of a table iterator. If what you want is to update records, use Row.update() instead.")
+      raise NotImplementedError(
+        "You cannot append rows when in middle of a table iterator. "
+        "If what you want is to update records, use Row.update() instead."
+      )
 
     # Commit the private record into the write buffer
     # self.iobuf[self._unsaved_nrows] = self.wrec
@@ -1738,8 +1752,7 @@ cdef class Row:
       else:
         field[offset] = value
     except TypeError:
-      raise TypeError("invalid type (%s) for column ``%s``" % (type(value),
-                                                               key))
+      raise TypeError(f"invalid type ({type(value)}) for column ``{key}``")
 
   def fetch_all_fields(self):
     """Retrieve all the fields in the current row.
@@ -1756,10 +1769,11 @@ cdef class Row:
 
     # We need to do a cast for recognizing negative row numbers!
     if <signed long long>self._nrow < 0:
-      return ("Warning: Row iterator has not been initialized for table:\n"
-              "  %s\n"
-              " You will normally want to use this method in iterator "
-              "contexts." % self.table)
+      return (
+        "Warning: Row iterator has not been initialized for table:\n"
+        f"  {self.table}\n"
+        " You will normally want to use this method in iterator contexts."
+      )
 
     # Always return a copy of the row so that new data that is written
     # in self.iobuf doesn't overwrite the original returned data.
@@ -1770,15 +1784,16 @@ cdef class Row:
 
     # We need to do a cast for recognizing negative row numbers!
     if <signed long long>self._nrow < 0:
-      return ("Warning: Row iterator has not been initialized for table:\n"
-              "  %s\n"
+      return (
+        "Warning: Row iterator has not been initialized for table:\n"
+        f"  {self.table}\n"
               " You will normally want to use this object in iterator "
-              "contexts." % self.table)
+        "contexts."
+      )
 
     tablepathname = self.table._v_pathname
     classname = self.__class__.__name__
-    return "%s.row (%s), pointing to row #%d" %  (tablepathname, classname,
-                                                  self._nrow)
+    return f"{tablepathname}.row ({classname}), pointing to row #{self._nrow}"
 
   def __repr__(self):
     """Represent the record as an string"""
