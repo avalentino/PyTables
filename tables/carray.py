@@ -251,7 +251,7 @@ class CArray(Array):
             # needed for setting attributes in some descendants later
             # on
             self._v_objectid = self._create_carray(self._v_new_title)
-        except Exception:  # XXX
+        except Exception:
             # Problems creating the Array on disk. Close node and re-raise.
             self.close(flush=0)
             raise

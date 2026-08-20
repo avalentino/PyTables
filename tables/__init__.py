@@ -254,11 +254,11 @@ if "Float16Atom" in locals():
 
 if "Float96Atom" in locals():
     __all__.extend(("Float96Atom", "Float96Col"))
-    __all__.extend(("Complex192Atom", "Complex192Col"))  # XXX check
+    __all__.extend(("Complex192Atom", "Complex192Col"))
 
 if "Float128Atom" in locals():
     __all__.extend(("Float128Atom", "Float128Col"))
-    __all__.extend(("Complex256Atom", "Complex256Col"))  # XXX check
+    __all__.extend(("Complex256Atom", "Complex256Col"))
 
 
 def get_pytables_version() -> str:

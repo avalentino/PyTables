@@ -424,7 +424,6 @@ class ExternalLink(linkextension.ExternalLink, Link):
         if self.extfile is None or not self.extfile.isopen:
             self.extfile = tb.open_file(filename, **kwargs)
         else:
-            # XXX: implement better consistency checks
             assert self.extfile.filename == filename
             assert self.extfile.mode == kwargs.get("mode", "r")
 

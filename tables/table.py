@@ -87,15 +87,15 @@ _nxtype_from_nptype = {
 _nxtype_from_nptype[np.str_] = str
 
 if hasattr(np, "float16"):
-    _nxtype_from_nptype[np.float16] = float  # XXX: check
+    _nxtype_from_nptype[np.float16] = float
 if hasattr(np, "float96"):
-    _nxtype_from_nptype[np.float96] = ne.necompiler.double  # XXX: check
+    _nxtype_from_nptype[np.float96] = ne.necompiler.double
 if hasattr(np, "float128"):
-    _nxtype_from_nptype[np.float128] = ne.necompiler.double  # XXX: check
+    _nxtype_from_nptype[np.float128] = ne.necompiler.double
 if hasattr(np, "complex192"):
-    _nxtype_from_nptype[np.complex192] = complex  # XXX: check
+    _nxtype_from_nptype[np.complex192] = complex
 if hasattr(np, "complex256"):
-    _nxtype_from_nptype[np.complex256] = complex  # XXX: check
+    _nxtype_from_nptype[np.complex256] = complex
 
 
 # The NumPy scalar type corresponding to `SizeType`.
@@ -1344,7 +1344,6 @@ very small/large chunksize, you may want to increase/decrease it.""",
                     f"not allowed in conditions"
                 )
             else:  # only non-column values are converted to arrays
-                # XXX: not 100% sure about this
                 if isinstance(val, str):
                     val = np.asarray(val.encode("ascii"))
                 else:
@@ -2405,7 +2404,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 # Works for Python structures and always copies the original,
                 # so the resulting object is safe for in-place conversion.
                 wbuf_ra = np.rec.array(rows, dtype=self._v_dtype)
-            except Exception as exc:  # XXX
+            except Exception as exc:
                 raise ValueError(
                     f"rows parameter cannot be converted into a "
                     f"recarray object compliant with table '{self}'. "
@@ -2433,7 +2432,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 # Works for Python structures and always copies the original,
                 # so the resulting object is safe for in-place conversion.
                 recarr = np.rec.array(obj, dtype=self._v_dtype)
-        except Exception as exc:  # XXX
+        except Exception as exc:
             raise ValueError(
                 f"Object cannot be converted into a recarray object compliant "
                 f"with table format '{self.description._v_nested_descr}'. "
@@ -2598,7 +2597,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 # so the resulting object is safe for in-place conversion.
                 iflavor = flavor_of(column)
                 column = array_as_internal(column, iflavor)
-        except Exception as exc:  # XXX
+        except Exception as exc:
             raise ValueError(
                 f"column parameter cannot be converted into a "
                 f"ndarray object compliant with specified column "
@@ -2692,7 +2691,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 recarray = np.rec.array(columns, dtype=descr)
             else:
                 recarray = np.rec.fromarrays(columns, dtype=descr)
-        except Exception as exc:  # XXX
+        except Exception as exc:
             raise ValueError(
                 f"columns parameter cannot be converted into a "
                 f"recarray object compliant with table '{self}'. "

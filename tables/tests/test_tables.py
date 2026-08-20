@@ -1235,7 +1235,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         for i in range(9):
             row["var2"] = 110 + i
             row.append()
-        table.flush()  # XXX al eliminar...
+        table.flush()
         result = [
             r["var2"] for r in table.iterrows() if 100 <= r["var2"] < 120
         ]

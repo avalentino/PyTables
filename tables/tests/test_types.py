@@ -205,7 +205,6 @@ class ReadFloatTestCase(common.TestFileMixin, common.PyTablesTestCase):
             elif hasattr(tb, "Float128Atom"):
                 self.assertEqual(ds.dtype, "float128")
         else:
-            # XXX: check
             # the behavior depends on the HDF5 lib configuration
             try:
                 with self.assertWarns(UserWarning):
@@ -216,7 +215,6 @@ class ReadFloatTestCase(common.TestFileMixin, common.PyTablesTestCase):
                 self.assertEqual(ds.dtype, "float64")
 
     def test05_read_quadprecision_float(self):
-        # XXX: check
         try:
             with self.assertWarns(UserWarning):
                 ds = self.h5file.root.quadprecision

@@ -1396,7 +1396,6 @@ class SizeOnDiskInMemoryPropertyTestCase(
         self.assertTrue(self.array.size_on_disk < self.array.size_in_memory)
         self.assertEqual(self.array.size_in_memory, 10_000 * 10 * 2)
 
-    # XXX
     def test_random_data(self):
         complevel = 1
         self.create_array(complevel)
@@ -1407,7 +1406,6 @@ class SizeOnDiskInMemoryPropertyTestCase(
             abs(self.array.size_on_disk - file_size) <= self.hdf_overhead
         )
 
-        # XXX: check. The test fails if blosc is not available
         if tb.which_lib_version("blosc") is not None:
             self.assertAlmostEqual(self.array.size_on_disk, 10_000 * 10 * 2)
         else:

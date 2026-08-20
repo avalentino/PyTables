@@ -158,8 +158,6 @@ class HDF5ExtError(RuntimeError):
             traceback.format_list : :func:`traceback.format_list`
 
             """
-
-            # XXX: check _dump_h5_backtrace failures
         else:
             self.h5backtrace = None
 

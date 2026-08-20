@@ -1214,7 +1214,7 @@ class RootGroup(Group):
             # return ChildClass(self, childname)  # uncomment for debugging
             try:
                 return child_class(self, childname)
-            except Exception as exc:  # XXX
+            except Exception as exc:
                 warnings.warn(
                     f"problems loading leaf ``{self._g_join(childname)}``::\n\n"
                     f"  {exc}\n\n"

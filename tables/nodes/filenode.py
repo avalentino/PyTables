@@ -221,17 +221,10 @@ class RawPyTablesIO(io.RawIOBase):
         start = self._pos
         stop = self._pos + n
 
-        # XXX optimized path
-        # if stop <= self._node.nrows and isinstance(b, np.ndarray):
-        #     self._node.read(start, stop, out=b)
-        #     self._pos += n
-        #     return n
-
         if stop > self._node.nrows:
             stop = self._node.nrows
             n = stop - start
 
-        # XXX This ought to work with anything that supports the buffer API
         b[:n] = self._node.read(start, stop).tobytes()
 
         self._pos += n
@@ -254,7 +247,6 @@ class RawPyTablesIO(io.RawIOBase):
 
         chunksize = self._node.chunkshape[0] if self._node.chunkshape else -1
 
-        # XXX: check
         lsep = b"\n"
         lseplen = len(lsep)
 
@@ -401,14 +393,6 @@ class RawPyTablesIO(io.RawIOBase):
             raise ValueError("must have exactly one of read/write/append mode")
 
     def _cross_check_mode(self, mode, h5filemode):
-        # XXX: check
-        # readable = bool('r' in mode or '+' in mode)
-        # h5readable = bool('r' in h5filemode or '+' in h5filemode)
-        #
-        # if readable and not h5readable:
-        #     raise ValueError("RawPyTablesIO can't be open in read mode if "
-        #                      "the underlying hdf5 file is not readable")
-
         writable = bool("w" in mode or "a" in mode or "+" in mode)
         h5writable = bool(
             "w" in h5filemode or "a" in h5filemode or "+" in h5filemode
@@ -451,7 +435,6 @@ class RawPyTablesIO(io.RawIOBase):
         if size == 0:
             return
 
-        # XXX This may be redone to avoid a potentially large in-memory array.
         self._node.append(
             np.zeros(dtype=self._vtype, shape=self._vshape(size))
         )

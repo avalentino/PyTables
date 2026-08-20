@@ -562,7 +562,7 @@ class TableReadTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         n = len(Record.columns) - 2
 
-        table[coords[0]] = tuple(["aasa", "x"] + [123] * n)  # XXX
+        table[coords[0]] = tuple(["aasa", "x"] + [123] * n)
         # record = list(table[coords[0]])
         record = table.read(coords[0], coords[0] + 1)
         if common.verbose:
@@ -1338,9 +1338,9 @@ class StrlenTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.table = self.h5file.create_table(group, "table", tablelayout)
         self.table.flavor = "numpy"
         row = self.table.row
-        row["Text"] = "Hello Francesc!"  # XXX: check unicode --> bytes
+        row["Text"] = "Hello Francesc!"
         row.append()
-        row["Text"] = "Hola Francesc!"  # XXX: check unicode --> bytes
+        row["Text"] = "Hola Francesc!"
         row.append()
         self.table.flush()
 

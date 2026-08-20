@@ -281,7 +281,6 @@ def open_file(
 
     """
     filename = os.fspath(filename)
-    # XXX filename normalization ??
 
     # Check already opened files
     if _FILE_OPEN_POLICY == "strict":

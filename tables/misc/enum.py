@@ -408,10 +408,6 @@ class Enum:
         """
         return not self.__eq__(other)
 
-    # XXX: API incompatible change for PyTables 3 line
-    # Overriding __eq__ blocks inheritance of __hash__ in 3.x
-    # def __hash__(self):
-    #    return hash((self.__class__, tuple(self._names.items())))
     def __repr__(self) -> str:
         """Return the canonical string representation of the enumeration.
 

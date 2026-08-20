@@ -125,7 +125,6 @@ def _normalize_shape(shape: Shape | np.integer | int) -> Shape:
     except TypeError:
         raise TypeError(f"shape must be an integer or sequence: {shape!r}")
 
-    # XXX Get from HDF5 library if possible.
     # HDF5 does not support ranks greater than 32
     if len(shape) > 32:
         raise ValueError(f"shapes with rank > 32 are not supported: {shape!r}")
@@ -576,12 +575,6 @@ class Atom(metaclass=MetaAtom):
 
     def __ne__(self, other: Atom) -> bool:
         return not self.__eq__(other)
-
-    # XXX: API incompatible change for PyTables 3 line
-    # Overriding __eq__ blocks inheritance of __hash__ in 3.x
-    # def __hash__(self):
-    #    return hash((self.__class__, self.type, self.shape, self.itemsize,
-    #                 self.dflt))
 
     def copy(self, **override) -> Atom:
         """Get a copy of the atom, possibly overriding some arguments.
@@ -1179,12 +1172,6 @@ class EnumAtom(Atom):
         return f"EnumAtom(enum={self.enum!r}, dflt={self._defname!r}, base={self.base!r}, shape={self.shape!r})"
 
     __eq__ = _cmp_dispatcher("_is_equal_to_enumatom")
-
-    # XXX: API incompatible change for PyTables 3 line
-    # Overriding __eq__ blocks inheritance of __hash__ in 3.x
-    # def __hash__(self):
-    #    return hash((self.__class__, self.enum, self.shape, self.dflt,
-    #                 self.base))
 
 
 class ReferenceAtom(Atom):
