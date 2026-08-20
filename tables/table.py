@@ -867,11 +867,11 @@ class Table(tableextension.Table, Leaf):
                 chunkshape = (chunkshape,)
             try:
                 chunkshape = tuple(chunkshape)
-            except TypeError:
+            except TypeError as exc:
                 raise TypeError(
                     "`chunkshape` parameter must be an integer or sequence "
                     f"and you passed a {type(chunkshape)}"
-                )
+                ) from exc
             if len(chunkshape) != 1:
                 raise ValueError(
                     f"`chunkshape` rank (length) must be 1: {chunkshape!r}"
@@ -1205,11 +1205,11 @@ very small/large chunksize, you may want to increase/decrease it.""",
             return functools.reduce(
                 getattr, colpathname.split("/"), self.description
             )
-        except AttributeError:
+        except AttributeError as exc:
             raise KeyError(
                 f"table ``{self._v_pathname}`` does not have a column named "
                 f"``{colpathname}``"
-            )
+            ) from exc
 
     _check_column = _get_column_instance
 
@@ -1381,12 +1381,12 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 try:
                     varnames.append(var)
                     vartypes.append(ne.necompiler.getType(val))  # expensive
-                except ValueError:
+                except ValueError as exc:
                     # This is more clear than the error given by Numexpr.
                     raise TypeError(
                         f"variable ``{var}`` has data type "
                         f"``{val.dtype.name}``, not allowed in conditions"
-                    )
+                    ) from exc
         colnames, varnames = tuple(colnames), tuple(varnames)
         colpaths, vartypes = tuple(colpaths), tuple(vartypes)
         return (condition, colnames, varnames, colpaths, vartypes)
@@ -2159,11 +2159,11 @@ very small/large chunksize, you may want to increase/decrease it.""",
 
         try:
             return self._colenums[colname]
-        except KeyError:
+        except KeyError as exc:
             raise TypeError(
                 f"column ``{colname}`` of table ``{self._v_pathname}`` "
                 "is not of an enumerated type"
-            )
+            ) from exc
 
     def col(self, name: str) -> np.ndarray:
         """Get a column from the table.
@@ -2408,8 +2408,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 raise ValueError(
                     f"rows parameter cannot be converted into a "
                     f"recarray object compliant with table '{self}'. "
-                    f"The error was: <{exc}>"
-                )
+                ) from exc
         lenrows = wbuf_ra.shape[0]
         # If the number of rows to append is zero, don't do anything else
         if lenrows > 0:
@@ -2436,8 +2435,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
             raise ValueError(
                 f"Object cannot be converted into a recarray object compliant "
                 f"with table format '{self.description._v_nested_descr}'. "
-                f"The error was: <{exc}>"
-            )
+            ) from exc
 
         return recarr
 
@@ -2601,8 +2599,8 @@ very small/large chunksize, you may want to increase/decrease it.""",
             raise ValueError(
                 f"column parameter cannot be converted into a "
                 f"ndarray object compliant with specified column "
-                f"'{column}'. The error was: <{exc}>"
-            )
+                f"'{column}'."
+            ) from exc
 
         # Get rid of single-dimensional dimensions
         column = column.squeeze()
@@ -2695,8 +2693,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
             raise ValueError(
                 f"columns parameter cannot be converted into a "
                 f"recarray object compliant with table '{self}'. "
-                f"The error was: <{exc}>"
-            )
+            ) from exc
 
         if stop is None:
             # compute the stop value. start + len(rows)*step does not work

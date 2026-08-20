@@ -464,8 +464,8 @@ class Array(hdf5extension.Array, Leaf):
             """Validate a list member for the given axis length."""
             try:
                 num = int(num)
-            except TypeError:
-                raise TypeError(f"Illegal index: {num!r}")
+            except TypeError as exc:
+                raise TypeError(f"Illegal index: {num!r}") from exc
             if num > length - 1:
                 raise IndexError(f"Index out of bounds: {num}")
 

@@ -122,8 +122,10 @@ def _normalize_shape(shape: Shape | np.integer | int) -> Shape:
         shape = (shape,)  # N is a shorthand for (N,)
     try:
         shape = tuple(shape)
-    except TypeError:
-        raise TypeError(f"shape must be an integer or sequence: {shape!r}")
+    except TypeError as exc:
+        raise TypeError(
+            f"shape must be an integer or sequence: {shape!r}"
+        ) from exc
 
     # HDF5 does not support ranks greater than 32
     if len(shape) > 32:
@@ -645,10 +647,10 @@ def _abstract_atom_init(
         assert self.kind in atom_map
         try:
             atomclass = atom_map[self.kind][itemsize]
-        except KeyError:
+        except KeyError as exc:
             raise _invalid_itemsize_error(
                 self.kind, itemsize, atom_map[self.kind]
-            )
+            ) from exc
         self.__class__ = atomclass
         atomclass.__init__(self, shape, dflt)
 
@@ -1084,15 +1086,17 @@ class EnumAtom(Atom):
         pyvalues = [value for (name, value) in self.enum]
         try:
             npgenvalues = np.array(pyvalues)
-        except ValueError:
-            raise TypeError("concrete values are not uniformly-shaped")
+        except ValueError as exc:
+            raise TypeError(
+                "concrete values are not uniformly-shaped"
+            ) from exc
         try:
             npvalues = np.array(npgenvalues, dtype=basedtype.base)
-        except ValueError:
+        except ValueError as exc:
             raise TypeError(
                 "storage atom type is incompatible with "
                 "concrete values in the enumeration"
-            )
+            ) from exc
         if npvalues.shape[1:] != basedtype.shape:
             raise TypeError(
                 "storage atom shape does not match that of "

@@ -181,8 +181,10 @@ class Enum:
         """
         try:
             return self._names[name]
-        except KeyError:
-            raise KeyError(f"no enumerated value with that name: {name!r}")
+        except KeyError as exc:
+            raise KeyError(
+                f"no enumerated value with that name: {name!r}"
+            ) from exc
 
     def __setitem__(self, name: Any, value: Any) -> NoReturn:
         """Forbidden operation."""
@@ -216,8 +218,8 @@ class Enum:
         """
         try:
             return self[name]
-        except KeyError as ke:
-            raise AttributeError(*ke.args)
+        except KeyError as exc:
+            raise AttributeError(*exc.args) from exc
 
     def __setattr__(self, name: Any, value: Any) -> NoReturn:
         """Forbidden operation."""
@@ -294,12 +296,12 @@ class Enum:
         """
         try:
             return self._values[value]
-        except KeyError:
+        except KeyError as exc:
             if len(default) > 0:
                 return default[0]
             raise ValueError(
                 f"no enumerated value with that concrete value: {value!r}"
-            )
+            ) from exc
 
     def __len__(self) -> int:
         """Return the number of enumerated values in the enumerated type.

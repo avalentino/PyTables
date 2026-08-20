@@ -97,8 +97,8 @@ def idx2long(index: int | float | np.ndarray) -> int:
             return index.item()
         else:
             return int(index)
-    except Exception:
-        raise TypeError("not an integer type.")
+    except Exception as exc:
+        raise TypeError("not an integer type.") from exc
 
 
 # This is used in VLArray and EArray to produce NumPy object compliant

@@ -73,9 +73,9 @@ def _check_indexable_cmp(
                 ne.necompiler.typeCompileAst(
                     ne.necompiler.expressionToAST(exprnode)
                 )
-            except NotImplementedError as nie:
+            except NotImplementedError as exc:
                 # Try to make this Numexpr error less cryptic.
-                raise _unsupported_operation_error(nie)
+                raise _unsupported_operation_error(exc) from exc
         return result
 
     newfunc.__name__ = getidxcmp.__name__
@@ -488,9 +488,9 @@ def compile_condition(
         # reasons of inserting copy operators for unaligned,
         # *unidimensional* arrays.
         func = ne.necompiler.NumExpr(expr, signature)
-    except NotImplementedError as nie:
+    except NotImplementedError as exc:
         # Try to make this Numexpr error less cryptic.
-        raise _unsupported_operation_error(nie)
+        raise _unsupported_operation_error(exc) from exc
 
     _, ex_uses_vml = ne.necompiler.getExprNames(condition, {})
     kwargs = {"ex_uses_vml": ex_uses_vml}

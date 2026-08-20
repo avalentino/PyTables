@@ -104,8 +104,8 @@ def get_blosc2_directories():
     """Get Blosc2 directories for the C library."""
     try:
         import blosc2
-    except ModuleNotFoundError:
-        raise OSError("Cannot import the blosc2 requirement")
+    except ModuleNotFoundError as exc:
+        raise OSError("Cannot import the blosc2 requirement") from exc
     version = blosc2.__version__
     basepath = Path(os.path.dirname(blosc2.__file__))
     recinfo = basepath.parent / f"blosc2-{version}.dist-info" / "RECORD"

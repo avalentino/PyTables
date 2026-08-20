@@ -173,7 +173,7 @@ def copy_leaf(
             check_CSI=check_CSI,
             propindexes=propindexes,
         )
-    except Exception:
+    except Exception as exc:
         type_, value, _ = sys.exc_info()
         print(
             f"Problems doing the copy from '{srcfile}:{srcnode}' to "
@@ -188,7 +188,7 @@ def copy_leaf(
             "Please check that the node names are not "
             "duplicated in destination, and if so, add "
             "the --overwrite-nodes flag if desired."
-        )
+        ) from exc
 
     # Upgrade flavors in dstnode, if required
     if upgradeflavors:
@@ -310,7 +310,7 @@ def copy_children(
             propindexes=propindexes,
             use_hardlinks=use_hardlinks,
         )
-    except Exception:
+    except Exception as exc:
         type_, value, _ = sys.exc_info()
         print(
             f"Problems doing the copy from '{srcfile}:{srcgroup}' to "
@@ -327,7 +327,7 @@ def copy_children(
             "--overwrite-nodes flag if desired. In "
             "particular, pay attention that root_uep is not "
             "fooling you."
-        )
+        ) from exc
 
     # Upgrade flavors in dstnode, if required
     if upgradeflavors:

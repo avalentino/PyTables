@@ -378,8 +378,8 @@ def inftype(
             return b"\xff" * itemsize
     try:
         return infinitymap[dtype.name][sign >= 0]
-    except KeyError:
-        raise TypeError(f"Type {dtype.name} is not supported")
+    except KeyError as exc:
+        raise TypeError(f"Type {dtype.name} is not supported") from exc
 
 
 def string_next_after(

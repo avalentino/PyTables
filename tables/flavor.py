@@ -359,10 +359,10 @@ if np.lib.NumpyVersion(np.__version__) >= np.lib.NumpyVersion("1.19.0"):
             warnings.simplefilter("error")
             try:
                 array = np.array(array, *args, **kwargs)
-            except VisibleDeprecationWarning:
+            except VisibleDeprecationWarning as exc:
                 raise ValueError(
                     "cannot guess the desired dtype from the input"
-                )
+                ) from exc
 
         return array
 

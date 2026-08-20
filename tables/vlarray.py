@@ -341,11 +341,11 @@ class VLArray(hdf5extension.VLArray, Leaf):
                 chunkshape = (chunkshape,)
             try:
                 chunkshape = tuple(chunkshape)
-            except TypeError:
+            except TypeError as exc:
                 raise TypeError(
                     "`chunkshape` parameter must be an integer or sequence "
                     f"and you passed a {type(chunkshape)}"
-                )
+                ) from exc
             if len(chunkshape) != 1:
                 raise ValueError(
                     f"`chunkshape` rank (length) must be 1: {chunkshape!r}"
@@ -533,8 +533,8 @@ class VLArray(hdf5extension.VLArray, Leaf):
         else:
             try:  # fastest check in most cases
                 len(sequence)
-            except TypeError:
-                raise TypeError("argument is not a sequence")
+            except TypeError as exc:
+                raise TypeError("argument is not a sequence") from exc
             statom = atom
 
         if len(sequence) > 0:
@@ -728,8 +728,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
                     f"Value parameter:\n'{value!r}'\n"
                     "cannot be converted into an array object "
                     f"compliant vlarray[{nrow}] row: \n'{nparr[:]!r}'\n"
-                    f"The error was: <{exc}>"
-                )
+                ) from exc
 
             if nparr.size > 0:
                 self._modify(nrow, nparr, nobjects)

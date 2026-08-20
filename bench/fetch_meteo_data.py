@@ -86,8 +86,8 @@ if len(sys.argv) != 3:
 try:
     date_start = datetime.date.fromisoformat(sys.argv[1])
     date_stop = datetime.date.fromisoformat(sys.argv[2])
-except ValueError:
-    raise ValueError("Dates must be in ISO format (e.g. YYYY-MM-DD)")
+except ValueError as exc:
+    raise ValueError("Dates must be in ISO format (e.g. YYYY-MM-DD)") from exc
 if date_stop < date_start:
     raise ValueError("Start date must be before stop date")
 

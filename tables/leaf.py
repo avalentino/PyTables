@@ -691,8 +691,8 @@ class Leaf(Node):
             # a TypeError will be issued (to be caught later on).
             try:
                 key = toarray(key)
-            except ValueError:
-                raise TypeError(f"Invalid index or slice: {key!r}")
+            except ValueError as exc:
+                raise TypeError(f"Invalid index or slice: {key!r}") from exc
         elif not isinstance(key, np.ndarray):
             raise TypeError(f"Invalid index or slice: {key!r}")
 

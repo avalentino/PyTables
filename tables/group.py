@@ -461,8 +461,8 @@ class Group(hdf5extension.Group, Node):
         """
         try:
             return self._f_get_child(childname)
-        except NoSuchNodeError:
-            raise IndexError(childname)
+        except NoSuchNodeError as exc:
+            raise IndexError(childname) from exc
 
     def _f_walknodes(self, classname: str | None = None) -> Iterator[Node]:
         """Iterate over descendant nodes.
@@ -822,9 +822,9 @@ class Group(hdf5extension.Group, Node):
         """
         try:
             super().__delattr__(name)  # nothing particular
-        except AttributeError as ae:
+        except AttributeError as exc:
             hint = " (use ``node._f_remove()`` if you want to remove a node)"
-            raise ae.__class__(str(ae) + hint)
+            raise exc.__class__(str(exc) + hint) from exc
 
     def __dir__(self) -> list[str]:
         """Autocomplete only children named as valid python identifiers.

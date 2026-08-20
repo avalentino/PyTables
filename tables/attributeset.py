@@ -597,12 +597,12 @@ class AttributeSet(hdf5extension.AttributeSet):
         """Implement a dictionary like interface for `__getattr__()`."""
         try:
             return self.__getattr__(name)
-        except AttributeError:
+        except AttributeError as exc:
             # Capture the AttributeError and re-raise a KeyError one
             raise KeyError(
                 f"Attribute ('{name}') does not exist in "
                 f"node '{self._v__nodepath}'"
-            )
+            ) from exc
 
     def __setitem__(self, name: str, value: Any) -> None:
         """Implement a dictionary like interface for `__setattr__()`."""
@@ -612,12 +612,12 @@ class AttributeSet(hdf5extension.AttributeSet):
         """Implement a dictionary like interface for `__delattr__()`."""
         try:
             self.__delattr__(name)
-        except AttributeError:
+        except AttributeError as exc:
             # Capture the AttributeError and re-raise a KeyError one
             raise KeyError(
                 f"Attribute ('{name}') does not exist in "
                 f"node '{self._v__nodepath}'"
-            )
+            ) from exc
 
     def __contains__(self, name: str) -> bool:
         """Return True if the set contains an attribute with the specified name.

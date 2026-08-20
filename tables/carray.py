@@ -193,21 +193,21 @@ class CArray(Array):
                 raise ValueError("you must specify a non-empty shape")
             try:
                 shape = tuple(shape)
-            except TypeError:
+            except TypeError as exc:
                 raise TypeError(
                     "`shape` parameter must be a sequence "
                     f"and you passed a {type(shape)}"
-                )
+                ) from exc
             self.shape = tuple(SizeType(s) for s in shape)
 
             if chunkshape is not None:
                 try:
                     chunkshape = tuple(chunkshape)
-                except TypeError:
+                except TypeError as exc:
                     raise TypeError(
                         "`chunkshape` parameter must be a sequence "
                         f"and you passed a {type(chunkshape)}"
-                    )
+                    ) from exc
                 if len(shape) != len(chunkshape):
                     raise ValueError(
                         f"the shape ({shape}) and chunkshape "

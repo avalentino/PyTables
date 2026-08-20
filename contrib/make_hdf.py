@@ -294,7 +294,7 @@ class HdfDict(dict):
             del self[k]
             return k, v
         except StopIteration:
-            raise KeyError("Hdf Dict is empty")
+            raise KeyError("Hdf Dict is empty") from None
 
     def __setitem__(self, key, value):
         raise NotImplementedError

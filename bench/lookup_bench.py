@@ -22,10 +22,10 @@ def get_nrows(nrows_str):
     powers = {"k": 3, "m": 6, "g": 9}
     try:
         return int(float(nrows_str[:-1]) * 10 ** powers[nrows_str[-1]])
-    except KeyError:
+    except KeyError as exc:
         raise ValueError(
             "value of nrows must end with either 'k', 'm' or 'g' suffixes."
-        )
+        ) from exc
 
 
 class DB:

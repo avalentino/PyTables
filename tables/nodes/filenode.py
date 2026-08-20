@@ -96,8 +96,8 @@ class RawPyTablesIO(io.RawIOBase):
             pos = pos.__index__()
         # except AttributeError as err:
         #     raise TypeError("an integer is required") from err
-        except AttributeError:
-            raise TypeError("an integer is required")
+        except AttributeError as exc:
+            raise TypeError("an integer is required") from exc
         if whence == 0:
             if pos < 0:
                 raise ValueError(f"negative seek position {pos!r}")
@@ -789,7 +789,7 @@ def read_from_filenode(
     f = tb.File(h5file, "r") if new_h5file else h5file
     try:
         fnode = open_node(f.get_node(where=where, name=name))
-    except tb.NoSuchNodeError:
+    except tb.NoSuchNodeError as exc:
         fnode = None
         for n in f.walk_nodes(where=where, classname="EArray"):
             if n.attrs._filename == name:
@@ -799,7 +799,7 @@ def read_from_filenode(
             f.close()
             raise tb.NoSuchNodeError(
                 f"A filenode '{name}' cannot be found at '{where}'"
-            )
+            ) from exc
 
     # guess output filename if necessary
     # NOTE: pathlib.Path strips trailing slash automatically :-(
