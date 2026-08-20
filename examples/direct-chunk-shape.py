@@ -30,7 +30,7 @@ import os
 import tempfile
 
 import h5py
-import numpy
+import numpy as np
 import blosc2
 import hdf5plugin
 
@@ -50,7 +50,7 @@ cparams = {
 
 def np2b2(a):
     return blosc2.asarray(
-        numpy.ascontiguousarray(a),
+        np.ascontiguousarray(a),
         chunks=a.shape,
         blocks=a.shape,
         cparams=cparams,
@@ -58,8 +58,8 @@ def np2b2(a):
 
 
 # Assemble the array.
-achunk = numpy.arange(4 * 4).reshape((4, 4))
-adata = numpy.zeros((6, 6), dtype=achunk.dtype)
+achunk = np.arange(4 * 4).reshape((4, 4))
+adata = np.zeros((6, 6), dtype=achunk.dtype)
 adata[0:4, 0:4] = achunk[:, :]
 adata[0:4, 4:6] = achunk[:, 0:2]
 adata[4:6, 0:4] = achunk[0:2, :]
