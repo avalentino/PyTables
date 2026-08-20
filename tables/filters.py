@@ -466,14 +466,3 @@ bitshuffle=False, fletcher32=False, least_significant_digit=None)
         newargs = self.__dict__.copy()
         newargs.update(override)
         return self.__class__(**newargs)
-
-
-def _test() -> None:
-    """Run ``doctest`` on this module."""
-    import doctest
-
-    doctest.testmod()
-
-
-if __name__ == "__main__":
-    _test()

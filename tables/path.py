@@ -212,14 +212,3 @@ def isvisiblename(name: str) -> bool:
 def isvisiblepath(path: str) -> bool:
     """Return `True` if `path` makes the named node visible."""
     return _hidden_path_re.search(path) is None
-
-
-def _test() -> None:
-    """Run ``doctest`` on this module."""
-    import doctest
-
-    doctest.testmod()
-
-
-if __name__ == "__main__":
-    _test()

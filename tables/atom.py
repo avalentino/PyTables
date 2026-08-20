@@ -140,7 +140,7 @@ def _cmp_dispatcher(other_method_name: str) -> Callable[[Any, Any], bool]:
             )
         except AttributeError:
             return False
-        return other_method(self)
+        return bool(other_method(self))
 
     return dispatched_cmp
 
@@ -309,13 +309,13 @@ class Atom(metaclass=MetaAtom):
 
             >>> import numpy as np
             >>> Atom.from_sctype(np.int16, shape=(2, 2))
-            Int16Atom(shape=(2, 2), dflt=0)
+            Int16Atom(shape=(np.int64(2), np.int64(2)), dflt=np.int16(0))
             >>> Atom.from_sctype('S5', dflt='hello')
             Traceback (most recent call last):
             ...
             ValueError: unknown NumPy scalar type: 'S5'
             >>> Atom.from_sctype('float64')
-            Float64Atom(shape=(), dflt=0.0)
+            Float64Atom(shape=(), dflt=np.float64(0.0))
 
         """
         if not isinstance(sctype, type) or not issubclass(sctype, np.generic):
@@ -346,9 +346,9 @@ class Atom(metaclass=MetaAtom):
 
             >>> import numpy as np
             >>> Atom.from_dtype(np.dtype((np.int16, (2, 2))))
-            Int16Atom(shape=(2, 2), dflt=0)
+            Int16Atom(shape=(np.int64(2), np.int64(2)), dflt=np.int16(0))
             >>> Atom.from_dtype(np.dtype('float64'))
-            Float64Atom(shape=(), dflt=0.0)
+            Float64Atom(shape=(), dflt=np.float64(0.0))
 
         Note: for easier use in Python 3, where all strings lead to the
         Unicode dtype, this dtype will also generate a StringAtom. Since
@@ -397,9 +397,9 @@ class Atom(metaclass=MetaAtom):
         shape and dflt arguments, respectively::
 
             >>> Atom.from_type('bool')
-            BoolAtom(shape=(), dflt=False)
+            BoolAtom(shape=(), dflt=np.False_)
             >>> Atom.from_type('int16', shape=(2, 2))
-            Int16Atom(shape=(2, 2), dflt=0)
+            Int16Atom(shape=(np.int64(2), np.int64(2)), dflt=np.int16(0))
             >>> Atom.from_type('string40', dflt='hello')
             Traceback (most recent call last):
             ...
@@ -431,11 +431,11 @@ class Atom(metaclass=MetaAtom):
         a default item size::
 
             >>> Atom.from_kind('int', itemsize=2, shape=(2, 2))
-            Int16Atom(shape=(2, 2), dflt=0)
+            Int16Atom(shape=(np.int64(2), np.int64(2)), dflt=np.int16(0))
             >>> Atom.from_kind('int', shape=(2, 2))
-            Int32Atom(shape=(2, 2), dflt=0)
+            Int32Atom(shape=(np.int64(2), np.int64(2)), dflt=np.int32(0))
             >>> Atom.from_kind('int', shape=1)
-            Int32Atom(shape=(1,), dflt=0)
+            Int32Atom(shape=(np.int64(1),), dflt=np.int32(0))
             >>> Atom.from_kind('string', dflt=b'hello')
             Traceback (most recent call last):
             ...
@@ -559,14 +559,14 @@ class Atom(metaclass=MetaAtom):
             >>> atom1 = Int32Atom(shape=12)
             >>> atom2 = atom1.copy()
             >>> print(atom1)
-            Int32Atom(shape=(12,), dflt=0)
+            Int32Atom(shape=(np.int64(12),), dflt=np.int32(0))
             >>> print(atom2)
-            Int32Atom(shape=(12,), dflt=0)
+            Int32Atom(shape=(np.int64(12),), dflt=np.int32(0))
             >>> atom1 is atom2
             False
             >>> atom3 = atom1.copy(shape=(2, 2))
             >>> print(atom3)
-            Int32Atom(shape=(2, 2), dflt=0)
+            Int32Atom(shape=(np.int64(2), np.int64(2)), dflt=np.int32(0))
             >>> atom1.copy(foobar=42) #doctest: +ELLIPSIS
             Traceback (most recent call last):
             ...

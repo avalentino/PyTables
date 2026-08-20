@@ -441,14 +441,3 @@ def _conv_numpy_to_python(array: np.ndarray) -> Any | list[Any]:
 
 # Now register everything related with *available* flavors.
 _register_all()
-
-
-def _test() -> None:
-    """Run ``doctest`` on this module."""
-    import doctest
-
-    doctest.testmod()
-
-
-if __name__ == "__main__":
-    _test()

@@ -2939,11 +2939,11 @@ class File(hdf5extension.File):
             Last modif.: '...'
             Object Tree:
             / (RootGroup) 'Table Benchmark'
-            /tuple0 (Table(100,)lzo(1)) 'This is the table title'
+            /tuple0 (Table(np.int64(100),)lzo(1)) 'This is the table title'
             /group0 (Group) ''
-            /group0/tuple1 (Table(100,)lzo(1)) 'This is the table title'
+            /group0/tuple1 (Table(np.int64(100),)lzo(1)) 'This is the table title'
             /group0/group1 (Group) ''
-            /group0/group1/tuple2 (Table(100,)lzo(1)) 'This is the table title'
+            /group0/group1/tuple2 (Table(np.int64(100),)lzo(1)) 'This is the table title'
             /group0/group1/group2 (Group) ''
             >>> f.close()
 

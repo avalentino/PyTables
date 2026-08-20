@@ -425,13 +425,3 @@ class Enum:
 
         """
         return f"Enum({self._names})"
-
-
-def _test():
-    import doctest
-
-    return doctest.testmod()
-
-
-if __name__ == "__main__":
-    _test()

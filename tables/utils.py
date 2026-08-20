@@ -463,14 +463,3 @@ def detect_number_of_cores() -> int:
         if ncpus > 0:
             return ncpus
     return 1  # Default
-
-
-def _test() -> None:
-    """Run ``doctest`` on this module."""
-    import doctest
-
-    doctest.testmod()
-
-
-if __name__ == "__main__":
-    _test()

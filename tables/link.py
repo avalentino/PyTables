@@ -242,7 +242,7 @@ class SoftLink(linkextension.SoftLink, Link):
             >>> f.root.arr2
             /arr2 (SoftLink) -> /arr
             >>> print(f.root.arr2())
-            /arr (Array(2,)) ''
+            /arr (Array(np.int64(2),)) ''
             >>> f.close()
 
         """
