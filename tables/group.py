@@ -338,13 +338,15 @@ class Group(hdf5extension.Group, Node):
                         warnings.warn(
                             f"leaf ``{self._g_join(childname)}`` is of an "
                             f"unsupported type; it will become an "
-                            "``UnImplemented`` node"
+                            "``UnImplemented`` node",
+                            stacklevel=2,
                         )
                     else:
                         warnings.warn(
                             f"leaf ``{self._g_join(childname)}`` has an "
                             f"unknown class ID ``{child_cid}``; "
-                            "it will become an ``UnImplemented`` node"
+                            "it will become an ``UnImplemented`` node",
+                            stacklevel=2,
                         )
                 return UnImplemented
             assert child_cid2 in class_id_dict
@@ -512,6 +514,7 @@ class Group(hdf5extension.Group, Node):
             "be ready to see PyTables asking for *lots* of memory and "
             "possibly slow I/O.",
             PerformanceWarning,
+            stacklevel=2,
         )
 
     def _g_refnode(
@@ -549,6 +552,7 @@ class Group(hdf5extension.Group, Node):
                 f"named ``{childname}``; you will not be able to use "
                 f"natural naming to access the child node",
                 NaturalNameWarning,
+                stacklevel=2,
             )
 
         # Check group width limits.
@@ -798,7 +802,6 @@ class Group(hdf5extension.Group, Node):
             # Sort the groups before delivering. This uses the groups names
             # for groups in tree (in order to sort() can classify them).
             for groupname in groupnames:
-                # TODO: check recursion
                 stack.append(objgroup._v_groups[groupname])
                 yield objgroup._v_groups[groupname]
 
@@ -887,6 +890,7 @@ class Group(hdf5extension.Group, Node):
                 f"named ``{name}``; you will not be able to use natural naming "
                 "to access the child node",
                 NaturalNameWarning,
+                stacklevel=2,
             )
 
         super().__setattr__(name, value)
@@ -1214,7 +1218,8 @@ class RootGroup(Group):
                 warnings.warn(
                     f"problems loading leaf ``{self._g_join(childname)}``::\n\n"
                     f"  {exc}\n\n"
-                    "The leaf will become an ``UnImplemented`` node."
+                    "The leaf will become an ``UnImplemented`` node.",
+                    stacklevel=2,
                 )
                 # If not, associate an UnImplemented object to it
                 return UnImplemented(self, childname)
@@ -1251,6 +1256,7 @@ class TransactionGroupG(NotLoggedMixin, Group):
             f"maximum ({self._v_max_group_width}); be ready to see PyTables "
             f"asking for *lots* of memory and possibly slow I/O",
             PerformanceWarning,
+            stacklevel=2,
         )
 
 
@@ -1266,6 +1272,7 @@ class TransactionG(NotLoggedMixin, Group):
             f"({self._v_max_group_width}); be ready to see PyTables "
             f"asking for *lots* of memory and possibly slow I/O",
             PerformanceWarning,
+            stacklevel=2,
         )
 
 
@@ -1286,6 +1293,7 @@ class MarkG(NotLoggedMixin, Group):
             f"be ready to see PyTables asking for *lots* of memory and "
             f"possibly slow I/O",
             PerformanceWarning,
+            stacklevel=2,
         )
 
     def _g_reset(self) -> None:

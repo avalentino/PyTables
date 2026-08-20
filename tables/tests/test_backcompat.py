@@ -39,29 +39,29 @@ class BackCompatTablesTestCase(common.PyTablesTestCase):
 
 
 @common.unittest.skipIf(not common.lzo_avail, "lzo not available")
-class Table2_1LZO(BackCompatTablesTestCase):
+class Table21LZO(BackCompatTablesTestCase):
     # pytables 0.8.x versions and after
     h5fname = "Table2_1_lzo_nrv2e_shuffle.h5"
 
 
 @common.unittest.skipIf(not common.lzo_avail, "lzo not available")
-class Tables_LZO1(BackCompatTablesTestCase):
+class TablesLZO1(BackCompatTablesTestCase):
     h5fname = "Tables_lzo1.h5"  # files compressed with LZO1
 
 
 @common.unittest.skipIf(not common.lzo_avail, "lzo not available")
-class Tables_LZO1_shuffle(BackCompatTablesTestCase):
+class TablesLZO1Shuffle(BackCompatTablesTestCase):
     # files compressed with LZO1 and shuffle
     h5fname = "Tables_lzo1_shuffle.h5"
 
 
 @common.unittest.skipIf(not common.lzo_avail, "lzo not available")
-class Tables_LZO2(BackCompatTablesTestCase):
+class TablesLZO2(BackCompatTablesTestCase):
     h5fname = "Tables_lzo2.h5"  # files compressed with LZO2
 
 
 @common.unittest.skipIf(not common.lzo_avail, "lzo not available")
-class Tables_LZO2_shuffle(BackCompatTablesTestCase):
+class TablesLZO2Shuffle(BackCompatTablesTestCase):
     # files compressed with LZO2 and shuffle
     h5fname = "Tables_lzo2_shuffle.h5"
 
@@ -95,11 +95,11 @@ class BackCompatAttrsTestCase(common.TestFileMixin, common.PyTablesTestCase):
             self.assertTrue(common.allequal(a.attrs.pythonscalar, scalar))
 
 
-class Attrs_1_3(BackCompatAttrsTestCase):
+class Attrs13(BackCompatAttrsTestCase):
     format = "1.3"  # pytables 1.0.x versions and earlier
 
 
-class Attrs_1_4(BackCompatAttrsTestCase):
+class Attrs14(BackCompatAttrsTestCase):
     format = "1.4"  # pytables 1.1.x versions and later
 
 
@@ -210,11 +210,11 @@ def suite():
         theSuite.addTest(common.make_suite(TimeTestCase))
         theSuite.addTest(common.make_suite(OldFlavorsTestCase01))
         theSuite.addTest(common.make_suite(OldFlavorsTestCase02))
-        theSuite.addTest(common.make_suite(Table2_1LZO))
-        theSuite.addTest(common.make_suite(Tables_LZO1))
-        theSuite.addTest(common.make_suite(Tables_LZO1_shuffle))
-        theSuite.addTest(common.make_suite(Tables_LZO2))
-        theSuite.addTest(common.make_suite(Tables_LZO2_shuffle))
+        theSuite.addTest(common.make_suite(Table21LZO))
+        theSuite.addTest(common.make_suite(TablesLZO1))
+        theSuite.addTest(common.make_suite(TablesLZO1Shuffle))
+        theSuite.addTest(common.make_suite(TablesLZO2))
+        theSuite.addTest(common.make_suite(TablesLZO2Shuffle))
 
     return theSuite
 

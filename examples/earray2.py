@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""Small example that shows how to work with extendeable arrays of different
-types, strings included."""
+"""How to work with extendable arrays of different types, strings included."""
 
 import numpy as np
 

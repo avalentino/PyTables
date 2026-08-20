@@ -127,7 +127,7 @@ class _FileRegistry:
         handlers = list(self._handlers)  # make a copy
         for fileh in handlers:
             msg = f"Closing remaining open file: {fileh.filename}"
-            warnings.warn(UnclosedFileWarning(msg))
+            warnings.warn(UnclosedFileWarning(msg), stacklevel=2)
             fileh.close()
 
 
@@ -304,14 +304,14 @@ def open_file(
                     "not in read-only mode (as requested)."
                 )
             # 'a' and 'r+' are compatible with everything except 'r'
-            elif mode in ("a", "r+") and omode == "r":
+            if mode in ("a", "r+") and omode == "r":
                 raise ValueError(
                     f"The file '{filename}' is already opened, but "
                     "in read-only mode.  Please close it before "
                     "reopening in append mode."
                 )
             # 'w' means that we want to destroy existing contents
-            elif mode == "w":
+            if mode == "w":
                 raise ValueError(
                     f"The file '{filename}' is already opened.  Please "
                     "close it before reopening in write mode."
@@ -358,6 +358,7 @@ class _DictCache(dict):
                 f"maximum number ({self.nslots}); be ready to see PyTables "
                 "asking for *lots* of memory and possibly slow I/O.",
                 PerformanceWarning,
+                stacklevel=2,
             )
         super().__setitem__(key, value)
 
@@ -424,7 +425,10 @@ class NodeManager:
                 return node
             else:
                 # this should not happen
-                warnings.warn(f"a closed node found in the cache: ``{key}``")
+                warnings.warn(
+                    f"a closed node found in the cache: ``{key}``",
+                    stacklevel=2,
+                )
 
         if key in self.registry:
             node = self.registry[key]
@@ -432,7 +436,8 @@ class NodeManager:
                 # this should not happen since WeakValueDictionary drops all
                 # dead weakrefs
                 warnings.warn(
-                    f"None is stored in the registry for key: ``{key}``"
+                    f"None is stored in the registry for key: ``{key}``",
+                    stacklevel=2,
                 )
             elif node._v_isopen:
                 self.cache_node(node, key)
@@ -440,7 +445,8 @@ class NodeManager:
             else:
                 # this should not happen
                 warnings.warn(
-                    f"a closed node found in the registry: ``{key}``"
+                    f"a closed node found in the registry: ``{key}``",
+                    stacklevel=2,
                 )
                 del self.registry[key]
                 node = None
@@ -484,7 +490,8 @@ class NodeManager:
             # method is called for object that are still alive when the
             # interpreter is shut down
             warnings.warn(
-                f"dropping a node that is not in the registry: ``{nodepath}``"
+                f"dropping a node that is not in the registry: ``{nodepath}``",
+                stacklevel=2,
             )
 
             node._g_pre_kill_hook()
@@ -505,7 +512,9 @@ class NodeManager:
         for path in closed_keys:
             # self.cache.pop(path, None)
             if path in self.cache:
-                warnings.warn(f"closed node the cache: ``{path}``")
+                warnings.warn(
+                    f"closed node the cache: ``{path}``", stacklevel=2
+                )
                 self.cache.pop(path, None)
             self.registry.pop(path)
 
@@ -776,6 +785,7 @@ class File(hdf5extension.File):
             warnings.warn(
                 "The use of uppercase keyword parameters is deprecated",
                 DeprecationWarning,
+                stacklevel=2,
             )
 
         kwargs = {k.upper(): v for k, v in kwargs.items()}
@@ -1078,7 +1088,7 @@ class File(hdf5extension.File):
                     "the description parameter is not consistent "
                     "with the data type of the obj parameter"
                 )
-            elif description is None:
+            if description is None:
                 description = descr
 
         parentnode = self._get_or_create_path(where, createparents)
@@ -1184,16 +1194,16 @@ class File(hdf5extension.File):
                     "(or None) then both the atom and shape "
                     "parameters should be provided."
                 )
-            else:
-                # Making strides=(0,...) below is a trick to create the
-                # array fast and without memory consumption
-                dflt = np.zeros((), dtype=atom.dtype)
-                obj = np.ndarray(
-                    shape,
-                    dtype=atom.dtype,
-                    buffer=dflt,
-                    strides=(0,) * len(shape),
-                )
+
+            # Making strides=(0,...) below is a trick to create the
+            # array fast and without memory consumption
+            dflt = np.zeros((), dtype=atom.dtype)
+            obj = np.ndarray(
+                shape,
+                dtype=atom.dtype,
+                buffer=dflt,
+                strides=(0,) * len(shape),
+            )
         else:
             flavor = flavor_of(obj)
             # use a temporary object because converting obj at this stage
@@ -1319,15 +1329,14 @@ class File(hdf5extension.File):
 
             if shape is not None and shape != obj.shape:
                 raise TypeError("the shape parameter do not match obj.shape")
-            else:
-                shape = obj.shape
+            shape = obj.shape
 
             if atom is not None and atom.dtype != obj.dtype:
                 raise TypeError(
                     "the 'atom' parameter is not consistent with "
                     "the data type of the 'obj' parameter"
                 )
-            elif atom is None:
+            if atom is None:
                 atom = Atom.from_dtype(obj.dtype)
         else:
             if atom is None and shape is None:
@@ -1465,15 +1474,14 @@ class File(hdf5extension.File):
                 raise TypeError(
                     "the shape parameter is not compatible with obj.shape."
                 )
-            else:
-                shape = earray_shape
+            shape = earray_shape
 
             if atom is not None and atom.dtype != obj.dtype:
                 raise TypeError(
                     "the atom parameter is not consistent with "
                     "the data type of the obj parameter"
                 )
-            elif atom is None:
+            if atom is None:
                 atom = Atom.from_dtype(obj.dtype)
 
         parentnode = self._get_or_create_path(where, createparents)

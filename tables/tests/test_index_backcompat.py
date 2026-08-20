@@ -137,12 +137,12 @@ class IndexesTestCase(common.TestFileMixin, common.PyTablesTestCase):
 
 
 # Check indexes from PyTables version 2.0
-class Indexes2_0TestCase(IndexesTestCase):
+class Indexes20TestCase(IndexesTestCase):
     h5fname = common.test_filename("indexes_2_0.h5")
 
 
 # Check indexes from PyTables version 2.1
-class Indexes2_1TestCase(IndexesTestCase):
+class Indexes21TestCase(IndexesTestCase):
     h5fname = common.test_filename("indexes_2_1.h5")
 
 
@@ -151,8 +151,8 @@ def suite():
     niter = 1
 
     for n in range(niter):
-        theSuite.addTest(common.make_suite(Indexes2_0TestCase))
-        theSuite.addTest(common.make_suite(Indexes2_1TestCase))
+        theSuite.addTest(common.make_suite(Indexes20TestCase))
+        theSuite.addTest(common.make_suite(Indexes21TestCase))
 
     return theSuite
 

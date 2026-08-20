@@ -19,7 +19,7 @@ niter = 1
 
 
 def show_stats(explain, tref):
-    "Show the used memory"
+    """Show the used memory."""
     for line in Path("/proc/self/status").read_text().splitlines():
         if line.startswith("VmSize:"):
             vmsize = int(line.split()[1])

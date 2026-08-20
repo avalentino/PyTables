@@ -233,7 +233,8 @@ def read_file(filename, atom, riter, indexmode, dselect, verbose):
         else:
             warnings.warn(
                 "Not indexed table or empty index. Defaulting to in-kernel "
-                "selection"
+                "selection",
+                stacklevel=2,
             )
             indexmode = "inkernel"
             where = table._whereInRange

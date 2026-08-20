@@ -185,7 +185,7 @@ def _equiv_expr_node(
         or len(x.children) != len(y.children)
     ):
         return False
-    for xchild, ychild in zip(x.children, y.children):
+    for xchild, ychild in zip(x.children, y.children, strict=False):
         if not _equiv_expr_node(xchild, ychild):
             return False
     return True
@@ -421,14 +421,13 @@ idxvars: {self.index_variables}"""
             var, ops, _ = expr
             exprs2.append((var, ops, tuple(limit_values)))
         # Create a new container for the converted values
-        newcc = CompiledCondition(
+        return CompiledCondition(
             self.function,
             self.parameters,
             exprs2,
             self.string_expression,
             **self.kwargs,
         )
-        return newcc
 
 
 def _get_variable_names(

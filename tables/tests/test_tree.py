@@ -80,8 +80,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         nodelist = ["/", "/table0", "/group0/var1", "/group0/group1/var4"]
         nodenames = []
         for node in nodelist:
-            object = self.h5file.get_node(node)
-            nodenames.append(object._v_pathname)
+            obj = self.h5file.get_node(node)
+            nodenames.append(obj._v_pathname)
 
         self.assertEqual(nodenames, nodelist)
         if common.verbose:
@@ -97,7 +97,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         for group in nodegroups:
             for name in nodenames:
                 try:
-                    object = self.h5file.get_node(group, name)
+                    obj = self.h5file.get_node(group, name)
                 except LookupError:
                     if common.verbose:
                         print(
@@ -105,7 +105,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                             f"under ``{name}``"
                         )
                 else:
-                    nodepaths.append(object._v_pathname)
+                    nodepaths.append(obj._v_pathname)
 
         self.assertEqual(
             nodepaths,
@@ -133,15 +133,15 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # warnings.filterwarnings("error", category=UserWarning)
         for node in nodelist:
             try:
-                object = self.h5file.get_node(node, classname="Group")
+                obj = self.h5file.get_node(node, classname="Group")
             except LookupError:
                 if common.verbose:
                     _, value, _ = sys.exc_info()
                     print("\nGreat!, the next LookupError was caught!")
                     print(value)
             else:
-                nodenames.append(object._v_pathname)
-                groupobjects.append(object)
+                nodenames.append(obj._v_pathname)
+                groupobjects.append(obj)
 
         self.assertEqual(
             nodenames,
@@ -158,7 +158,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         for group in groupobjects:
             for name in nodenames:
                 try:
-                    object = self.h5file.get_node(group, name, "Array")
+                    obj = self.h5file.get_node(group, name, "Array")
                 except Exception:
                     if common.verbose:
                         print(
@@ -166,7 +166,7 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                             f"under ``{name}``"
                         )
                 else:
-                    nodearrays.append(object._v_pathname)
+                    nodearrays.append(obj._v_pathname)
 
         self.assertEqual(
             nodearrays,
@@ -240,8 +240,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     print(f"\nUnamble to list ``{node}``")
             else:
                 objects.extend(objectlist)
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames,
@@ -267,8 +267,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 if common.verbose:
                     print(f"\nUnamble to list ``{node}``")
             else:
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames,
@@ -297,8 +297,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames,
@@ -325,8 +325,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames, ["/group0/table1", "/group0/group1/table2"]
@@ -368,8 +368,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     print(f"\nUnamble to iter ``{node}``")
             else:
                 objects.extend(objectlist)
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames,
@@ -395,8 +395,8 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 if common.verbose:
                     print(f"\nUnamble to iter ``{node}``")
             else:
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames,
@@ -418,15 +418,15 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         nodenames = []
         for node in objects:
             try:
-                objectlist = [o for o in self.h5file.iter_nodes(node, "Leaf")]
+                objectlist = list(self.h5file.iter_nodes(node, "Leaf"))
             except TypeError:
                 if common.verbose:
                     _, value, _ = sys.exc_info()
                     print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames,
@@ -446,15 +446,15 @@ class TreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         nodenames = []
         for node in objects:
             try:
-                objectlist = [o for o in self.h5file.iter_nodes(node, "Table")]
+                objectlist = list(self.h5file.iter_nodes(node, "Table"))
             except TypeError:
                 if common.verbose:
                     _, value, _ = sys.exc_info()
                     print("\nGreat!, the next TypeError was caught!")
                     print(value)
             else:
-                for object in objectlist:
-                    nodenames.append(object._v_pathname)
+                for obj in objectlist:
+                    nodenames.append(obj._v_pathname)
 
         self.assertEqual(
             nodenames, ["/group0/table1", "/group0/group1/table2"]
@@ -1031,25 +1031,26 @@ class HiddenTreeTestCase(common.TempFileMixin, common.PyTablesTestCase):
     def _test00b_objects(self):
         """Object dictionaries conformance with ``walk_nodes()``."""
 
-        def dictCheck(dictName, classname):
+        def dictCheck(dict_name, classname):
             file_ = self.h5file
 
-            objects = getattr(file_, dictName)
+            objects = getattr(file_, dict_name)
             walkPaths = [
                 node._v_pathname for node in file_.walk_nodes("/", classname)
             ]
-            dictPaths = [path for path in objects]
+            dictPaths = list(objects)
             walkPaths.sort()
             dictPaths.sort()
             self.assertEqual(
                 walkPaths,
                 dictPaths,
-                f"nodes in ``{dictName}`` do not match those from ``walk_nodes()``",
+                f"nodes in ``{dict_name}`` do not match those from "
+                "``walk_nodes()``",
             )
             self.assertEqual(
                 len(walkPaths),
                 len(objects),
-                f"length of ``{dictName}`` differs from that of ``walk_nodes()``",
+                f"length of ``{dict_name}`` differs from that of ``walk_nodes()``",
             )
 
         warnings.filterwarnings("ignore", category=DeprecationWarning)

@@ -1,4 +1,4 @@
-"""Beware! you need PyTables >= 2.3 to run this script!"""
+"""Beware! you need PyTables >= 2.3 to run this script."""
 
 from time import perf_counter as clock
 

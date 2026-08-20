@@ -82,7 +82,8 @@ class UnImplemented(hdf5extension.UnImplemented, Leaf):
         """
         warnings.warn(
             f"UnImplemented node {self._v_pathname!r} does not know how "
-            f"to copy itself; skipping"
+            f"to copy itself; skipping",
+            stacklevel=2,
         )
 
     def _f_copy(

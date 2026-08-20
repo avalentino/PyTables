@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Setup script for the tables package"""
+"""Setup script for the tables package."""
 
 import os
 import sys
@@ -101,7 +101,7 @@ def get_blosc2_version(headername):
 
 
 def get_blosc2_directories():
-    """Get Blosc2 directories for the C library"""
+    """Get Blosc2 directories for the C library."""
     try:
         import blosc2
     except ModuleNotFoundError:
@@ -169,7 +169,9 @@ def blosc2_find_directories_hook():
 
 
 def newer(source, target):
-    """Return true if 'source' exists and is more recently modified than
+    """Determine if source is newer than target.
+
+    Return true if 'source' exists and is more recently modified than
     'target', or if 'source' exists and 'target' doesn't.  Return false if
     both exist and 'target' is the same age or younger than 'source'.
     Raise FileNotFoundError if 'source' does not exist.
@@ -226,9 +228,9 @@ def _find_file_path(name, locations, prefixes=("",), suffixes=("",)):
 # This approach is based on this SO answer http://stackoverflow.com/a/21621689
 # This is also what pandas does.
 class BuildExtensions(build_ext):
-    """Subclass setuptools build_ext command
+    """Subclass setuptools build_ext command.
 
-    BuildExtensions does two things
+    BuildExtensions does three things:
     1) it makes sure numpy is available
     2) it injects numpy's core/include directory in the include_dirs
        parameter of all extensions
@@ -369,10 +371,7 @@ class BasePackage:
         )
 
     def find_runtime_path(self, locations=None):
-        """
-        returns True if the runtime can be found
-        returns None otherwise
-        """
+        """Return True if the runtime can be found, None otherwise."""
         # An explicit path can not be provided for runtime libraries.
         # (The argument is accepted for compatibility with previous
         # methods.)
@@ -410,6 +409,7 @@ class BasePackage:
                         # return abs_path
                         # Be consistent with name-only search above
                         return True
+        return False
 
     def _pkg_config(self, flags):
         try:
@@ -1141,7 +1141,7 @@ if __name__ == "__main__":
 
     blosc_sources = [Path("hdf5-blosc/src/blosc_filter.c")]
     if "BLOSC" not in optional_libs:
-        if not os.environ.get("PYTABLES_NO_EMBEDDED_LIBS", None) is None:
+        if os.environ.get("PYTABLES_NO_EMBEDDED_LIBS", None) is not None:
             exit_with_error(
                 "Unable to find the blosc library. "
                 "The embedded copy of the blosc sources can't be used because "

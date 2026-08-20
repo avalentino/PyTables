@@ -291,6 +291,7 @@ class AttributeSet(hdf5extension.AttributeSet):
             return self._v_attrnamessys[:]
         elif attrset == "all":
             return self._v_attrnames[:]
+        raise ValueError(f"Invalid 'attrset' parameter: {attrset}.")
 
     def __dir__(self) -> list[str]:
         """Autocomplete only children named as valid python identifiers.
@@ -401,7 +402,9 @@ class AttributeSet(hdf5extension.AttributeSet):
             try:
                 retval = Filters._unpack(value)
             except ValueError:
-                warnings.warn(FiltersWarning("Failed parsing FILTERS key"))
+                warnings.warn(
+                    FiltersWarning("Failed parsing FILTERS key"), stacklevel=2
+                )
                 retval = None
         elif name == "TITLE" and not isinstance(value, str):
             retval = value.decode("utf-8")
@@ -518,6 +521,7 @@ class AttributeSet(hdf5extension.AttributeSet):
                 "be ready to see PyTables asking for *lots* of memory and "
                 "possibly slow I/O",
                 PerformanceWarning,
+                stacklevel=2,
             )
 
         undo_enabled = nodefile.is_undo_enabled()

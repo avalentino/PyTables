@@ -1,4 +1,4 @@
-"""This utility prints the contents of an HDF5 file as a tree.
+"""Utility for printing the contents of an HDF5 file as a tree.
 
 Pass the flag -h to this for help on usage.
 
@@ -226,7 +226,7 @@ def get_tree_str(
 
                 except NotImplementedError as e:
                     # size_on_disk is not implemented for VLArrays
-                    warnings.warn(str(e))
+                    warnings.warn(str(e), stacklevel=2)
 
             # push leaf nodes onto the stack for the next pass
             leaves.append(node)
@@ -385,7 +385,7 @@ class PrettyTree:
     Each node can have multiple labels, given as a list of strings.
 
     Example:
-    --------
+    -------
         A = PrettyTree('A', labels=['wow'])
         B = PrettyTree('B', labels=['such tree'])
         C = PrettyTree('C', children=[A, B])
@@ -453,7 +453,7 @@ def bytes2human(use_si_units=False):
 
     def b2h(nbytes):
 
-        for prefix, value in zip(prefixes, values):
+        for prefix, value in zip(prefixes, values, strict=False):
             scaled = nbytes / value
             if scaled >= 1:
                 break

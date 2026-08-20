@@ -16,7 +16,7 @@ import tables as tb
 
 
 class Info(tb.IsDescription):
-    """A sub-structure of Test"""
+    """A sub-structure of Test."""
 
     _v_pos = 2  # The position in the whole structure
     name = tb.StringCol(10)

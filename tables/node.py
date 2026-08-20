@@ -386,6 +386,7 @@ class Node(metaclass=MetaNode):
                 f"maximum depth ({self._v_maxtreedepth}); be ready to see "
                 "PyTables asking for *lots* of memory and possibly slow I/O",
                 PerformanceWarning,
+                stacklevel=2,
             )
 
         if self._v_pathname != "/":
@@ -418,6 +419,7 @@ class Node(metaclass=MetaNode):
                 f"depth ({self._v_maxtreedepth}); be ready to see PyTables "
                 "asking for *lots* of memory and possibly slow I/O",
                 PerformanceWarning,
+                stacklevel=2,
             )
 
         node_manager = self._v_file._node_manager
@@ -831,6 +833,7 @@ class Node(metaclass=MetaNode):
                 "copying across databases can not be undone "
                 "nor redone from this database",
                 UndoRedoWarning,
+                stacklevel=2,
             )
 
         # Copying over an existing node?

@@ -12,16 +12,16 @@ class Descr(tb.IsDescription):
 
 
 # Parameters for the table and index creation
-small_chunkshape = (2,)
-small_blocksizes = (64, 32, 16, 8)
-nrows = 43
+SMALL_CHUNKSHAPE = (2,)
+SMALL_BLOCKSIZES = (64, 32, 16, 8)
+NROWS = 43
 
 # Create the new file
 h5fname = "indexes_2_1.h5"
 h5file = tb.open_file(h5fname, "w")
 t1 = h5file.create_table(h5file.root, "table1", Descr)
 row = t1.row
-for i in range(nrows):
+for i in range(NROWS):
     row["var1"] = i
     row["var2"] = i
     row["var3"] = i
@@ -33,9 +33,9 @@ t1.flush()
 t1.copy(h5file.root, "table2")
 
 # Create indexes of all kinds
-t1.cols.var1.create_index(0, "ultralight", _blocksizes=small_blocksizes)
-t1.cols.var2.create_index(3, "light", _blocksizes=small_blocksizes)
-t1.cols.var3.create_index(6, "medium", _blocksizes=small_blocksizes)
-t1.cols.var4.create_index(9, "full", _blocksizes=small_blocksizes)
+t1.cols.var1.create_index(0, "ultralight", _blocksizes=SMALL_BLOCKSIZES)
+t1.cols.var2.create_index(3, "light", _blocksizes=SMALL_BLOCKSIZES)
+t1.cols.var3.create_index(6, "medium", _blocksizes=SMALL_BLOCKSIZES)
+t1.cols.var4.create_index(9, "full", _blocksizes=SMALL_BLOCKSIZES)
 
 h5file.close()

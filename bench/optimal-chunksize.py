@@ -32,7 +32,6 @@ def quantize(data, least_significant_digit):
     For example, if least_significant_digit=1, bits will be 4.
 
     """
-
     precision = 10**-least_significant_digit
     exp = math.log10(precision)
     if exp < 0:

@@ -1,4 +1,5 @@
-"""
+"""File splitter.
+
 Split out a monolithic file with many different runs of
 indexed_search.py. The resulting files are meant for use in
 get-figures.py.

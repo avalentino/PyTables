@@ -307,10 +307,9 @@ class SoftLink(linkextension.SoftLink, Link):
         """
         if not self._v_isopen:
             raise tb.ClosedNodeError("the node object is closed")
-        elif self.is_dangling():
+        if self.is_dangling():
             raise ValueError("softlink target does not exist")
-        else:
-            return self.dereference().__getitem__(key)
+        return self.dereference().__getitem__(key)
 
     def __setitem__(self, key: str, value: Any) -> None:
         """Setitem magic method.
@@ -320,14 +319,13 @@ class SoftLink(linkextension.SoftLink, Link):
         """
         if not self._v_isopen:
             raise tb.ClosedNodeError("the node object is closed")
-        elif self.is_dangling():
+        if self.is_dangling():
             raise ValueError("softlink target does not exist")
-        else:
-            self.dereference().__setitem__(key, value)
+        self.dereference().__setitem__(key, value)
 
     def is_dangling(self) -> bool:
         """Return True if the link is dangling."""
-        return not (self.dereference() in self._v_file)
+        return self.dereference() not in self._v_file
 
     def __str__(self) -> str:
         """Return a short string representation of the link.

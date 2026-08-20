@@ -6639,7 +6639,7 @@ class DefaultValues(common.TempFileMixin, common.PyTablesTestCase):
             print("Records should look like:")
             print(r[:5])
 
-        for name1, name2 in zip(r.dtype.names, r2.dtype.names):
+        for name1, name2 in zip(r.dtype.names, r2.dtype.names, strict=False):
             self.assertTrue(common.allequal(r[name1], r2[name2]))
 
         # The following can give false errors when columns with extended
@@ -6714,7 +6714,7 @@ class DefaultValues(common.TempFileMixin, common.PyTablesTestCase):
             print("Records should look like:")
             print(r[:5])
 
-        for name1, name2 in zip(r.dtype.names, r2.dtype.names):
+        for name1, name2 in zip(r.dtype.names, r2.dtype.names, strict=False):
             self.assertTrue(common.allequal(r[name1], r2[name2]))
 
         # The following can give false errors when columns with extended
@@ -7680,7 +7680,7 @@ class SpecialColnamesTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(len(t.colnames), 3, "Number of columns incorrect")
         if common.verbose:
             print("colnames -->", t.colnames)
-        for name, name2 in zip(t.colnames, ("a", "_b", "__c")):
+        for name, name2 in zip(t.colnames, ("a", "_b", "__c"), strict=False):
             self.assertEqual(name, name2)
 
 

@@ -14,7 +14,6 @@ ofilters = tb.Filters(complevel=1, complib="blosc2", shuffle=1)
 # filters = tb.Filters(complevel=1, complib="lzo", shuffle=0)
 # ofilters = tb.Filters(complevel=1, complib="lzo", shuffle=0)
 
-# TODO: Makes it sense to add a 's'tring typecode here?
 typecode_to_dtype = {
     "b": "bool",
     "i": "int32",
@@ -26,8 +25,11 @@ typecode_to_dtype = {
 
 
 def _compute(result, function, arguments, start=None, stop=None, step=None):
-    """Compute the `function` over the `arguments` and put the outcome in
-    `result`"""
+    """Perform computation.
+
+    Compute the `function` over the `arguments` and put the outcome in
+    `result`.
+    """
     arg0 = arguments[0]
     if hasattr(arg0, "maindim"):
         maindim = arg0.maindim
@@ -81,7 +83,6 @@ def _compute(result, function, arguments, start=None, stop=None, step=None):
 
 def evaluate(ex, out=None, local_dict=None, global_dict=None, **kwargs):
     """Evaluate expression and return an array."""
-
     # First, get the signature for the arrays in expression
     context = ne.necompiler.getContext(kwargs)
     names, _ = ne.necompiler.getExprNames(ex, context)
@@ -108,7 +109,7 @@ def evaluate(ex, out=None, local_dict=None, global_dict=None, **kwargs):
     # Create a signature
     signature = [
         (name, ne.necompiler.getType(type_))
-        for (name, type_) in zip(names, types)
+        for (name, type_) in zip(names, types, strict=False)
     ]
     print("signature-->", signature)
 

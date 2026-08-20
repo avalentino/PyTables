@@ -42,8 +42,7 @@ def plot_bar(values, n):
         if n == 0:
             checks.pop()
             ind = np.arange(len(checks))
-    p = plt.bar(ind + width * n, values, width, color=colors[n])
-    return p
+    return plt.bar(ind + width * n, values, width, color=colors[n])
 
 
 def show_plot(bars, filenames, tit):

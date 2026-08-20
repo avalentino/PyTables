@@ -1,4 +1,4 @@
-"""This utility lets you look into the data and metadata of your data files.
+"""Utility to look into the data and metadata of your data files.
 
 Pass the flag -h to this for help on usage.
 
@@ -181,8 +181,8 @@ def main():
 
     try:
         h5file = tb.open_file(filename, "r")
-    except Exception as e:
-        return f"Cannot open input file: {e}"
+    except Exception as exc:
+        return f"Cannot open input file: {exc}"
 
     with h5file:
         # Check whether the specified node is a group or a leaf
@@ -196,3 +196,4 @@ def main():
         else:
             # This should never happen
             print("Unrecognized object:", nodeobject)
+    return 0

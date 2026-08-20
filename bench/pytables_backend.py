@@ -40,8 +40,7 @@ class PyTablesDB(DB):
     def open_db(self, remove=0):
         if remove and Path(self.filename).is_file():
             Path(self.filename).unlink()
-        con = tb.open_file(self.filename, "a")
-        return con
+        return tb.open_file(self.filename, "a")
 
     def close_db(self, con):
         # Remove first the table_cache attribute if it exists
@@ -65,7 +64,7 @@ class PyTablesDB(DB):
         )
 
     def fill_table(self, con):
-        "Fills the table"
+        """Fill the table."""
         table = con.root.table
 
         for j, i in enumerate(range(0, self.nrows, self.step)):
@@ -164,7 +163,6 @@ class PyTablesDB(DB):
         # condvars = {"col": colobj}
         # c = self.condvars
         # print "condvars-->", c['inf'], c['sup'], c['inf2'], c['sup2']
-        ncoords = 0
         if colobj.is_indexed:
             results = [
                 r[column] for r in table.where(condition, self.condvars)
@@ -202,11 +200,10 @@ class PyTablesDB(DB):
                 )
             ]
 
-        ncoords = len(results)
+        return len(results)
 
         # return coords
         # print "results-->", results
         # return results
-        return ncoords
         # self.tprof.append( self.colobj.index.tprof )
         # return ncoords, self.tprof

@@ -630,13 +630,13 @@ class ExprError(common.TempFileMixin, common.PyTablesTestCase):
         class Nested(tb.IsDescription):
             col1 = tb.Int32Col()
 
-            class col2(tb.IsDescription):
+            class Col2(tb.IsDescription):
                 col3 = tb.Int64Col()
 
         t = self.h5file.create_table("/", "a", Nested)
         expr = "a * b + c"
         # The next non-nested column should work
-        a = t.cols.col2.col3
+        a = t.cols.Col2.col3
         vars_ = {
             "a": a,
             "b": self.b,
@@ -646,7 +646,7 @@ class ExprError(common.TempFileMixin, common.PyTablesTestCase):
         r1 = expr.eval()
         self.assertIsNotNone(r1)
         # But a nested column should not
-        a = t.cols.col2
+        a = t.cols.Col2
         vars_ = {
             "a": a,
             "b": self.b,
@@ -1280,7 +1280,7 @@ class AppendModeFalse(AppendModeTestCase):
 
 
 # Test for `__iter__()` iterator
-class iterTestCase(common.TempFileMixin, common.PyTablesTestCase):
+class IterTestCase(common.TempFileMixin, common.PyTablesTestCase):
     def setUp(self):
         super().setUp()
         shape = list(self.shape)
@@ -1311,7 +1311,7 @@ class iterTestCase(common.TempFileMixin, common.PyTablesTestCase):
         """Checking the __iter__ iterator."""
 
         expr = tb.Expr(self.sexpr, self.vars)
-        r1 = np.array([row for row in expr])
+        r1 = np.array(list(expr))
         r2 = eval(self.sexpr, self.npvars)
         if common.verbose:
             print("Tested shape, maindim:", self.shape, self.maindim)
@@ -1328,7 +1328,7 @@ class iterTestCase(common.TempFileMixin, common.PyTablesTestCase):
         start, stop, step = self.range_[0], None, None
         expr = tb.Expr(self.sexpr, self.vars)
         expr.set_inputs_range(start, stop, step)
-        r1 = np.array([row for row in expr])
+        r1 = np.array(list(expr))
         npvars = get_sliced_vars2(
             self.npvars, start, stop, step, self.shape, self.maindim
         )
@@ -1348,7 +1348,7 @@ class iterTestCase(common.TempFileMixin, common.PyTablesTestCase):
         start, stop, step = self.range_[0], self.range_[2], None
         expr = tb.Expr(self.sexpr, self.vars)
         expr.set_inputs_range(start, stop, step)
-        r1 = np.array([row for row in expr])
+        r1 = np.array(list(expr))
         npvars = get_sliced_vars2(
             self.npvars, start, stop, step, self.shape, self.maindim
         )
@@ -1368,7 +1368,7 @@ class iterTestCase(common.TempFileMixin, common.PyTablesTestCase):
         start, stop, step = self.range_
         expr = tb.Expr(self.sexpr, self.vars)
         expr.set_inputs_range(start, stop, step)
-        r1 = np.array([row for row in expr])
+        r1 = np.array(list(expr))
         npvars = get_sliced_vars2(
             self.npvars, start, stop, step, self.shape, self.maindim
         )
@@ -1383,44 +1383,44 @@ class iterTestCase(common.TempFileMixin, common.PyTablesTestCase):
         )
 
 
-class iter0(iterTestCase):
+class Iter0(IterTestCase):
     maindim = 0
     shape = (0,)
     range_ = (1, 2, 1)
 
 
-class iter1(iterTestCase):
+class Iter1(IterTestCase):
     maindim = 0
     shape = (3,)
     range_ = (1, 2, 1)
 
 
-class iter2(iterTestCase):
+class Iter2(IterTestCase):
     maindim = 0
     shape = (3, 2)
     range_ = (0, 3, 2)
 
 
-class iter3(iterTestCase):
+class Iter3(IterTestCase):
     maindim = 1
     shape = (3, 2)
     range_ = (0, 3, 2)
 
 
-class iter4(iterTestCase):
+class Iter4(IterTestCase):
     maindim = 2
     shape = (3, 2, 1)
     range_ = (1, 3, 2)
 
 
-class iter5(iterTestCase):
+class Iter5(IterTestCase):
     maindim = 2
     shape = (1, 2, 5)
     range_ = (0, 4, 2)
 
 
 # Test for set_output_range
-class setOutputRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
+class SetOutputRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
     def test00_simple(self):
         """Checking the range selection for output."""
 
@@ -1498,61 +1498,61 @@ class setOutputRangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         )
 
 
-class setOutputRange0(setOutputRangeTestCase):
+class SetOutputRange0(SetOutputRangeTestCase):
     maindim = 0
     shape = (10,)
     range_ = (0, 1, 2)
 
 
-class setOutputRange1(setOutputRangeTestCase):
+class SetOutputRange1(SetOutputRangeTestCase):
     maindim = 0
     shape = (10,)
     range_ = (0, 10, 2)
 
 
-class setOutputRange2(setOutputRangeTestCase):
+class SetOutputRange2(SetOutputRangeTestCase):
     maindim = 0
     shape = (10,)
     range_ = (1, 10, 2)
 
 
-class setOutputRange3(setOutputRangeTestCase):
+class SetOutputRange3(SetOutputRangeTestCase):
     maindim = 0
     shape = (10, 1)
     range_ = (1, 10, 3)
 
 
-class setOutputRange4(setOutputRangeTestCase):
+class SetOutputRange4(SetOutputRangeTestCase):
     maindim = 0
     shape = (10, 2)
     range_ = (1, 10, 3)
 
 
-class setOutputRange5(setOutputRangeTestCase):
+class SetOutputRange5(SetOutputRangeTestCase):
     maindim = 0
     shape = (5, 3, 1)
     range_ = (1, 5, 1)
 
 
-class setOutputRange6(setOutputRangeTestCase):
+class SetOutputRange6(SetOutputRangeTestCase):
     maindim = 1
     shape = (2, 5)
     range_ = (1, 3, 2)
 
 
-class setOutputRange7(setOutputRangeTestCase):
+class SetOutputRange7(SetOutputRangeTestCase):
     maindim = 1
     shape = (2, 5, 1)
     range_ = (1, 3, 2)
 
 
-class setOutputRange8(setOutputRangeTestCase):
+class SetOutputRange8(SetOutputRangeTestCase):
     maindim = 2
     shape = (1, 3, 5)
     range_ = (1, 5, 2)
 
 
-class setOutputRange9(setOutputRangeTestCase):
+class SetOutputRange9(SetOutputRangeTestCase):
     maindim = 3
     shape = (1, 3, 4, 5)
     range_ = (1, 5, 3)
@@ -1700,22 +1700,22 @@ def suite():
         theSuite.addTest(common.make_suite(Maindim3))
         theSuite.addTest(common.make_suite(AppendModeTrue))
         theSuite.addTest(common.make_suite(AppendModeFalse))
-        theSuite.addTest(common.make_suite(iter0))
-        theSuite.addTest(common.make_suite(iter1))
-        theSuite.addTest(common.make_suite(iter2))
-        theSuite.addTest(common.make_suite(iter3))
-        theSuite.addTest(common.make_suite(iter4))
-        theSuite.addTest(common.make_suite(iter5))
-        theSuite.addTest(common.make_suite(setOutputRange0))
-        theSuite.addTest(common.make_suite(setOutputRange1))
-        theSuite.addTest(common.make_suite(setOutputRange2))
-        theSuite.addTest(common.make_suite(setOutputRange3))
-        theSuite.addTest(common.make_suite(setOutputRange4))
-        theSuite.addTest(common.make_suite(setOutputRange5))
-        theSuite.addTest(common.make_suite(setOutputRange6))
-        theSuite.addTest(common.make_suite(setOutputRange7))
-        theSuite.addTest(common.make_suite(setOutputRange8))
-        theSuite.addTest(common.make_suite(setOutputRange9))
+        theSuite.addTest(common.make_suite(Iter0))
+        theSuite.addTest(common.make_suite(Iter1))
+        theSuite.addTest(common.make_suite(Iter2))
+        theSuite.addTest(common.make_suite(Iter3))
+        theSuite.addTest(common.make_suite(Iter4))
+        theSuite.addTest(common.make_suite(Iter5))
+        theSuite.addTest(common.make_suite(SetOutputRange0))
+        theSuite.addTest(common.make_suite(SetOutputRange1))
+        theSuite.addTest(common.make_suite(SetOutputRange2))
+        theSuite.addTest(common.make_suite(SetOutputRange3))
+        theSuite.addTest(common.make_suite(SetOutputRange4))
+        theSuite.addTest(common.make_suite(SetOutputRange5))
+        theSuite.addTest(common.make_suite(SetOutputRange6))
+        theSuite.addTest(common.make_suite(SetOutputRange7))
+        theSuite.addTest(common.make_suite(SetOutputRange8))
+        theSuite.addTest(common.make_suite(SetOutputRange9))
         theSuite.addTest(common.make_suite(VeryLargeInputs1))
         if common.heavy:
             theSuite.addTest(common.make_suite(VeryLargeInputs2))

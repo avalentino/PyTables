@@ -70,7 +70,8 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
     def iter_chunks(self):
         chunk_ranges = [
-            range(0, s, cs) for (s, cs) in zip(self.shape, self.chunkshape)
+            range(0, s, cs)
+            for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
         ]
         yield from itertools.product(*chunk_ranges)
 
@@ -90,14 +91,15 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
     def test_chunk_info_aligned_beyond(self):
         beyond = tuple(
-            (1 + s // cs) * cs for (s, cs) in zip(self.shape, self.chunkshape)
+            (1 + s // cs) * cs
+            for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
         )
         self.assertRaises(IndexError, self.array.chunk_info, beyond)
 
     def test_chunk_info_unaligned_beyond(self):
         beyond = tuple(
             1 + (1 + s // cs) * cs
-            for (s, cs) in zip(self.shape, self.chunkshape)
+            for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
         )
         self.assertRaises(IndexError, self.array.chunk_info, beyond)
 
@@ -125,14 +127,17 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Extended to fit chunk boundaries.
         ext_obj = np.pad(
             self.obj,
-            [(0, s % cs) for (s, cs) in zip(self.shape, self.chunkshape)],
+            [
+                (0, s % cs)
+                for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
+            ],
         )
         for chunk_start in self.iter_chunks():
             chunk = self.array.read_chunk(chunk_start)
             self.assertIsInstance(chunk, bytes)
             obj_slice = tuple(
                 slice(s, s + cs)
-                for (s, cs) in zip(chunk_start, self.chunkshape)
+                for (s, cs) in zip(chunk_start, self.chunkshape, strict=False)
             )
             # Compare decompressed data to avoid zlib implementation differences
             expected_bytes = self.prepare_chunk(ext_obj[obj_slice].tobytes())
@@ -142,11 +147,15 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Extended to fit chunk boundaries.
         ext_obj = np.pad(
             self.obj,
-            [(0, s % cs) for (s, cs) in zip(self.shape, self.chunkshape)],
+            [
+                (0, s % cs)
+                for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
+            ],
         )
         chunk_start = (0,) * self.obj.ndim
         obj_slice = tuple(
-            slice(s, s + cs) for (s, cs) in zip(chunk_start, self.chunkshape)
+            slice(s, s + cs)
+            for (s, cs) in zip(chunk_start, self.chunkshape, strict=False)
         )
         expected_bytes = self.prepare_chunk(ext_obj[obj_slice].tobytes())
 
@@ -175,7 +184,8 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
     def test_read_chunk_beyond(self):
         beyond = tuple(
-            (1 + s // cs) * cs for (s, cs) in zip(self.shape, self.chunkshape)
+            (1 + s // cs) * cs
+            for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
         )
         self.assertRaises(IndexError, self.array.read_chunk, beyond)
 
@@ -184,12 +194,15 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Extended to fit chunk boundaries.
         ext_obj = np.pad(
             new_obj,
-            [(0, s % cs) for (s, cs) in zip(self.shape, self.chunkshape)],
+            [
+                (0, s % cs)
+                for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
+            ],
         )
         for chunk_start in self.iter_chunks():
             obj_slice = tuple(
                 slice(s, s + cs)
-                for (s, cs) in zip(chunk_start, self.chunkshape)
+                for (s, cs) in zip(chunk_start, self.chunkshape, strict=False)
             )
             obj_bytes = self.compress_chunk(ext_obj[obj_slice].tobytes())
             self.array.write_chunk(chunk_start, obj_bytes)
@@ -207,7 +220,8 @@ class DirectChunkingTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
     def test_write_chunk_beyond(self):
         beyond = tuple(
-            (1 + s // cs) * cs for (s, cs) in zip(self.shape, self.chunkshape)
+            (1 + s // cs) * cs
+            for (s, cs) in zip(self.shape, self.chunkshape, strict=False)
         )
         self.assertRaises(
             IndexError, self.array.write_chunk, beyond, b"foobar"
@@ -283,7 +297,8 @@ class XDirectChunkingTestCase(DirectChunkingTestCase):
         new_obj = self.obj.copy()
         new_obj.resize(self.array.shape, refcheck=False)
         obj_slice = tuple(
-            slice(s, s + cs) for (s, cs) in zip(chunk_start, self.chunkshape)
+            slice(s, s + cs)
+            for (s, cs) in zip(chunk_start, self.chunkshape, strict=False)
         )
         if not shrink_after:
             new_obj[obj_slice] = new_obj[
@@ -319,7 +334,8 @@ class XDirectChunkingTestCase(DirectChunkingTestCase):
         self.array.truncate(chunk_start[0] + self.chunkshape[0])
 
         obj_slice = tuple(
-            slice(s, s + cs) for (s, cs) in zip(chunk_start, self.chunkshape)
+            slice(s, s + cs)
+            for (s, cs) in zip(chunk_start, self.chunkshape, strict=False)
         )
         new_obj = self.array[:]
         # Reuse the (modified) data of the first chunk for the new chunk.

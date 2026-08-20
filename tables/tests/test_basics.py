@@ -1979,7 +1979,7 @@ class FlavorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Check the copied flavors right after copying and after reopening.
         for fmode in ["r+", "r"]:
             self._reopen(fmode)
-            for sname, dname in zip(snames, dnames):
+            for sname, dname in zip(snames, dnames, strict=False):
                 if fmode == "r+":
                     snode = self.h5file.get_node("/", sname)
                     node = snode.copy("/", dname)

@@ -1823,7 +1823,7 @@ class Sec2DriverTestCase(DefaultDriverTestCase):
     def test_get_file_image(self):
         image = self.h5file.get_file_image()
         self.assertGreater(len(image), 0)
-        self.assertEqual([i for i in image[:4]], [137, 72, 68, 70])
+        self.assertEqual(list(image[:4]), [137, 72, 68, 70])
 
 
 class StdioDriverTestCase(DefaultDriverTestCase):
@@ -1833,7 +1833,7 @@ class StdioDriverTestCase(DefaultDriverTestCase):
     def test_get_file_image(self):
         image = self.h5file.get_file_image()
         self.assertGreater(len(image), 0)
-        self.assertEqual([i for i in image[:4]], [137, 72, 68, 70])
+        self.assertEqual(list(image[:4]), [137, 72, 68, 70])
 
 
 class CoreDriverTestCase(DefaultDriverTestCase):
@@ -1843,7 +1843,7 @@ class CoreDriverTestCase(DefaultDriverTestCase):
     def test_get_file_image(self):
         image = self.h5file.get_file_image()
         self.assertGreater(len(image), 0)
-        self.assertEqual([i for i in image[:4]], [137, 72, 68, 70])
+        self.assertEqual(list(image[:4]), [137, 72, 68, 70])
 
 
 class CoreDriverNoBackingStoreTestCase(common.PyTablesTestCase):
@@ -2014,8 +2014,7 @@ class CoreDriverNoBackingStoreTestCase(common.PyTablesTestCase):
     def _get_digest(self, filename):
         md5 = hashlib.md5()
         md5.update(Path(filename).read_bytes())
-        hexdigest = md5.hexdigest()
-        return hexdigest
+        return md5.hexdigest()
 
     def test_openFileA(self):
         self._create_file(self.h5fname)
@@ -2114,7 +2113,7 @@ class CoreDriverNoBackingStoreTestCase(common.PyTablesTestCase):
         image = self.h5file.get_file_image()
 
         self.assertGreater(len(image), 0)
-        self.assertEqual([i for i in image[:4]], [137, 72, 68, 70])
+        self.assertEqual(list(image[:4]), [137, 72, 68, 70])
 
 
 class SplitDriverTestCase(DefaultDriverTestCase):
@@ -2296,13 +2295,13 @@ class InMemoryCoreDriverTestCase(common.PyTablesTestCase):
     def test_newFileW(self):
         image = self._create_image(self.h5fname, mode="w")
         self.assertGreater(len(image), 0)
-        self.assertEqual([i for i in image[:4]], [137, 72, 68, 70])
+        self.assertEqual(list(image[:4]), [137, 72, 68, 70])
         self.assertFalse(Path(self.h5fname).exists())
 
     def test_newFileA(self):
         image = self._create_image(self.h5fname, mode="a")
         self.assertGreater(len(image), 0)
-        self.assertEqual([i for i in image[:4]], [137, 72, 68, 70])
+        self.assertEqual(list(image[:4]), [137, 72, 68, 70])
         self.assertFalse(Path(self.h5fname).exists())
 
     def test_openFileR(self):

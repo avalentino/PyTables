@@ -14,7 +14,7 @@ PORT = 5432
 
 
 class StreamChar:
-    "Object simulating a file for reading"
+    """Object simulating a file for reading."""
 
     def __init__(self, db):
         self.db = db
@@ -127,8 +127,7 @@ class PostgresDB(DB):
         #              column, base+self.rng[0],
         #              column, base+self.rng[1]))
         # results = self.flatten(self.cur.fetchall())
-        results = self.cur.fetchall()
-        return results
+        return self.cur.fetchall()
 
     def do_query(self, con, column, base, *unused):
         d = (self.rng[1] - self.rng[0]) / 2

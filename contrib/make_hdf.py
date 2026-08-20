@@ -28,7 +28,7 @@ def is_dict(item):
 
 
 def make_col(row_type, row_name, row_item, str_len):
-    """for strings it will always make at least 80 char or twice mac char size"""
+    """Make the string at least 80 char or twice mac char size."""
     set_len = 80
     if str_len:
         set_len = max(set_len, 2 * str_len)
@@ -251,8 +251,7 @@ class HdfDict(dict):
                                 cur_row += 1
                             total_columns.append(cur_column)
                             return total_columns
-        else:
-            raise KeyError(k)
+        raise KeyError(k)
 
     def iterkeys(self):
         yield from self.keys()

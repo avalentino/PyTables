@@ -256,7 +256,7 @@ def dump_refs(preheat=10, iter1=10, iter2=10, *testargs):
 
 
 def dump_garbage():
-    """show us what the garbage is about."""
+    """Show us what the garbage is about."""
     # Force collection
     print("\nGARBAGE:")
     gc.collect()
@@ -436,7 +436,7 @@ if __name__ == "__main__":
         #                    ngroups, ntables, nrows)
         profile.run(
             "testMethod(file, usearray, testwrite, testread, "
-            + "complib, complevel, ngroups, ntables, nrows)"
+            "complib, complevel, ngroups, ntables, nrows)"
         )
 
     # Show the dirt

@@ -23,7 +23,7 @@ obversion = "1.1"  # Numeric and numarray flavors are gone.
 
 
 class CArray(Array):
-    """This class represents homogeneous datasets in an HDF5 file.
+    """Class that represent homogeneous datasets in an HDF5 file.
 
     The difference between a CArray and a normal Array (see
     :ref:`ArrayClassDescr`), from which it inherits, is that a CArray
@@ -213,7 +213,7 @@ class CArray(Array):
                         f"the shape ({shape}) and chunkshape "
                         f"({chunkshape}) ranks must be equal."
                     )
-                elif min(chunkshape) < 1:
+                if min(chunkshape) < 1:
                     raise ValueError(
                         "chunkshape parameter cannot have zero-dimensions."
                     )

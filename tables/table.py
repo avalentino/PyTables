@@ -241,27 +241,25 @@ def _table__where_indexed(
 
 def create_indexes_table(table: Table) -> IndexesTableG:
     """Create indexes for a table."""
-    itgroup = IndexesTableG(
+    return IndexesTableG(
         table._v_parent,
         _index_name_of(table),
         "Indexes container for table " + table._v_pathname,
         new=True,
     )
-    return itgroup
 
 
 def create_indexes_descr(
     igroup: Group, dname: str, iname: str, filters: Filters | None
 ) -> IndexesDescG:
     """Create indexes descriptor."""
-    idgroup = IndexesDescG(
+    return IndexesDescG(
         igroup,
         iname,
         "Indexes container for sub-description " + dname,
         filters=filters,
         new=True,
     )
-    return idgroup
 
 
 def _column__create_index(
@@ -381,7 +379,7 @@ class _ColIndexes(dict):
 
 
 class Table(tableextension.Table, Leaf):
-    """This class represents heterogeneous datasets in an HDF5 file.
+    """Class that represent heterogeneous datasets in an HDF5 file.
 
     Tables are leaves (see the Leaf class in :ref:`LeafClassDescr`) whose data
     consists of a unidimensional sequence of *rows*, where each row contains
@@ -946,6 +944,7 @@ class Table(tableextension.Table, Leaf):
                 "``ptrepack`` utility in order to recreate the indexes. "
                 f"The 1.x indexed columns found are: {self._listoldindexes}",
                 OldIndexWarning,
+                stacklevel=2,
             )
 
         # It does not matter to which column 'indexobj' belongs,
@@ -995,6 +994,7 @@ dimensions that are orthogonal (and preferably close) to the *main*
 dimension of this leave.  Alternatively, in case you have specified a
 very small/large chunksize, you may want to increase/decrease it.""",
                     PerformanceWarning,
+                    stacklevel=2,
                 )
         return nrowsinbuf
 
@@ -1040,6 +1040,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 "be ready to see PyTables asking for *lots* of memory "
                 "and possibly slow I/O",
                 PerformanceWarning,
+                stacklevel=2,
             )
 
         # 1. Create the HDF5 table (some parameters need to be computed).
@@ -1132,7 +1133,8 @@ very small/large chunksize, you may want to increase/decrease it.""",
                     warnings.warn(
                         "could not load default value "
                         f"for the ``{colname}`` column of table ``{self._v_pathname}``; "
-                        f"using ``{objcol.dflt!r}`` instead"
+                        f"using ``{objcol.dflt!r}`` instead",
+                        stacklevel=2,
                     )
                     defval = objcol.dflt
 
@@ -1388,8 +1390,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                     )
         colnames, varnames = tuple(colnames), tuple(varnames)
         colpaths, vartypes = tuple(colpaths), tuple(vartypes)
-        condkey = (condition, colnames, varnames, colpaths, vartypes)
-        return condkey
+        return (condition, colnames, varnames, colpaths, vartypes)
 
     def _compile_condition(
         self,
@@ -1419,7 +1420,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
         # Extract more information from referenced columns.
 
         # start with normal variables
-        typemap = dict(list(zip(varnames, vartypes)))
+        typemap = dict(list(zip(varnames, vartypes, strict=False)))
         indexedcols = []
         for colname in colnames:
             col = condvars[colname]
@@ -1956,8 +1957,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
         # Return a rank-0 array if start > stop
         if (start >= stop and 0 < step) or (start <= stop and 0 > step):
             if field is None:
-                nra = self._get_container(0)
-                return nra
+                return self._get_container(0)
             return np.empty(shape=0, dtype=dtype_field)
 
         nrows = len(range(start, stop, step))
@@ -3199,6 +3199,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 f"to the .flush() or .reindex_dirty() methods on "
                 f"this table before start using other nodes.",
                 PerformanceWarning,
+                stacklevel=2,
             )
         # Get rid of the IO buffers (if they have been created at all)
         mydict = self.__dict__
@@ -4035,8 +4036,8 @@ class ColumnAttributeSet:
         """Set a PyTables attribute for this column."""
         if not self.issystemcolumnname(key):
             setattr(self._v_tableattrs, self._prefix(key), val)
-        else:
-            return super().__setattr__(key, val)
+            return None
+        return super().__setattr__(key, val)
 
     def __getitem__(self, key: str) -> Any:
         """Dictionary-like interface for __getattr__."""
@@ -4056,15 +4057,13 @@ class ColumnAttributeSet:
         """Delete the attribute for this column."""
         if self.issystemcolumnname(key):
             raise TypeError("Deleting system attributes is prohibited")
-        else:
-            delattr(self._v_tableattrs, self._prefix(key))
+        delattr(self._v_tableattrs, self._prefix(key))
 
     def __delitem__(self, key: str) -> None:
         """Dictionary-like interface for __delattr__."""
         if self.issystemcolumnname(key):
             raise TypeError("Deleting system attributes is prohibited")
-        else:
-            del self._v_tableattrs[self._prefix(key)]
+        del self._v_tableattrs[self._prefix(key)]
 
     def _f_rename(self, oldattrname: str, newattrname: str) -> None:
         """Rename an attribute from oldattrname to newattrname."""

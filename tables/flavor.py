@@ -152,6 +152,7 @@ def flavor_to_flavor(
             f"{fe.args[0]}; returning an object of the ``{src_flavor}`` "
             "flavor instead",
             FlavorWarning,
+            stacklevel=2,
         )
         return array
 

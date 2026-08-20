@@ -683,15 +683,15 @@ class UnalignedAndComplexTestCase(
         super().setUp()
         self.root = self.h5file.root
 
-    def write_read(self, testArray):
+    def write_read(self, test_array):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                f"\nRunning test for array with type '{testArray.dtype.type}'"
+                f"\nRunning test for array with type '{test_array.dtype.type}'"
             )
 
         # Create the array under root and name 'somearray'
-        a = testArray
+        a = test_array
         if self.endiancheck:
             byteorder = {"little": "big", "big": "little"}[sys.byteorder]
         else:
@@ -1975,8 +1975,8 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
             arr = self.h5file.root.somearray
 
         # Get and compare an element
-        ga = [i for i in a]
-        garr = [i for i in arr]
+        ga = list(a)
+        garr = list(arr)
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)
@@ -2002,7 +2002,7 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)
-        for x_ga, x_garr in zip(ga, garr):
+        for x_ga, x_garr in zip(ga, garr, strict=False):
             self.assertTrue(common.allequal(x_ga, x_garr))
 
     def test01a_single(self):
@@ -2019,8 +2019,8 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
             arr = self.h5file.root.somearray
 
         # Get and compare an element
-        ga = [i for i in a]
-        garr = [i for i in arr]
+        ga = list(a)
+        garr = list(arr)
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)
@@ -2045,7 +2045,7 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)
-        for x_ga, x_garr in zip(ga, garr):
+        for x_ga, x_garr in zip(ga, garr, strict=False):
             self.assertTrue(common.allequal(x_ga, x_garr))
 
 

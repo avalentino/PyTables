@@ -187,6 +187,10 @@ class Filters:
             return 1
         if self.bitshuffle:
             return 2
+        return RuntimeError(
+            f"Inconsstent status: shuffle={self.shuffle}, "
+            f"bitshuffle={self.bitshuffle}."
+        )
 
     @classmethod
     def _from_leaf(cls, leaf: Leaf) -> Filters:
@@ -350,6 +354,7 @@ bitshuffle=False, fletcher32=True, least_significant_digit=None)
                     f"compression library ``{complib}`` is not available; "
                     f"using ``{default_complib}`` instead",
                     FiltersWarning,
+                    stacklevel=2,
                 )
                 complib = default_complib  # always available
 

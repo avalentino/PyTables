@@ -14,8 +14,7 @@ np.random.seed((19, 20))
 def open_db(filename, remove=0):
     if remove and Path(filename).is_file():
         Path(filename).unlink()
-    con = tb.open_file(filename, "a")
-    return con
+    return tb.open_file(filename, "a")
 
 
 def create_db(filename, nrows):

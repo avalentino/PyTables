@@ -35,11 +35,12 @@ class BasicTestCase(common.PyTablesTestCase):
 
     endiancheck = 0
 
-    def WriteRead(self, testArray):
+    def WriteRead(self, test_array):
         if common.verbose:
             print("\n", "-=" * 30)
             print(
-                f"Running test for array with typecode '{testArray.dtype.char}'",
+                "Running test for array with typecode "
+                f"'{test_array.dtype.char}'",
                 end=" ",
             )
             print("for class check:", self.title)
@@ -51,7 +52,7 @@ class BasicTestCase(common.PyTablesTestCase):
                 self.root = self.h5file.root
 
                 # Create the array under root and name 'somearray'
-                a = testArray
+                a = test_array
                 self.h5file.create_array(
                     self.root, "somearray", a, "Some array"
                 )

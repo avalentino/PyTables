@@ -269,11 +269,11 @@ class SoftLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
     def test08__v_links(self):
         """Checking `Group._v_links`."""
 
-        links = [node for node in self.h5file.root._v_links]
+        links = list(self.h5file.root._v_links)
         if common.verbose:
             print("detected links (under root):", links)
         self.assertEqual(len(links), 2)
-        links = [node for node in self.h5file.root.group1._v_links]
+        links = list(self.h5file.root.group1._v_links)
         if common.verbose:
             print("detected links (under /group1):", links)
         self.assertEqual(links, ["larr1"])
@@ -564,11 +564,11 @@ class ExternalLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
     def test08__v_links(self):
         """Checking `Group._v_links`."""
 
-        links = [node for node in self.h5file.root._v_links]
+        links = list(self.h5file.root._v_links)
         if common.verbose:
             print("detected links (under root):", links)
         self.assertEqual(len(links), 2)
-        links = [node for node in self.h5file.root.group1._v_links]
+        links = list(self.h5file.root.group1._v_links)
         if common.verbose:
             print("detected links (under /group1):", links)
         self.assertEqual(links, ["larr1"])

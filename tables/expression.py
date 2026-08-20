@@ -239,7 +239,7 @@ class Expr:
         # Create a signature for the expression
         signature = [
             (name, ne.necompiler.getType(type_))
-            for (name, type_) in zip(self.names, types_)
+            for (name, type_) in zip(self.names, types_, strict=False)
         ]
 
         # Compile the expression
@@ -324,7 +324,7 @@ class Expr:
                     "a 64-bit unsigned integer object, that is "
                     "not yet supported in expressions, sorry; "
                 )
-            elif hasattr(val, "_v_colpathnames"):  # nested column
+            if hasattr(val, "_v_colpathnames"):  # nested column
                 # This branch is never reached because the compile step
                 # above already raise a ``TypeError`` for nested
                 # columns, but that could change in the future.  So it

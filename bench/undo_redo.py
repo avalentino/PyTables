@@ -1,5 +1,7 @@
 """Benchmark for undo/redo.
-Run this program without parameters for mode of use."""
+
+Run this program without parameters for mode of use.
+"""
 
 from time import perf_counter as clock
 
@@ -38,8 +40,7 @@ class BasicBenchmark:
         # os.remove(self.file)
 
     def create_node(self):
-        """Checking a undo/redo create_array."""
-
+        """Check a undo/redo create_array."""
         for i in range(self.nobjects):
             # Create a new array
             self.fileh.create_array("/", "array" + str(i), self.a1)
@@ -68,8 +69,7 @@ class BasicBenchmark:
             print("Time for Undo, Redo (createNode):", undo, "s, ", redo, "s")
 
     def copy_children(self):
-        """Checking a undo/redo copy_children."""
-
+        """Check a undo/redo copy_children."""
         # Create a group
         self.fileh.create_group("/", "agroup")
         # Create several objects there
@@ -115,8 +115,7 @@ class BasicBenchmark:
             )
 
     def set_attr(self):
-        """Checking a undo/redo for setting attributes."""
-
+        """Check a undo/redo for setting attributes."""
         # Create a new array
         self.fileh.create_array("/", "array", self.a1)
         for i in range(self.nobjects):

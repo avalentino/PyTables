@@ -76,18 +76,18 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if self.flavor == "numpy":
             if self.type == "string":
-                object = np.ndarray(
+                obj = np.ndarray(
                     buffer=b"a" * self.objsize,
                     shape=self.shape,
                     dtype=f"S{carray.atom.itemsize}",
                 )
             else:
-                object = np.arange(self.objsize, dtype=carray.atom.dtype)
-                object.shape = carray.shape
+                obj = np.arange(self.objsize, dtype=carray.atom.dtype)
+                obj.shape = carray.shape
         if common.verbose:
-            print("Object to append -->", repr(object))
+            print("Object to append -->", repr(obj))
 
-        carray[...] = object
+        carray[...] = obj
 
     def _get_shape(self):
         if self.shape is not None:
@@ -625,7 +625,7 @@ class MD6WriteTestCase(BasicTestCase):
     step = 3
 
 
-class MD6WriteTestCase__(BasicTestCase):
+class MD6WriteTestCase2(BasicTestCase):
     type = "int32"
     shape = (2, 2)
     chunkshape = (1, 1)

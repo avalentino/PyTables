@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-"""This script allows to create arbitrarily large files with the desired
+"""Test file generator.
+
+This script allows to create arbitrarily large files with the desired
 combination of groups, tables per group and rows per table.
 
 Issue "python stress-test3.py" without parameters for a help on usage.
@@ -119,7 +121,7 @@ def read_file(filename, ngroups, recsize, verbose):
 
 
 def dump_garbage():
-    """show us what the garbage is about."""
+    """Show us what the garbage is about."""
     # Force collection
     print("\nGARBAGE:")
     gc.collect()

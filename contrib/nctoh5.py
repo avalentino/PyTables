@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-"""
-convert netCDF file to HDF5 using Scientific.IO.NetCDF and PyTables.
+"""Convert netCDF file to HDF5 using Scientific.IO.NetCDF and PyTables.
+
 Jeff Whitaker <jeffrey.s.whitaker@noaa.gov>
 
 This requires Scientific from

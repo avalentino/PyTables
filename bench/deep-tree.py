@@ -11,7 +11,7 @@ random.seed(2)
 
 
 def show_stats(explain, tref):
-    "Show the used memory (only works for Linux 2.6.x)."
+    """Show the used memory (only works for Linux 2.6.x)."""
     for line in Path("/proc/self/status").read_text().splitlines():
         if line.startswith("VmSize:"):
             vmsize = int(line.split()[1])

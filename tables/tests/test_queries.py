@@ -23,8 +23,8 @@ _strlen = int(np.log10(_maxnvalue - 1)) + 1
 str_format = f"0{_strlen}d"
 """Format of string values."""
 
-small_blocksizes = (300, 60, 20, 5)
-# small_blocksizes = (512, 128, 32, 4)   # for manual testing only
+SMALL_BLOCKSIZES = (300, 60, 20, 5)
+# SMALL_BLOCKSIZES = (512, 128, 32, 4)   # for manual testing only
 """Sensible parameters for indexing with small blocksizes."""
 
 
@@ -114,8 +114,7 @@ def append_columns(classdict, shape=()):
             dtype = np.dtype((sctype, shape))
             col = tb.Col.from_dtype(dtype, pos=colpos)
         classdict[colname] = col
-    ncols = colpos
-    return ncols
+    return colpos
 
 
 def nested_description(classname, pos, shape=()):
@@ -276,7 +275,7 @@ class BaseTableQueryTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 acolumn.create_index(
                     kind=self.kind,
                     optlevel=self.optlevel,
-                    _blocksizes=small_blocksizes,
+                    _blocksizes=SMALL_BLOCKSIZES,
                     _testmode=True,
                 )
 
@@ -857,8 +856,8 @@ class IndexedTableUsage(ScalarTableMixin, BaseTableUsageTestCase):
 
     def setUp(self):
         super().setUp()
-        self.table.cols.c_bool.create_index(_blocksizes=small_blocksizes)
-        self.table.cols.c_int32.create_index(_blocksizes=small_blocksizes)
+        self.table.cols.c_bool.create_index(_blocksizes=SMALL_BLOCKSIZES)
+        self.table.cols.c_int32.create_index(_blocksizes=SMALL_BLOCKSIZES)
         self.will_query_use_indexing = self.table.will_query_use_indexing
         self.compileCondition = self.table._compile_condition
         self.requiredExprVars = self.table._required_expr_vars
@@ -943,8 +942,7 @@ class IndexedTableUsage3(IndexedTableUsage):
 class IndexedTableUsage4(IndexedTableUsage):
     conditions = [
         "((c_int32 > 0) & (c_bool == True)) & (c_extra > 0)",
-        "((c_int32 > 0) & (c_bool == True)) & ((c_extra > 0)"
-        + " & (c_extra < 4))",
+        "((c_int32 > 0) & (c_bool == True)) & ((c_extra > 0) & (c_extra < 4))",
     ]
     idx_expr = [
         ("c_int32", ("gt",), (0,)),
@@ -956,8 +954,7 @@ class IndexedTableUsage4(IndexedTableUsage):
 class IndexedTableUsage5(IndexedTableUsage):
     conditions = [
         "(c_int32 >= 1) & (c_int32 < 2) & (c_bool == True)",
-        "(c_int32 >= 1) & (c_int32 < 2) & (c_bool == True)"
-        + " & (c_extra > 0)",
+        "(c_int32 >= 1) & (c_int32 < 2) & (c_bool == True) & (c_extra > 0)",
     ]
     idx_expr = [
         ("c_int32", ("ge", "lt"), (1, 2)),
@@ -1075,8 +1072,7 @@ class IndexedTableUsage15(IndexedTableUsage):
     conditions = [
         "(~(c_int32 > 0) | ~c_bool)",
         "(~(c_int32 > 0) | ~(c_bool)) & (c_extra > 0)",
-        "(~(c_int32 > 0) | ~(c_bool == True)) & ((c_extra > 0)"
-        + " & (c_extra < 4))",
+        "(~(c_int32 > 0) | ~(c_bool == True)) & ((c_extra > 0)&(c_extra < 4))",
     ]
     idx_expr = [
         ("c_int32", ("le",), (0,)),
@@ -1089,8 +1085,7 @@ class IndexedTableUsage16(IndexedTableUsage):
     conditions = [
         "(~(c_int32 > 0) & ~(c_int32 < 2))",
         "(~(c_int32 > 0) & ~(c_int32 < 2)) & (c_extra > 0)",
-        "(~(c_int32 > 0) & ~(c_int32 < 2)) & ((c_extra > 0)"
-        + " & (c_extra < 4))",
+        "(~(c_int32 > 0) & ~(c_int32 < 2)) & ((c_extra > 0) & (c_extra < 4))",
     ]
     idx_expr = [
         ("c_int32", ("le",), (0,)),
@@ -1103,8 +1098,7 @@ class IndexedTableUsage17(IndexedTableUsage):
     conditions = [
         "(~(c_int32 > 0) & ~(c_int32 < 2))",
         "(~(c_int32 > 0) & ~(c_int32 < 2)) & (c_extra > 0)",
-        "(~(c_int32 > 0) & ~(c_int32 < 2)) & ((c_extra > 0)"
-        + " & (c_extra < 4))",
+        "(~(c_int32 > 0) & ~(c_int32 < 2)) & ((c_extra > 0) & (c_extra < 4))",
     ]
     idx_expr = [
         ("c_int32", ("le",), (0,)),
@@ -1128,8 +1122,7 @@ class IndexedTableUsage18(IndexedTableUsage):
 
 class IndexedTableUsage19(IndexedTableUsage):
     conditions = [
-        "~((c_int32 > 0) & (c_bool)) & ((c_bool == False)"
-        + " & (c_extra < 4))",
+        "~((c_int32 > 0) & (c_bool)) & ((c_bool == False) & (c_extra < 4))",
     ]
     idx_expr = [
         ("c_bool", ("eq",), (False,)),
@@ -1154,8 +1147,7 @@ class IndexedTableUsage21(IndexedTableUsage):
     conditions = [
         "(~(c_int32 > 0) & (c_bool))",
         "(~(c_int32 > 0) & (c_bool)) & (c_extra > 0)",
-        "(~(c_int32 > 0) & (c_bool == True)) & ((c_extra > 0)"
-        + " & (c_extra < 4))",
+        "(~(c_int32 > 0) & (c_bool == True)) & ((c_extra > 0) & (c_extra < 4))",
     ]
     idx_expr = [
         ("c_int32", ("le",), (0,)),
@@ -1168,8 +1160,7 @@ class IndexedTableUsage22(IndexedTableUsage):
     conditions = [
         "~((c_int32 >= 1) & (c_int32 < 2)) & ~(c_bool == True)",
         "~(c_bool == True) & (c_extra > 0)",
-        "~((c_int32 >= 1) & (c_int32 < 2)) & (~(c_bool == True)"
-        + " & (c_extra > 0))",
+        "~((c_int32 >= 1) & (c_int32 < 2)) & (~(c_bool == True)&(c_extra > 0))",
     ]
     idx_expr = [
         ("c_bool", ("eq",), (False,)),
@@ -1235,8 +1226,7 @@ class IndexedTableUsage26(IndexedTableUsage):
 class IndexedTableUsage27(IndexedTableUsage):
     conditions = [
         "(c_int32 == 3) | c_bool | (c_int32 == 5)",
-        "(((c_int32 == 3) | (c_bool == True)) | (c_int32 == 5))"
-        + " & (c_extra > 0)",
+        "(((c_int32 == 3) | (c_bool == True)) | (c_int32 == 5))&(c_extra > 0)",
     ]
     idx_expr = [
         ("c_int32", ("eq",), (3,)),
@@ -1249,8 +1239,7 @@ class IndexedTableUsage27(IndexedTableUsage):
 class IndexedTableUsage28(IndexedTableUsage):
     conditions = [
         "((c_int32 == 3) | c_bool) & (c_int32 == 5)",
-        "(((c_int32 == 3) | (c_bool == True)) & (c_int32 == 5))"
-        + " & (c_extra > 0)",
+        "(((c_int32 == 3) | (c_bool == True)) & (c_int32 == 5))&(c_extra > 0)",
     ]
     idx_expr = [
         ("c_int32", ("eq",), (3,)),
@@ -1263,8 +1252,7 @@ class IndexedTableUsage28(IndexedTableUsage):
 class IndexedTableUsage29(IndexedTableUsage):
     conditions = [
         "(c_int32 == 3) | ((c_int32 == 4) & (c_int32 == 5))",
-        "((c_int32 == 3) | ((c_int32 == 4) & (c_int32 == 5)))"
-        + " & (c_extra > 0)",
+        "((c_int32 == 3) | ((c_int32 == 4) & (c_int32 == 5))) & (c_extra > 0)",
     ]
     idx_expr = [
         ("c_int32", ("eq",), (4,)),
@@ -1277,8 +1265,7 @@ class IndexedTableUsage29(IndexedTableUsage):
 class IndexedTableUsage30(IndexedTableUsage):
     conditions = [
         "((c_int32 == 3) | (c_int32 == 4)) & (c_int32 == 5)",
-        "((c_int32 == 3) | (c_int32 == 4)) & (c_int32 == 5)"
-        + " & (c_extra > 0)",
+        "((c_int32 == 3) | (c_int32 == 4)) & (c_int32 == 5) & (c_extra > 0)",
     ]
     idx_expr = [
         ("c_int32", ("eq",), (3,)),

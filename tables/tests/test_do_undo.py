@@ -1319,7 +1319,7 @@ class CreateGroupTestCase(common.TempFileMixin, common.PyTablesTestCase):
         )
 
 
-minRowIndex = 10
+MIN_ROW_INDEX = 10
 
 
 def populateTable(where, name):
@@ -1331,7 +1331,7 @@ def populateTable(where, name):
         var3 = tb.IntCol(dflt=0, pos=3)
         var4 = tb.FloatCol(dflt=0, pos=4)
 
-    nrows = minRowIndex
+    nrows = MIN_ROW_INDEX
     table = where._v_file.create_table(
         where, name, Indexed, "Indexed", None, nrows
     )
@@ -1549,9 +1549,9 @@ class RenameNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
         self.assertIsNone(table.cols.var4.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
         self.assertNotIn("/table2", self.h5file)
         self.assertEqual(self.h5file.root.table.title, "Indexed")
 
@@ -1566,9 +1566,9 @@ class RenameNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var1.index)
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
         self.assertIsNone(table.cols.var4.index)
 
 
@@ -1772,9 +1772,9 @@ class MoveNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
         self.assertIsNone(table.cols.var4.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
         self.assertEqual(self.h5file.root.table.title, "Indexed")
 
         # Redo the operation
@@ -1788,9 +1788,9 @@ class MoveNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var1.index)
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
         self.assertIsNone(table.cols.var4.index)
 
 
@@ -1906,9 +1906,9 @@ class RemoveNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
         self.assertIsNone(table.cols.var4.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
         self.assertEqual(self.h5file.root.table.title, "Indexed")
 
         # Redo the operation
@@ -2069,9 +2069,9 @@ class CopyNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var1.index)
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
         self.assertIsNone(table.cols.var4.index)
 
         # Now undo the past operation
@@ -2081,9 +2081,9 @@ class CopyNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
         self.assertIsNone(table.cols.var4.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
 
         # Check that the copied node does not exist in the object tree.
         self.assertNotIn("/agroup/agroup3/table", self.h5file)
@@ -2099,9 +2099,9 @@ class CopyNodeTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertIsNotNone(table.cols.var1.index)
         self.assertIsNotNone(table.cols.var2.index)
         self.assertIsNotNone(table.cols.var3.index)
-        self.assertEqual(table.cols.var1.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var2.index.nelements, minRowIndex)
-        self.assertEqual(table.cols.var3.index.nelements, minRowIndex)
+        self.assertEqual(table.cols.var1.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var2.index.nelements, MIN_ROW_INDEX)
+        self.assertEqual(table.cols.var3.index.nelements, MIN_ROW_INDEX)
         self.assertIsNone(table.cols.var4.index)
 
     def test01_copyGroup(self):

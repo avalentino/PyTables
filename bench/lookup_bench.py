@@ -1,5 +1,8 @@
-"""Benchmark to help choosing the best chunksize so as to optimize the access
-time in random lookups."""
+"""Chunk size benchmark.
+
+Benchmark to help choosing the best chunksize so as to optimize the access
+time in random lookups.
+"""
 
 import subprocess
 from time import perf_counter as clock
@@ -73,8 +76,7 @@ class DB:
     def open_db(self, remove=0):
         if remove and Path(self.filename).is_file():
             Path(self.filename).unlink()
-        con = tb.open_file(self.filename, "a")
-        return con
+        return tb.open_file(self.filename, "a")
 
     def create_db(self, verbose):
         self.con = self.open_db(remove=1)
@@ -102,7 +104,7 @@ class DB:
         )
 
     def fill_array(self):
-        "Fills the array"
+        """Fill the array."""
         earray = self.con.root.earray
         arr = self.get_array(0, self.step)
         for j, i in enumerate(range(0, self.nrows, self.step)):
@@ -116,8 +118,7 @@ class DB:
         arr = np.arange(start, stop, dtype="float")
         if self.userandom:
             arr += np.random.normal(0, stop * self.scale, size=stop - start)
-        arr = arr.astype(self.dtype)
-        return arr
+        return arr.astype(self.dtype)
 
     def print_qtime(self, ltimes):
         ltimes = np.array(ltimes)

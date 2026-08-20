@@ -1,4 +1,4 @@
-"Example showing how to add a column on a existing column"
+"""Example showing how to add a column on a existing column."""
 
 import tables as tb
 

@@ -213,15 +213,13 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             self._v_pathname
         )
         table = self._v_file._get_node(tablepath)
-        column = table.cols._g_col(columnpath)
-        return column
+        return table.cols._g_col(columnpath)
 
     @property
     def table(self) -> Table:
         """Accessor for the `Table` object of this index."""
         tablepath, _ = _table_column_pathname_of_index(self._v_pathname)
-        table = self._v_file._get_node(tablepath)
-        return table
+        return self._v_file._get_node(tablepath)
 
     @property
     def nblockssuperblock(self) -> int:
@@ -931,6 +929,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                     "OPSI was not able to achieve a completely sorted index."
                     "  Please report this to the authors.",
                     UserWarning,
+                    stacklevel=2,
                 )
 
         # Close and delete the temporal optimization index file
@@ -2094,6 +2093,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             return self.read_indices(key, key + 1, 1)[0]
         elif isinstance(key, slice):
             return self.read_indices(key.start, key.stop, key.step)
+        raise IndexError(f"Invalid index: {key}")
 
     def __len__(self) -> int:
         return self.nelements
@@ -2201,7 +2201,9 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                 elif self.type == "uint16":
                     tlen = sorted_._search_bin_na_us(*item)
                 else:
-                    assert False, "This can't happen!"
+                    raise RuntimeError(
+                        f"Invalid `type` attribute: {self.type}"
+                    )
             else:
                 tlen = self.search_scalar(item, sorted_)
         # Get possible remaining values in last row
@@ -2375,7 +2377,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
             idx = chunkmap.nonzero()[0]
             starts = (idx * ratio).astype("int_")
             stops = np.ceil((idx + 1) * ratio).astype("int_")
-            for start, stop in zip(starts, stops):
+            for start, stop in zip(starts, stops, strict=False):
                 tchunkmap[start:stop] = True
             chunkmap = tchunkmap
         if profile:
@@ -2463,7 +2465,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
     def __repr__(self) -> str:
         """Return the string representation including also  metainfo."""
         cpathname = f"{self.table._v_pathname}.cols.{self.column.pathname}"
-        retstr = f"""{self._v_pathname} (Index for column {cpathname})
+        return f"""{self._v_pathname} (Index for column {cpathname})
   optlevel := {self.optlevel}
   kind := {self.kind}
   filters := {self.filters}
@@ -2481,7 +2483,6 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
     bounds := {self.bounds}
     sortedLR := {self.sortedLR}
     indicesLR := {self.indicesLR}"""
-        return retstr
 
 
 class IndexesDescG(NotLoggedMixin, Group):
@@ -2496,6 +2497,7 @@ class IndexesDescG(NotLoggedMixin, Group):
             "be ready to see PyTables asking for *lots* of memory and "
             "possibly slow I/O",
             PerformanceWarning,
+            stacklevel=2,
         )
 
 
@@ -2525,6 +2527,7 @@ class IndexesTableG(NotLoggedMixin, Group):
             f"the recommended maximum ({self._v_max_group_width}); be ready to "
             "see PyTables asking for *lots* of memory and possibly slow I/O",
             PerformanceWarning,
+            stacklevel=2,
         )
 
     def _g_check_name(self, name: str) -> None:
@@ -2540,11 +2543,10 @@ class IndexesTableG(NotLoggedMixin, Group):
         tablename = names.pop()[3:]  # "_i_" is at the beginning
         parentpathname = "/".join(names)
         tablepathname = join_path(parentpathname, tablename)
-        table = self._v_file._get_node(tablepathname)
-        return table
+        return self._v_file._get_node(tablepathname)
 
 
 class OldIndex(NotLoggedMixin, Group):
-    """This is meant to hide indexes of PyTables 1.x files."""
+    """Class meant to hide indexes of PyTables 1.x files."""
 
     _c_classid = "CINDEX"

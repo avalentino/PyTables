@@ -39,6 +39,38 @@ deftype_from_kind = {}  # filled as atom classes are created
 _type_re = re.compile(r"^([a-z]+)([0-9]*)$")
 
 
+__all__ = [
+    "Atom",
+    "BoolAtom",
+    "Complex32Atom",
+    "Complex64Atom",
+    "Complex128Atom",
+    "ComplexAtom",
+    "EnumAtom",
+    "Float32Atom",
+    "Float64Atom",
+    "FloatAtom",
+    "Int8Atom",
+    "Int16Atom",
+    "Int32Atom",
+    "Int64Atom",
+    "IntAtom",
+    "ObjectAtom",
+    "PseudoAtom",
+    "StringAtom",
+    "Time32Atom",
+    "Time64Atom",
+    "TimeAtom",
+    "UInt8Atom",
+    "UInt16Atom",
+    "UInt32Atom",
+    "UInt64Atom",
+    "UIntAtom",
+    "VLStringAtom",
+    "VLUnicodeAtom",
+]
+
+
 def split_type(type_: str) -> tuple[str, int | None]:
     """Split a PyTables type into a PyTables kind and an item size.
 
@@ -378,6 +410,7 @@ class Atom(metaclass=MetaAtom):
                 "support for unicode type is very limited, and "
                 "only works for strings that can be cast as ascii",
                 FlavorWarning,
+                stacklevel=2,
             )
             itemsize = basedtype.itemsize // 4
             assert (
@@ -789,6 +822,8 @@ if hasattr(np, "float16"):
         def __init__(self, shape: Shape = (), dflt: float = 0.0) -> None:
             Atom.__init__(self, "float16", shape, dflt)
 
+    __all__.append("Float16Atom")
+
 
 class Float32Atom(FloatAtom):  # type: ignore[misc]
     """Float 32 atom."""
@@ -821,6 +856,8 @@ if hasattr(np, "float96"):
         def __init__(self, shape: Shape = (), dflt: float = 0.0) -> None:
             Atom.__init__(self, "float96", shape, dflt)
 
+    __all__.append("Float96Atom")
+
 
 if hasattr(np, "float128"):
 
@@ -832,6 +869,8 @@ if hasattr(np, "float128"):
 
         def __init__(self, shape: Shape = (), dflt: float = 0.0) -> None:
             Atom.__init__(self, "float128", shape, dflt)
+
+    __all__.append("Float128Atom")
 
 
 class ComplexAtom(Atom):
@@ -896,8 +935,10 @@ class _ComplexErrorAtom(ComplexAtom):
 Complex32Atom = Complex64Atom = Complex128Atom = _ComplexErrorAtom
 if hasattr(np, "complex192"):
     Complex192Atom = _ComplexErrorAtom
+    __all__.append("Complex192Atom")
 if hasattr(np, "complex256"):
     Complex256Atom = _ComplexErrorAtom
+    __all__.append("Complex256Atom")
 
 
 class TimeAtom(Atom):  # type: ignore[misc]
@@ -1218,10 +1259,9 @@ class _BufferedAtom(PseudoAtom):
 
     def toarray(self, object_: Any) -> np.ndarray:
         buffer_ = self._tobuffer(object_)
-        array = np.ndarray(
+        return np.ndarray(
             buffer=buffer_, dtype=self.base.dtype, shape=len(buffer_)
         )
-        return array
 
     def _tobuffer(self, object_: Any) -> NoReturn:
         """Convert an `object_` into a buffer."""

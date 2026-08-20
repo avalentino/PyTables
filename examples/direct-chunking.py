@@ -37,14 +37,12 @@ np_data = np.arange(np.prod(chunkshape), dtype=dtype).reshape(chunkshape)
 
 def chunk_from_data(data):
     b2_data = b2.asarray(data, chunks=chunkshape, blocks=b2_blockshape)
-    wchunk = b2_data.to_cframe()
-    return wchunk
+    return b2_data.to_cframe()
 
 
 def data_from_chunk(rchunk):
     b2_array = b2.ndarray_from_cframe(rchunk)
-    data = b2_array[:]
-    return data
+    return b2_array[:]
 
 
 with tb.open_file(fname, mode="w") as h5f:

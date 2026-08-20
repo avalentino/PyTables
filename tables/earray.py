@@ -25,7 +25,7 @@ obversion = "1.4"  # Numeric and numarray flavors are gone.
 
 
 class EArray(CArray):
-    r"""This class represents extendable, homogeneous datasets in an HDF5 file.
+    r"""Class that represent extendable, homogeneous datasets in an HDF5 file.
 
     The main difference between an EArray and a CArray (see
     :ref:`CArrayClassDescr`), from which it inherits, is that the former

@@ -78,25 +78,25 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.rowshape[earray.extdim] = self.chunksize
 
         if self.type == "string":
-            object = np.ndarray(
+            obj = np.ndarray(
                 buffer=b"a" * self.objsize,
                 shape=self.rowshape,
                 dtype=f"S{earray.atom.itemsize}",
             )
         else:
-            object = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            object.shape = self.rowshape
+            obj = np.arange(self.objsize, dtype=earray.atom.dtype.base)
+            obj.shape = self.rowshape
 
         if common.verbose:
             if self.flavor == "numpy":
-                print("Object to append -->", object)
+                print("Object to append -->", obj)
             else:
-                print("Object to append -->", repr(object))
+                print("Object to append -->", repr(obj))
         for i in range(self.nappends):
             if self.type == "string":
-                earray.append(object)
+                earray.append(obj)
             else:
-                earray.append(object * i)
+                earray.append(obj * i)
 
     def _get_shape(self):
         if self.shape is not None:
@@ -180,20 +180,20 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                     i = int(earray.nrow - initialrows)
                     object__ = object_ * (i // self.chunksize)
 
-            object = object__[chunk]
+            obj = object__[chunk]
             # The next adds much more verbosity
             # if common.verbose:
             if False:
                 print("number of row ==>", earray.nrow)
-                if hasattr(object, "shape"):
-                    print("shape should look as:", object.shape)
+                if hasattr(obj, "shape"):
+                    print("shape should look as:", obj.shape)
                 print("row in earray ==>", repr(row))
-                print("Should look like ==>", repr(object))
+                print("Should look like ==>", repr(obj))
 
             self.assertEqual(
                 initialrows + self.nappends * self.chunksize, earray.nrows
             )
-            self.assertTrue(common.allequal(row, object, self.flavor))
+            self.assertTrue(common.allequal(row, obj, self.flavor))
             if hasattr(row, "shape"):
                 self.assertEqual(len(row.shape), len(shape) - 1)
             else:
@@ -282,21 +282,21 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             else:
                 i = int(earray.nrow - initialrows)
                 object__ = object_ * (i // self.chunksize)
-            object = object__[index]
+            obj = object__[index]
 
             # The next adds much more verbosity
             # if common.verbose:
             if False:
                 print("number of row ==>", earray.nrow)
-                if hasattr(object, "shape"):
-                    print("shape should look as:", object.shape)
+                if hasattr(obj, "shape"):
+                    print("shape should look as:", obj.shape)
                 print("row in earray ==>", repr(row))
-                print("Should look like ==>", repr(object))
+                print("Should look like ==>", repr(obj))
 
             self.assertEqual(
                 initialrows + self.nappends * self.chunksize, earray.nrows
             )
-            self.assertTrue(common.allequal(row, object, self.flavor))
+            self.assertTrue(common.allequal(row, obj, self.flavor))
             if hasattr(row, "shape"):
                 self.assertEqual(len(row.shape), len(shape) - 1)
             else:
@@ -385,12 +385,12 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # do a copy() in order to ensure that len(object._data)
             # actually do a measure of its length
             # object = object__[self.start:stop:self.step].copy()
-            object = object__[self.start : self.stop : self.step].copy()
+            obj = object__[self.start : self.stop : self.step].copy()
             # Swap the axes again to have normal ordering
             if self.flavor == "numpy":
-                object = object.swapaxes(0, self.extdim)
+                obj = obj.swapaxes(0, self.extdim)
         else:
-            object = np.empty(shape=self.shape, dtype=self.dtype)
+            obj = np.empty(shape=self.shape, dtype=self.dtype)
 
         # Read all the array
         try:
@@ -399,15 +399,15 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             row = np.empty(shape=self.shape, dtype=self.dtype)
 
         if common.verbose:
-            if hasattr(object, "shape"):
-                print("shape should look as:", object.shape)
+            if hasattr(obj, "shape"):
+                print("shape should look as:", obj.shape)
             print("Object read ==>", repr(row))
-            print("Should look like ==>", repr(object))
+            print("Should look like ==>", repr(obj))
 
         self.assertEqual(
             initialrows + self.nappends * self.chunksize, earray.nrows
         )
-        self.assertTrue(common.allequal(row, object, self.flavor))
+        self.assertTrue(common.allequal(row, obj, self.flavor))
 
         shape = self._get_shape()
         if hasattr(row, "shape"):
@@ -490,12 +490,12 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # do a copy() in order to ensure that len(object._data)
             # actually do a measure of its length
             # object = object__[self.start:stop:self.step].copy()
-            object = object__[self.start : self.stop : self.step].copy()
+            obj = object__[self.start : self.stop : self.step].copy()
             # Swap the axes again to have normal ordering
             if self.flavor == "numpy":
-                object = object.swapaxes(0, self.extdim)
+                obj = obj.swapaxes(0, self.extdim)
         else:
-            object = np.empty(shape=self.shape, dtype=self.dtype)
+            obj = np.empty(shape=self.shape, dtype=self.dtype)
 
         # Read all the array
         try:
@@ -509,15 +509,15 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             row = np.empty(shape=self.shape, dtype=self.dtype)
 
         if common.verbose:
-            if hasattr(object, "shape"):
-                print("shape should look as:", object.shape)
+            if hasattr(obj, "shape"):
+                print("shape should look as:", obj.shape)
             print("Object read ==>", repr(row))
-            print("Should look like ==>", repr(object))
+            print("Should look like ==>", repr(obj))
 
         self.assertEqual(
             initialrows + self.nappends * self.chunksize, earray.nrows
         )
-        self.assertTrue(common.allequal(row, object, self.flavor))
+        self.assertTrue(common.allequal(row, obj, self.flavor))
 
         shape = self._get_shape()
         if hasattr(row, "shape"):
@@ -605,9 +605,9 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 object__.swapaxes(0, self.extdim)
             # do a copy() in order to ensure that len(object._data)
             # actually do a measure of its length
-            object = object__.__getitem__(self.slices).copy()
+            obj = object__.__getitem__(self.slices).copy()
         else:
-            object = np.empty(shape=self.shape, dtype=self.dtype)
+            obj = np.empty(shape=self.shape, dtype=self.dtype)
 
         # Read all the array
         try:
@@ -617,16 +617,16 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("Object read:\n", repr(row))
-            print("Should look like:\n", repr(object))
-            if hasattr(object, "shape"):
+            print("Should look like:\n", repr(obj))
+            if hasattr(obj, "shape"):
                 print("Original object shape:", self.shape)
                 print("Shape read:", row.shape)
-                print("shape should look as:", object.shape)
+                print("shape should look as:", obj.shape)
 
         self.assertEqual(
             initialrows + self.nappends * self.chunksize, earray.nrows
         )
-        self.assertTrue(common.allequal(row, object, self.flavor))
+        self.assertTrue(common.allequal(row, obj, self.flavor))
         if not hasattr(row, "shape"):
             # Scalar case
             self.assertEqual(len(self.shape), 1)
@@ -717,32 +717,32 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 object__.swapaxes(0, self.extdim)
             # do a copy() in order to ensure that len(object._data)
             # actually do a measure of its length
-            object = object__.__getitem__(self.slices).copy()
+            obj = object__.__getitem__(self.slices).copy()
         else:
-            object = np.empty(shape=self.shape, dtype=self.dtype)
+            obj = np.empty(shape=self.shape, dtype=self.dtype)
 
         if self.flavor == "numpy":
-            object = np.asarray(object)
+            obj = np.asarray(obj)
 
         if self.type == "string":
             if hasattr(self, "wslice"):
                 # These sentences should be equivalent
                 # object[self.wslize] = object[self.wslice].pad("xXx")
                 # earray[self.wslice] = earray[self.wslice].pad("xXx")
-                object[self.wslize] = "xXx"
+                obj[self.wslize] = "xXx"
                 earray[self.wslice] = "xXx"
-            elif sum(object[self.slices].shape) != 0:
+            elif sum(obj[self.slices].shape) != 0:
                 # object[:] = object.pad("xXx")
-                object[:] = "xXx"
-                if object.size > 0:
-                    earray[self.slices] = object
+                obj[:] = "xXx"
+                if obj.size > 0:
+                    earray[self.slices] = obj
         else:
             if hasattr(self, "wslice"):
-                object[self.wslice] = object[self.wslice] * 2 + 3
+                obj[self.wslice] = obj[self.wslice] * 2 + 3
                 earray[self.wslice] = earray[self.wslice] * 2 + 3
-            elif sum(object[self.slices].shape) != 0:
-                object = object * 2 + 3
-                if np.prod(object.shape) > 0:
+            elif sum(obj[self.slices].shape) != 0:
+                obj = obj * 2 + 3
+                if np.prod(obj.shape) > 0:
                     earray[self.slices] = earray[self.slices] * 2 + 3
         # Read all the array
         row = earray.__getitem__(self.slices)
@@ -754,16 +754,16 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         if common.verbose:
             print("Object read:\n", repr(row))
-            print("Should look like:\n", repr(object))
-            if hasattr(object, "shape"):
+            print("Should look like:\n", repr(obj))
+            if hasattr(obj, "shape"):
                 print("Original object shape:", self.shape)
                 print("Shape read:", row.shape)
-                print("shape should look as:", object.shape)
+                print("shape should look as:", obj.shape)
 
         self.assertEqual(
             initialrows + self.nappends * self.chunksize, earray.nrows
         )
-        self.assertTrue(common.allequal(row, object, self.flavor))
+        self.assertTrue(common.allequal(row, obj, self.flavor))
         if not hasattr(row, "shape"):
             # Scalar case
             self.assertEqual(len(self.shape), 1)
@@ -861,7 +861,7 @@ class EmptyEArrayTestCase(BasicTestCase):
     step = 1
 
 
-class NP_EmptyEArrayTestCase(BasicTestCase):
+class NPEmptyEArrayTestCase(BasicTestCase):
     type = "int32"
     dtype = np.dtype("()int32")
     shape = (2, 0)
@@ -1124,7 +1124,7 @@ class MD6WriteTestCase(BasicTestCase):
     step = 3
 
 
-class NP_MD6WriteTestCase(BasicTestCase):
+class NPMD6WriteTestCase(BasicTestCase):
     """Testing NumPy scalars as indexes"""
 
     type = "int32"
@@ -1133,7 +1133,7 @@ class NP_MD6WriteTestCase(BasicTestCase):
     nappends = 10
 
 
-class MD6WriteTestCase__(BasicTestCase):
+class MD6WriteTestCase2(BasicTestCase):
     type = "int32"
     shape = (2, 0)
     chunksize = 1
@@ -1163,7 +1163,7 @@ class MD10WriteTestCase(BasicTestCase):
     step = 10
 
 
-class NP_MD10WriteTestCase(BasicTestCase):
+class NPMD10WriteTestCase(BasicTestCase):
     type = "int32"
     shape = (1, 2, 3, 4, 5, 5, 4, 3, 2, 0)
     chunksize = 5

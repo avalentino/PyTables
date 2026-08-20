@@ -1,5 +1,8 @@
-"""This script compares the speed of the computation of a polynomial for
-different (numpy.memmap and tables.Expr) out-of-memory paradigms."""
+"""Polynomial computation benchmark.
+
+Compare the speed of the computation of a polynomial for
+different (numpy.memmap and tables.Expr) out-of-memory paradigms.
+"""
 
 from time import perf_counter as clock
 from pathlib import Path
@@ -33,7 +36,6 @@ MB = 1024 * 1024  # a MegaByte
 
 def print_filesize(filename, clib=None, clevel=0):
     """Print some statistics about file sizes."""
-
     # os.system("sync")    # make sure that all data has been flushed to disk
     if isinstance(filename, list):
         filesize_bytes = sum(Path(fname).stat().st_size for fname in filename)

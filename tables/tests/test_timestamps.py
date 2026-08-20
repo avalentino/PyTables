@@ -164,9 +164,7 @@ class BitForBitTestCase(
         for data in Path(filename).read_bytes():
             md5.update(data)
 
-        hexdigest = md5.hexdigest()
-
-        return hexdigest
+        return md5.hexdigest()
 
 
 def suite():

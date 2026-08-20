@@ -302,9 +302,7 @@ def quantize(data: npt.ArrayLike, least_significant_digit: int):
     exp = math.floor(exp) if exp < 0 else math.ceil(exp)
     bits = math.ceil(math.log2(10**-exp))
     scale = 2**bits
-    datout = np.around(scale * data) / scale
-
-    return datout
+    return np.around(scale * data) / scale
 
 
 # Utilities to detect leaked instances.  See recipe 14.10 of the Python
@@ -324,8 +322,7 @@ def log_instance_creation(instance: Any, name: str | None = None) -> None:
 def string_to_classes(s: str) -> list[str]:
     """Return the list of tracked classes matching the input string."""
     if s == "*":
-        c = sorted(tracked_classes)
-        return c
+        return sorted(tracked_classes)
     else:
         return s.split()
 

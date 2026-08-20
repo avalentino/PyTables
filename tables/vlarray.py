@@ -39,7 +39,7 @@ obversion = "1.4"  # Numeric and numarray flavors are gone.
 
 
 class VLArray(hdf5extension.VLArray, Leaf):
-    """This class represents variable length (ragged) arrays in an HDF5 file.
+    """Class that represent variable length (ragged) arrays in an HDF5 file.
 
     Instances of this class represent array objects in the object tree
     with the property that their rows can have a *variable* number of
@@ -629,17 +629,17 @@ class VLArray(hdf5extension.VLArray, Leaf):
         if self._nrowsread >= self._stop:
             self._init = False
             raise StopIteration  # end of iteration
-        else:
-            # Read a chunk of rows
-            if self._row + 1 >= self.nrowsinbuf or self._row < 0:
-                self._stopb = self._startb + self._step * self.nrowsinbuf
-                self.listarr = self.read(self._startb, self._stopb, self._step)
-                self._row = -1
-                self._startb = self._stopb
-            self._row += 1
-            self.nrow += self._step
-            self._nrowsread += self._step
-            return self.listarr[self._row]
+
+        # Read a chunk of rows
+        if self._row + 1 >= self.nrowsinbuf or self._row < 0:
+            self._stopb = self._startb + self._step * self.nrowsinbuf
+            self.listarr = self.read(self._startb, self._stopb, self._step)
+            self._row = -1
+            self._startb = self._stopb
+        self._row += 1
+        self.nrow += self._step
+        self._nrowsread += self._step
+        return self.listarr[self._row]
 
     def __getitem__(
         self, key: int | slice | Sequence[int] | np.ndarray
@@ -695,7 +695,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
 
     def _assign_values(self, coords: Sequence[int], values: Sequence) -> None:
         """Assign the `values` to the positions stated in `coords`."""
-        for nrow, value in zip(coords, values):
+        for nrow, value in zip(coords, values, strict=False):
             if nrow >= self.nrows:
                 raise IndexError("First index out of range")
             if nrow < 0:

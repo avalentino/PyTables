@@ -523,6 +523,7 @@ class Leaf(Node):
                     f"small/large chunksize, you may want to "
                     f"increase/decrease it.",
                     PerformanceWarning,
+                    stacklevel=2,
                 )
         return nrowsinbuf
 
@@ -712,7 +713,7 @@ class Leaf(Node):
                 raise IndexError(
                     "Coordinate indexing array has incompatible shape"
                 )
-            elif len(key.shape) == 2:
+            if len(key.shape) == 2:
                 if key.shape[0] != len(self.shape):
                     raise IndexError(
                         "Coordinate indexing array has incompatible shape"
@@ -752,14 +753,18 @@ class Leaf(Node):
                 f"Chunk coordinates do not match dataset shape: "
                 f"{coords} !~ {self.shape}"
             )
-        if any(c < 0 or c >= s for (c, s) in zip(coords, self.shape)):
+        if any(
+            c < 0 or c >= s for (c, s) in zip(coords, self.shape, strict=False)
+        ):
             raise IndexError(
                 f"Chunk coordinates not within dataset shape: "
                 f"{coords} <> {self.shape}"
             )
 
     def _check_chunk_coords(self, coords: tuple[int, ...]) -> None:
-        if any(c % cs for (c, cs) in zip(coords, self.chunkshape)):
+        if any(
+            c % cs for (c, cs) in zip(coords, self.chunkshape, strict=False)
+        ):
             raise NotChunkAlignedError(
                 f"Coordinates are not multiples of chunk shape: "
                 f"{tuple(coords)} !* {self.chunkshape}"

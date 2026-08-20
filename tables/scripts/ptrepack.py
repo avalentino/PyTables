@@ -1,4 +1,4 @@
-"""This utility lets you repack your data files in a flexible way.
+"""Utility for repacking your data files in a flexible way.
 
 Pass the flag -h to this for help on usage.
 

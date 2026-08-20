@@ -24,7 +24,6 @@ class WideTreeTestCase(unittest.TestCase):
         test takes around 25 MB.
 
         """
-
         maxchilds = 1000
         if verbose:
             print("\n", "-=" * 30)
@@ -76,7 +75,6 @@ class WideTreeTestCase(unittest.TestCase):
         test takes around 25 MB.
 
         """
-
         maxchilds = 1000
         if verbose:
             print("\n", "-=" * 30)

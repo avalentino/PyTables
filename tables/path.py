@@ -149,7 +149,7 @@ def check_name_validity(name: str) -> None:
     # http://hdfgroup.org/HDF5/doc/UG/03_Model.html#Structure
     if name == ".":
         raise ValueError("``.`` is not allowed as an object name")
-    elif "/" in name:
+    if "/" in name:
         raise ValueError(
             f"the ``/`` character is not allowed in object names: {name!r}"
         )
@@ -178,8 +178,7 @@ def join_path(parentpath: str, name: str) -> str:
         pstr = f"{parentpath}{name}"
     else:
         pstr = f"{parentpath}/{name}"
-    pstr = pstr.removesuffix("/")
-    return pstr
+    return pstr.removesuffix("/")
 
 
 def split_path(path: str) -> (str, str):

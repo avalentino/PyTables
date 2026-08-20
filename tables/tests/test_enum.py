@@ -363,7 +363,7 @@ class EnumTableTestCase(common.TempFileMixin, common.PyTablesTestCase):
         tbl.flush()
         tbl.flavor = "python"
         read = tbl.read()
-        for x_appended, x_read in zip(appended, read):
+        for x_appended, x_read in zip(appended, read, strict=False):
             self.assertEqual(
                 x_appended[0], x_read[0], "Written and read values differ."
             )

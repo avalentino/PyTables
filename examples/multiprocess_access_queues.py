@@ -1,5 +1,4 @@
-"""Example showing how to access a PyTables file from multiple processes using
-queues."""
+"""How to access a PyTables file from multiple processes using queues."""
 
 import time
 import queue

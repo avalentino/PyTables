@@ -70,8 +70,7 @@ def computeslicesize(expectedrows: int, memlevel: int) -> int:
     # (in idx-opt.c, the line ``mid = lo + (hi-lo)/2;`` will overflow
     # for values of ``lo`` and ``hi`` >= 2**30).  Finally, ss must be a
     # multiple of 4, so 2**30 must definitely be an upper limit.
-    ss = min(ss, 2**30)
-    return ss
+    return min(ss, 2**30)
 
 
 def computeblocksize(
@@ -89,8 +88,7 @@ def computeblocksize(
     size = int(lowercompoundsize * nlowerblocks)
     # We *need* superblocksize to be an exact multiple of the actual
     # compoundblock size (a ceil must be performed here!)
-    size = ((size // compoundsize) + 1) * compoundsize
-    return size
+    return ((size // compoundsize) + 1) * compoundsize
 
 
 def calc_chunksize(
@@ -136,8 +134,7 @@ def calc_chunksize(
     blocksize = computeblocksize(expectedrows, slicesize, chunksize)
     superblocksize = computeblocksize(expectedrows, blocksize, slicesize)
     # The size for different blocks information
-    sizes = (superblocksize, blocksize, slicesize, chunksize)
-    return sizes
+    return (superblocksize, blocksize, slicesize, chunksize)
 
 
 def ccs_ultralight(
@@ -219,6 +216,7 @@ def calcoptlevels(
         return col_medium(nblocks, optlevel)
     elif indsize == 8:  # full
         return col_full(nblocks, optlevel)
+    raise ValueError(f"Invalid 'indsize' value: {indsize}.")
 
 
 def col_light(nblocks: int, optlevel: int) -> tuple[bool, bool, bool, bool]:
@@ -407,8 +405,7 @@ def string_next_after(
             if ord(xchar) < 0xFF:
                 xlist[i] = chr(ord(xchar) + 1).encode("ascii")
                 break
-            else:
-                xlist[i] = b"\x00"
+            xlist[i] = b"\x00"
             i += 1
     else:
         if xlist == b"\x00" * itemsize:
@@ -418,8 +415,7 @@ def string_next_after(
             if ord(xchar) > 0x00:
                 xlist[i] = chr(ord(xchar) - 1).encode("ascii")
                 break
-            else:
-                xlist[i] = b"\xff"
+            xlist[i] = b"\xff"
             i += 1
     xlist.reverse()
     return b"".join(xlist)

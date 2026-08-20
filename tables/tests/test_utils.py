@@ -6,7 +6,7 @@ from tables.tests import common
 from tables.scripts import ptdump, pttree, ptrepack
 
 
-class ptrepackTestCase(common.PyTablesTestCase):
+class PTRepackTestCase(common.PyTablesTestCase):
     """Test ptrepack"""
 
     @patch.object(ptrepack, "copy_leaf")
@@ -32,7 +32,7 @@ class ptrepackTestCase(common.PyTablesTestCase):
         self.assertEqual(args, (src_fn, dst_fn, src_path, dst_path))
 
 
-class ptdumpTestCase(common.PyTablesTestCase):
+class PTDumpTestCase(common.PyTablesTestCase):
     """Test ptdump"""
 
     @patch.object(ptdump.tb, "open_file")
@@ -53,7 +53,7 @@ class ptdumpTestCase(common.PyTablesTestCase):
         self.assertEqual(args, (src_fn, "r"))
 
 
-class pttreeTestCase(common.PyTablesTestCase):
+class PTTreeTestCase(common.PyTablesTestCase):
     """Test ptdump"""
 
     @patch.object(pttree.tb, "open_file")
@@ -78,9 +78,9 @@ class pttreeTestCase(common.PyTablesTestCase):
 def suite():
     theSuite = common.unittest.TestSuite()
 
-    theSuite.addTest(common.make_suite(ptrepackTestCase))
-    theSuite.addTest(common.make_suite(ptdumpTestCase))
-    theSuite.addTest(common.make_suite(pttreeTestCase))
+    theSuite.addTest(common.make_suite(PTRepackTestCase))
+    theSuite.addTest(common.make_suite(PTDumpTestCase))
+    theSuite.addTest(common.make_suite(PTTreeTestCase))
 
     return theSuite
 

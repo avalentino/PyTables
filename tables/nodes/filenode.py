@@ -139,7 +139,9 @@ class RawPyTablesIO(io.RawIOBase):
 
         """
         if not self.closed and getattr(self._node, "_v_file", None) is None:
-            warnings.warn("host PyTables file is already closed!")
+            warnings.warn(
+                "host PyTables file is already closed!", stacklevel=2
+            )
 
         try:
             super().close()
@@ -817,7 +819,7 @@ def read_from_filenode(
             )
 
     # guess output filename if necessary
-    # TODO: pathlib.Path strips trailing slash automatically :-(
+    # NOTE: pathlib.Path strips trailing slash automatically :-(
     if path.is_dir() or filename.endswith(os.path.sep):
         if hasattr(fnode.node.attrs, "_filename"):
             path = path / fnode.node.attrs._filename

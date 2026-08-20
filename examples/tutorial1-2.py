@@ -1,4 +1,4 @@
-"""This example shows how to browse the object tree and enlarge tables.
+"""Show how to browse the object tree and enlarge tables.
 
 Before to run this program you need to execute first tutorial1-1.py
 that create the tutorial1.h5 file needed here.

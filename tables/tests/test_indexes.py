@@ -8,8 +8,8 @@ import tables as tb
 from tables.tests import common
 
 # Sensible parameters for indexing with small blocksizes
-minRowIndex = 10
-small_blocksizes = (96, 24, 6, 3)
+MIN_ROW_INDEX = 10
+SMALL_BLOCKSIZES = (96, 24, 6, 3)
 
 
 class TDescr(tb.IsDescription):
@@ -24,8 +24,8 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
     complib = "zlib"
     shuffle = 0
     fletcher32 = 0
-    nrows = minRowIndex
-    ss = small_blocksizes[2]
+    nrows = MIN_ROW_INDEX
+    ss = SMALL_BLOCKSIZES[2]
 
     def setUp(self):
         super().setUp()
@@ -58,7 +58,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         table.flush()
         # Index all entries:
         for col in table.colinstances.values():
-            indexrows = col.create_index(_blocksizes=small_blocksizes)
+            indexrows = col.create_index(_blocksizes=SMALL_BLOCKSIZES)
         if common.verbose:
             print("Number of written rows:", self.nrows)
             print("Number of indexed rows:", indexrows)
@@ -351,7 +351,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(table.colindexed["var1"], 0)
 
         # re-create the index again
-        indexrows = table.cols.var1.create_index(_blocksizes=small_blocksizes)
+        indexrows = table.cols.var1.create_index(_blocksizes=SMALL_BLOCKSIZES)
         self.assertIsNotNone(indexrows)
         idxcol = table.cols.var1.index
         if common.verbose:
@@ -391,7 +391,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(table.colindexed["var1"], 0)
 
         # re-create the index again
-        indexrows = table.cols.var1.create_index(_blocksizes=small_blocksizes)
+        indexrows = table.cols.var1.create_index(_blocksizes=SMALL_BLOCKSIZES)
         self.assertIsNotNone(indexrows)
         idxcol = table.cols.var1.index
         if common.verbose:
@@ -595,7 +595,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         table.flush()
         # Index all entries:
         for col in table.colinstances.values():
-            indexrows = col.create_index(_blocksizes=small_blocksizes)
+            indexrows = col.create_index(_blocksizes=SMALL_BLOCKSIZES)
             self.assertIsNotNone(indexrows)
         idxcol = table.cols.var1.index
         if common.verbose:
@@ -644,7 +644,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         table.flush()
         # Index all entries:
         for col in table.colinstances.values():
-            indexrows = col.create_index(_blocksizes=small_blocksizes)
+            indexrows = col.create_index(_blocksizes=SMALL_BLOCKSIZES)
             self.assertIsNotNone(indexrows)
         idxcol = table.cols.var1.index
         if common.verbose:
@@ -675,7 +675,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         table = self.h5file.create_table(
             self.h5file.root, "distance_table", Distance
         )
-        table.cols.frame.create_index(_blocksizes=small_blocksizes)
+        table.cols.frame.create_index(_blocksizes=SMALL_BLOCKSIZES)
         r = table.row
         for i in range(10):
             r["frame"] = i
@@ -714,7 +714,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
 
 
-small_ss = small_blocksizes[2]
+small_ss = SMALL_BLOCKSIZES[2]
 
 
 class BasicReadTestCase(BasicTestCase):
@@ -803,7 +803,7 @@ class LowerBoundTestCase(BasicTestCase):
 
 
 class DeepTableIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
-    nrows = minRowIndex
+    nrows = MIN_ROW_INDEX
 
     def test01(self):
         """Checking the indexing of a table in a 2nd level hierarchy"""
@@ -975,7 +975,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
     reopen = 1
     iprops = NoAutoProps
     colsToIndex = ["var1", "var2", "var3"]
-    small_blocksizes = (16, 8, 4, 2)
+    SMALL_BLOCKSIZES = (16, 8, 4, 2)
 
     def setUp(self):
         super().setUp()
@@ -984,7 +984,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
         title = "This is the IndexArray title"
         root = self.h5file.root
 
-        # Make the chunkshape smaller or equal than small_blocksizes[-1]
+        # Make the chunkshape smaller or equal than SMALL_BLOCKSIZES[-1]
         chunkshape = (2,)
         self.table = self.h5file.create_table(
             root,
@@ -998,7 +998,7 @@ class AutomaticIndexingTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.table.autoindex = self.iprops.auto
         for colname in self.colsToIndex:
             self.table.colinstances[colname].create_index(
-                _blocksizes=self.small_blocksizes
+                _blocksizes=self.SMALL_BLOCKSIZES
             )
         for i in range(self.nrows):
             # Fill rows with defaults
@@ -1618,7 +1618,7 @@ class AI4bTestCase(AutomaticIndexingTestCase):
 
 
 class AI5TestCase(AutomaticIndexingTestCase):
-    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     nrows = ss * 11 - 1
     reopen = 0
     iprops = NoAutoProps
@@ -1626,7 +1626,7 @@ class AI5TestCase(AutomaticIndexingTestCase):
 
 
 class AI6TestCase(AutomaticIndexingTestCase):
-    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     nrows = ss * 21 + 1
     reopen = 1
     iprops = NoAutoProps
@@ -1634,7 +1634,7 @@ class AI6TestCase(AutomaticIndexingTestCase):
 
 
 class AI7TestCase(AutomaticIndexingTestCase):
-    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     nrows = ss * 12 - 1
     # nrows = ss * 1-1  # faster test
     reopen = 0
@@ -1643,7 +1643,7 @@ class AI7TestCase(AutomaticIndexingTestCase):
 
 
 class AI8TestCase(AutomaticIndexingTestCase):
-    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     nrows = ss * 15 + 100
     # nrows = ss * 1 + 100  # faster test
     reopen = 1
@@ -1652,7 +1652,7 @@ class AI8TestCase(AutomaticIndexingTestCase):
 
 
 class AI9TestCase(AutomaticIndexingTestCase):
-    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    sbs, bs, ss, cs = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     nrows = ss
     reopen = 0
     iprops = DefaultProps
@@ -1810,7 +1810,7 @@ class OldIndexTestCase(common.TestFileMixin, common.PyTablesTestCase):
 
 
 # Sensible parameters for indexing with small blocksizes
-small_blocksizes = (512, 128, 32, 8)
+SMALL_BLOCKSIZES = (512, 128, 32, 8)
 
 
 class CompletelySortedIndexTestCase(
@@ -1838,7 +1838,7 @@ class CompletelySortedIndexTestCase(
         self.table = table
         self.icol = self.table.cols.icol
         # A full index with maximum optlevel should always be completely sorted
-        self.icol.create_csindex(_blocksizes=small_blocksizes)
+        self.icol.create_csindex(_blocksizes=SMALL_BLOCKSIZES)
 
     def test00_isCompletelySortedIndex(self):
         """Testing the Column.is_csi property."""
@@ -2469,7 +2469,7 @@ class ReadSortedIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.icol = self.table.cols.icol
         # A full index with maximum optlevel should always be completely sorted
         self.icol.create_index(
-            optlevel=self.optlevel, kind="full", _blocksizes=small_blocksizes
+            optlevel=self.optlevel, kind="full", _blocksizes=SMALL_BLOCKSIZES
         )
 
     def test01_readSorted1(self):
@@ -2734,8 +2734,8 @@ class TestIndexingNans(common.TempFileMixin, common.PyTablesTestCase):
                 r.append()
         table.flush()
 
-        table.cols.values.create_index(_blocksizes=small_blocksizes)
-        table.cols.values2.create_index(_blocksizes=small_blocksizes)
+        table.cols.values.create_index(_blocksizes=SMALL_BLOCKSIZES)
+        table.cols.values2.create_index(_blocksizes=SMALL_BLOCKSIZES)
 
         results2 = table.read_where("(values2 > 0)")
         self.assertEqual(len(results2), 400)
@@ -2763,8 +2763,8 @@ class TestIndexingNans(common.TempFileMixin, common.PyTablesTestCase):
                 r.append()
         table.flush()
 
-        table.cols.values.create_csindex(_blocksizes=small_blocksizes)
-        table.cols.values2.create_csindex(_blocksizes=small_blocksizes)
+        table.cols.values.create_csindex(_blocksizes=SMALL_BLOCKSIZES)
+        table.cols.values2.create_csindex(_blocksizes=SMALL_BLOCKSIZES)
 
         results2 = table.read_where("(values2 > 0)")
         self.assertEqual(len(results2), 100 * 4)

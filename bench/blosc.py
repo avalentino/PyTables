@@ -134,8 +134,7 @@ def process_file(kind, prec, clevel, synth):
         expr.eval()
     f.close()
     f2.close()
-    size = Path(iname).stat().st_size + Path(oname).stat().st_size
-    return size
+    return Path(iname).stat().st_size + Path(oname).stat().st_size
 
 
 if __name__ == "__main__":

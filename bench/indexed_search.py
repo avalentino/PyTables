@@ -71,7 +71,7 @@ class DB:
         print(f"Mrows/s (cached): {self.nrows / MROW / qtime2:.6f}")
 
     def norm_times(self, ltimes):
-        "Get the mean and stddev of ltimes, avoiding the extreme values."
+        """Get the mean and stddev of ltimes, avoiding the extreme values."""
         lmean = ltimes.mean()
         lstd = ltimes.std()
         ntimes = ltimes[ltimes < lmean + lstd]

@@ -39,7 +39,7 @@ SelectionType = int | slice | list[int | slice] | npt.ArrayLike
 
 
 class Array(hdf5extension.Array, Leaf):
-    """This class represents homogeneous datasets in an HDF5 file.
+    """Class that represent homogeneous datasets in an HDF5 file.
 
     This class provides methods to write or read data to or from array objects
     in the file. This class does not allow you neither to enlarge nor compress
@@ -348,29 +348,28 @@ class Array(hdf5extension.Array, Leaf):
             self._init = False
             self.listarr = None  # fixes issue #308
             raise StopIteration  # end of iteration
-        else:
-            # Read a chunk of rows
-            if self._row + 1 >= self.nrowsinbuf or self._row < 0:
-                self._stopb = self._startb + self._step * self.nrowsinbuf
-                # Protection for reading more elements than needed
-                self._stopb = min(self._stopb, self._stop)
-                listarr = self._read(self._startb, self._stopb, self._step)
 
-                # Swap the axes to easy the return of elements
-                if self.extdim > 0:
-                    listarr = listarr.swapaxes(self.extdim, 0)
-                self.listarr = internal_to_flavor(listarr, self.flavor)
-                self._row = -1
-                self._startb = self._stopb
-            self._row += 1
-            self.nrow += self._step
-            self._nrowsread += self._step
-            # Fixes bug #968132
-            # if self.listarr.shape:
-            if self.shape:
-                return self.listarr[self._row]
-            else:
-                return self.listarr  # Scalar case
+        # Read a chunk of rows
+        if self._row + 1 >= self.nrowsinbuf or self._row < 0:
+            self._stopb = self._startb + self._step * self.nrowsinbuf
+            # Protection for reading more elements than needed
+            self._stopb = min(self._stopb, self._stop)
+            listarr = self._read(self._startb, self._stopb, self._step)
+
+            # Swap the axes to easy the return of elements
+            if self.extdim > 0:
+                listarr = listarr.swapaxes(self.extdim, 0)
+            self.listarr = internal_to_flavor(listarr, self.flavor)
+            self._row = -1
+            self._startb = self._stopb
+        self._row += 1
+        self.nrow += self._step
+        self._nrowsread += self._step
+        # Fixes bug #968132
+        # if self.listarr.shape:
+        if self.shape:
+            return self.listarr[self._row]
+        return self.listarr  # Scalar case
 
     def _interpret_indexing(
         self,
@@ -477,7 +476,7 @@ class Array(hdf5extension.Array, Leaf):
             n_el = sum(1 for arg in args if arg is Ellipsis)
             if n_el > 1:
                 raise IndexError("Only one ellipsis may be used.")
-            elif n_el == 0 and len(args) != rank:
+            if n_el == 0 and len(args) != rank:
                 args = args + (Ellipsis,)
 
             final_args = []
@@ -556,7 +555,9 @@ class Array(hdf5extension.Array, Leaf):
 
         list_seen = False
         reorder = None
-        for idx, (exp, length) in enumerate(zip(args, self.shape)):
+        for idx, (exp, length) in enumerate(
+            zip(args, self.shape, strict=False)
+        ):
             if isinstance(exp, slice):
                 start, count, step = translate_slice(exp, length)
                 selection.append((start, count, step, idx, "AND"))
@@ -573,11 +574,10 @@ class Array(hdf5extension.Array, Leaf):
                     raise IndexError(
                         f"Empty selections are not allowed (axis {idx})"
                     )
-                elif len(exp) > 1:
+                if len(exp) > 1:
                     if list_seen:
                         raise IndexError("Only one selection list is allowed")
-                    else:
-                        list_seen = True
+                    list_seen = True
                 else:
                     if not isinstance(exp[0], (int, np.integer)) or (
                         isinstance(exp[0], np.ndarray)
@@ -723,7 +723,6 @@ class Array(hdf5extension.Array, Leaf):
             return
 
         # truncate data if least_significant_digit filter is set
-        # TODO: add the least_significant_digit attribute to the array on disk
         if (
             self.filters.least_significant_digit is not None
             and not np.issubdtype(nparr.dtype, np.signedinteger)

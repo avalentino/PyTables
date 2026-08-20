@@ -14,9 +14,9 @@ fzset = frozenset
 random.seed(19)
 
 # Sensible parameters for indexing with small blocksizes
-small_blocksizes = (16, 8, 4, 2)  # The smaller set of parameters...
+SMALL_BLOCKSIZES = (16, 8, 4, 2)  # The smaller set of parameters...
 # The size for medium indexes
-minRowIndex = 1000
+MIN_ROW_INDEX = 1000
 
 
 class Small(tb.IsDescription):
@@ -2958,7 +2958,7 @@ class SelectValuesTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class SV1aTestCase(SelectValuesTestCase):
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 1
     buffersize = 2
     ss = blocksizes[2]
@@ -2970,13 +2970,13 @@ class SV1aTestCase(SelectValuesTestCase):
 
 
 class SV1bTestCase(SV1aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     chunkshape = blocksizes[2] // 2**9
     buffersize = chunkshape * 5
 
 
 class SV2aTestCase(SelectValuesTestCase):
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 2
     buffersize = 2
     ss = blocksizes[2]
@@ -2988,13 +2988,13 @@ class SV2aTestCase(SelectValuesTestCase):
 
 
 class SV2bTestCase(SV2aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     chunkshape = blocksizes[2] // 2**7
     buffersize = chunkshape * 20
 
 
 class SV3aTestCase(SelectValuesTestCase):
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 2
     buffersize = 3
     ss = blocksizes[2]
@@ -3006,7 +3006,7 @@ class SV3aTestCase(SelectValuesTestCase):
 
 
 class SV3bTestCase(SV3aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     #    chunkshape = 4
     #    buffersize = 16
     chunkshape = 3
@@ -3014,7 +3014,7 @@ class SV3bTestCase(SV3aTestCase):
 
 
 class SV4aTestCase(SelectValuesTestCase):
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     buffersize = 10
     ss = blocksizes[2]
     nrows = ss * 3
@@ -3026,13 +3026,13 @@ class SV4aTestCase(SelectValuesTestCase):
 
 
 class SV4bTestCase(SV4aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     chunkshape = 500
     buffersize = 1000
 
 
 class SV5aTestCase(SelectValuesTestCase):
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     ss = blocksizes[2]
     nrows = ss * 5
     reopen = 0
@@ -3042,11 +3042,11 @@ class SV5aTestCase(SelectValuesTestCase):
 
 
 class SV5bTestCase(SV5aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
 
 
 class SV6aTestCase(SelectValuesTestCase):
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     ss = blocksizes[2]
     nrows = ss * 5 + 1
     reopen = 0
@@ -3057,12 +3057,12 @@ class SV6aTestCase(SelectValuesTestCase):
 
 
 class SV6bTestCase(SV6aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
 
 
 class SV7aTestCase(SelectValuesTestCase):
     random = 1
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     ss = blocksizes[2]
     nrows = ss * 5 + 3
     reopen = 0
@@ -3073,13 +3073,13 @@ class SV7aTestCase(SelectValuesTestCase):
 
 
 class SV7bTestCase(SV7aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
 
 
 class SV8aTestCase(SelectValuesTestCase):
     random = 0
     chunkshape = 1
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     ss = blocksizes[2]
     nrows = ss * 5 - 3
     reopen = 0
@@ -3091,12 +3091,12 @@ class SV8aTestCase(SelectValuesTestCase):
 
 class SV8bTestCase(SV8aTestCase):
     random = 0
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
 
 
 class SV9aTestCase(SelectValuesTestCase):
     random = 1
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     ss = blocksizes[2]
     nrows = ss * 5 + 11
     reopen = 0
@@ -3107,12 +3107,12 @@ class SV9aTestCase(SelectValuesTestCase):
 
 
 class SV9bTestCase(SV9aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
 
 
 class SV10aTestCase(SelectValuesTestCase):
     random = 1
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 1
     buffersize = 1
     ss = blocksizes[2]
@@ -3124,7 +3124,7 @@ class SV10aTestCase(SelectValuesTestCase):
 
 
 class SV10bTestCase(SV10aTestCase):
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     chunkshape = 5
     buffersize = 6
 
@@ -3134,7 +3134,7 @@ class SV11aTestCase(SelectValuesTestCase):
     # random test above (SV10a). It is explicitly put here as a way
     # to always check that specific case.
     values = [1, 7, 6, 7, 0, 7, 4, 4, 9, 5]
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 1
     buffersize = 1
     ss = blocksizes[2]
@@ -3152,7 +3152,7 @@ class SV11bTestCase(SelectValuesTestCase):
     values = [1, 7, 6, 7, 0, 7, 4, 4, 9, 5]
     chunkshape = 2
     buffersize = 2
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     ss = blocksizes[2]
     nrows = ss
     reopen = 0
@@ -3167,7 +3167,7 @@ class SV12aTestCase(SelectValuesTestCase):
     # to always check that specific case.
     # values = [0, 7, 0, 6, 5, 1, 6, 7, 0, 0]
     values = [4, 4, 1, 5, 2, 0, 1, 4, 3, 9]
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 1
     buffersize = 1
     ss = blocksizes[2]
@@ -3184,7 +3184,7 @@ class SV12bTestCase(SelectValuesTestCase):
     # to always check that specific case.
     # values = [0, 7, 0, 6, 5, 1, 6, 7, 0, 0]
     values = [4, 4, 1, 5, 2, 0, 1, 4, 3, 9]
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     chunkshape = 2
     buffersize = 2
     ss = blocksizes[2]
@@ -3197,7 +3197,7 @@ class SV12bTestCase(SelectValuesTestCase):
 
 class SV13aTestCase(SelectValuesTestCase):
     values = [0, 7, 0, 6, 5, 1, 6, 7, 0, 0]
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 3
     buffersize = 5
     ss = blocksizes[2]
@@ -3210,7 +3210,7 @@ class SV13aTestCase(SelectValuesTestCase):
 
 class SV13bTestCase(SelectValuesTestCase):
     values = [0, 7, 0, 6, 5, 1, 6, 7, 0, 0]
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     chunkshape = 5
     buffersize = 10
     ss = blocksizes[2]
@@ -3223,7 +3223,7 @@ class SV13bTestCase(SelectValuesTestCase):
 
 class SV14aTestCase(SelectValuesTestCase):
     values = [1, 7, 6, 7, 0, 7, 4, 4, 9, 5]
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     chunkshape = 2
     buffersize = 5
     ss = blocksizes[2]
@@ -3237,7 +3237,7 @@ class SV14aTestCase(SelectValuesTestCase):
 
 class SV14bTestCase(SelectValuesTestCase):
     values = [1, 7, 6, 7, 0, 7, 4, 4, 9, 5]
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     chunkshape = 9
     buffersize = 10
     ss = blocksizes[2]
@@ -3257,7 +3257,7 @@ class SV15aTestCase(SelectValuesTestCase):
     # Both values of seed below triggers a fail in indexing code
     # seed = 1885
     seed = 183
-    blocksizes = small_blocksizes
+    blocksizes = SMALL_BLOCKSIZES
     ss = blocksizes[2]
     nrows = ss * 5 + 1
     reopen = 0
@@ -3275,7 +3275,7 @@ class SV15bTestCase(SelectValuesTestCase):
     # Both values of seed below triggers a fail in indexing code
     seed = 1885
     # seed = 183
-    blocksizes = tb.idxutils.calc_chunksize(minRowIndex, memlevel=1)
+    blocksizes = tb.idxutils.calc_chunksize(MIN_ROW_INDEX, memlevel=1)
     ss = blocksizes[2]
     nrows = ss * 5 + 1
     reopen = 1

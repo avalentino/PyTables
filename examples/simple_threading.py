@@ -85,8 +85,7 @@ def main():
             out = outqueue.get()
             if isinstance(out, Exception):
                 raise out
-            else:
-                mean_ += out
+            mean_ += out
 
         mean_ /= SIZE * SIZE
 

@@ -5,17 +5,17 @@ import tables as tb
 from tables.tests import common
 
 
-def WriteRead(filename, testTuple):
+def WriteRead(filename, test_tuple):
     if common.verbose:
         print("\n", "-=" * 30)
-        print(f"Running test for object {type(testTuple)}")
+        print(f"Running test for object {type(test_tuple)}")
 
     # Create an instance of HDF5 Table
     fileh = tb.open_file(filename, mode="w")
     root = fileh.root
     try:
         # Create the array under root and name 'somearray'
-        a = testTuple
+        a = test_tuple
         fileh.create_array(root, "somearray", a, "Some array")
     finally:
         # Close the file
@@ -349,8 +349,8 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         )
 
         # Get and compare an element
-        ga = [i for i in a]
-        garr = [i for i in arr]
+        ga = list(a)
+        garr = list(arr)
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)
@@ -369,8 +369,8 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if isinstance(a[0], tuple):
             ga = [list(i) for i in a]
         else:
-            ga = [i for i in a]
-        garr = [i for i in arr]
+            ga = list(a)
+        garr = list(arr)
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)
@@ -386,8 +386,8 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         )
 
         # Get and compare an element
-        ga = [i for i in a]
-        garr = [i for i in arr]
+        ga = list(a)
+        garr = list(arr)
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)
@@ -406,8 +406,8 @@ class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
         if isinstance(a[0], tuple):
             ga = [list(i) for i in a]
         else:
-            ga = [i for i in a]
-        garr = [i for i in arr]
+            ga = list(a)
+        garr = list(arr)
         if common.verbose:
             print("Result of original iterator:", ga)
             print("Result of read generator:", garr)

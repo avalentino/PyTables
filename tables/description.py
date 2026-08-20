@@ -16,6 +16,38 @@ from .path import check_name_validity
 __docformat__ = "reStructuredText"
 """The format of documentation strings in this module."""
 
+__all__ = [
+    "BoolCol",
+    "Col",
+    "Complex32Col",
+    "Complex64Col",
+    "Complex128Col",
+    "ComplexCol",
+    "Description",
+    "EnumCol",
+    "Float32Col",
+    "Float64Col",
+    "FloatCol",
+    "Int8Col",
+    "Int16Col",
+    "Int32Col",
+    "Int64Col",
+    "IntCol",
+    "IsDescription",
+    "StringCol",
+    "Time32Col",
+    "Time64Col",
+    "TimeCol",
+    "UInt8Col",
+    "UInt16Col",
+    "UInt32Col",
+    "UInt64Col",
+    "UIntCol",
+    "descr_from_dtype",
+    "dtype_from_descr",
+    "same_position",
+]
+
 
 def same_position(
     oldmethod: Callable[[Col, Col], bool],
@@ -225,11 +257,6 @@ class Col(atom.Atom):
             __eq__ = same_position(atombase.__eq__)
             _is_equal_to_atom = same_position(atombase._is_equal_to_atom)
 
-            # XXX: API incompatible change for PyTables 3 line
-            # Overriding __eq__ blocks inheritance of __hash__ in 3.x
-            # def __hash__(self):
-            #    return hash((self._v_pos, self.atombase))
-
             if prefix == "Enum":
                 _is_equal_to_enumatom = same_position(
                     atombase._is_equal_to_enumatom
@@ -308,12 +335,15 @@ UInt64Col = Col._subclass_from_prefix("UInt64")
 FloatCol = Col._subclass_from_prefix("Float")
 if hasattr(atom, "Float16Atom"):
     Float16Col = Col._subclass_from_prefix("Float16")
+    __all__.append("Float16Col")
 Float32Col = Col._subclass_from_prefix("Float32")
 Float64Col = Col._subclass_from_prefix("Float64")
 if hasattr(atom, "Float96Atom"):
     Float96Col = Col._subclass_from_prefix("Float96")
+    __all__.append("Float96Col")
 if hasattr(atom, "Float128Atom"):
     Float128Col = Col._subclass_from_prefix("Float128")
+    __all__.append("Float128Col")
 
 ComplexCol = Col._subclass_from_prefix("Complex")
 Complex32Col = Col._subclass_from_prefix("Complex32")
@@ -321,8 +351,10 @@ Complex64Col = Col._subclass_from_prefix("Complex64")
 Complex128Col = Col._subclass_from_prefix("Complex128")
 if hasattr(atom, "Complex192Atom"):
     Complex192Col = Col._subclass_from_prefix("Complex192")
+    __all__.append("Complex192Col")
 if hasattr(atom, "Complex256Atom"):
     Complex256Col = Col._subclass_from_prefix("Complex256")
+    __all__.append("Complex256Col")
 
 TimeCol = Col._subclass_from_prefix("Time")
 Time32Col = Col._subclass_from_prefix("Time32")
@@ -332,7 +364,7 @@ Time64Col = Col._subclass_from_prefix("Time64")
 # Table description classes
 # =========================
 class Description:
-    """This class represents descriptions of the structure of tables.
+    """Class representing descriptions of the structure of tables.
 
     An instance of this class is automatically bound to Table (see
     :ref:`TableClassDescr`) objects when they are created.  It provides a
@@ -506,10 +538,10 @@ class Description:
                     # special methods &c: copy to newdict, warn about conflicts
                     warnings.warn(
                         f"Can't set attr {name!r} in description "
-                        f"class {self!r}"
+                        f"class {self!r}",
+                        stacklevel=2,
                     )
                 else:
-                    # print("Special variable!-->", name, classdict[name])
                     newdict[name] = descr
                 continue  # This variable is not needed anymore
 
@@ -624,7 +656,7 @@ class Description:
             and len(keys) == len(cols_with_pos)
             and len(keys) == len(cols_offsets)
             and not nested
-        ):  # TODO: support offsets with nested types
+        ):
             # We have to sort the offsets too, as they must follow the column
             # order. As the offsets and the pos should be place in the same
             # order, a single sort is enough here.
@@ -651,7 +683,6 @@ class Description:
         # Compute the dtype with offsets or without
         # print("offsets ->", cols_offsets, nestedDType, nested, valid_offsets)
         if valid_offsets:
-            # TODO: support offsets within nested types
             dtype_fields = {
                 "names": newdict["_v_names"],
                 "formats": nested_formats,
@@ -672,7 +703,7 @@ class Description:
         names = self._v_names
         fmts = self._v_nested_formats
         self._v_nested_names = names[:]  # Important to do a copy!
-        self._v_nested_descr = list(zip(names, fmts))
+        self._v_nested_descr = list(zip(names, fmts, strict=True))
         for i, name in enumerate(names):
             new_object = self._v_colobjects[name]
             if isinstance(new_object, Description):
@@ -901,7 +932,8 @@ def descr_from_dtype(
         elif kind == "V" and dtype.shape in [(), (1,)]:
             if dtype.shape != ():
                 warnings.warn(
-                    "nested descriptions will be converted to scalar"
+                    "nested descriptions will be converted to scalar",
+                    stacklevel=2,
                 )
             col, _ = descr_from_dtype(dtype.base, ptparams=ptparams)
             col._v_pos = offset

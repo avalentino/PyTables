@@ -69,7 +69,7 @@ hdf5_version = _get_hdf5_version()
 
 """
 
-from .atom import *
+from .atom import *  # noqa: F403
 from .file import File, copy_file, open_file
 from .leaf import Leaf, ChunkInfo
 from .node import Node
@@ -85,9 +85,28 @@ from .vlarray import VLArray
 from .misc.enum import Enum
 
 # Import the user classes from the proper modules
-from .exceptions import *
+from .exceptions import (
+    NodeError,
+    ChunkError,
+    FlavorError,
+    HDF5ExtError,
+    FileModeError,
+    FlavorWarning,
+    UndoRedoError,
+    FiltersWarning,
+    ClosedFileError,
+    ClosedNodeError,
+    DataTypeWarning,
+    NoSuchNodeError,
+    NotChunkedError,
+    UndoRedoWarning,
+    NoSuchChunkError,
+    NaturalNameWarning,
+    PerformanceWarning,
+    NotChunkAlignedError,
+)
 from .expression import Expr
-from .description import *
+from .description import *  # noqa: F403
 from .unimplemented import Unknown, UnImplemented
 from .utilsextension import (
     is_hdf5_file,
