@@ -136,7 +136,7 @@ def get_individual_tests(
 
 def run_single_test(suite: unittest.TestSuite) -> tuple[str, FTTestResult]:
     test_id = suite.id()
-    LOG.debug(f"Running test {threading.get_ident()} {test_id}")
+    LOG.debug("Running test %s %s", threading.get_ident(), test_id)
     result = FTTestResult(descriptions=True, verbosity=2)
     suite.run(result)
     LOG.debug("Finished test %s", test_id)
