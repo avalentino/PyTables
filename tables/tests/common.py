@@ -382,15 +382,11 @@ class ShowMemTime(PyTablesTestCase):
         print(f"VmExe:  {vmexe:>7} kB\tVmLib: {vmlib:>7} kB")
 
 
-try:
-    from unittest import makeSuite as make_suite
-except ImportError:
-
-    def make_suite(test_case_class, *, prefix=None):
-        loader = unittest.TestLoader()
-        if prefix:
-            loader.testMethodPrefix = prefix
-        return loader.loadTestsFromTestCase(test_case_class)
+def make_suite(test_case_class, *, prefix=None):
+    loader = unittest.TestLoader()
+    if prefix:
+        loader.testMethodPrefix = prefix
+    return loader.loadTestsFromTestCase(test_case_class)
 
 
 _FIRST_MARKER = object()
