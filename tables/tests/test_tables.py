@@ -1422,7 +1422,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
         for i in range(10):
             j = i + 1
             k = i * i
-            l = k + 1
+            q = k + 1
             table.append(
                 [
                     (
@@ -1447,11 +1447,11 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                         float(k**2),
                     ),
                     (
-                        f"Particle: {l:6d}",
-                        l,
-                        10 - l,
-                        float(l * l),
-                        float(l**2),
+                        f"Particle: {q:6d}",
+                        q,
+                        10 - q,
+                        float(q * q),
+                        float(q**2),
                     ),
                 ]
             )
