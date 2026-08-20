@@ -68,6 +68,7 @@ __all__ = [
     "UIntAtom",
     "VLStringAtom",
     "VLUnicodeAtom",
+    "split_type",
 ]
 
 

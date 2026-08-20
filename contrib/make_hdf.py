@@ -160,6 +160,8 @@ def save2(hdf_file, data):
 
 
 class HdfDict(dict):
+    """HDF dictionary."""
+
     def __init__(self, hdf_file, hdf_dict=None, stack=None):
         if hdf_dict is None:
             hdf_dict = {}

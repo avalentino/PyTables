@@ -262,18 +262,24 @@ if "Float128Atom" in locals():
 
 
 def get_pytables_version() -> str:
+    import warnings
+
     warnings.warn(
         "the 'get_pytables_version()' function is deprecated and could be "
         "removed in future versions. Please use 'tables.__version__'",
         DeprecationWarning,
+        stacklevel=2,
     )
     return __version__
 
 
 def get_hdf5_version() -> str:
+    import warnings
+
     warnings.warn(
         "the 'get_hdf5_version()' function is deprecated and could be "
         "removed in future versions. Please use 'tables.hdf5_version'",
         DeprecationWarning,
+        stacklevel=2,
     )
     return hdf5_version

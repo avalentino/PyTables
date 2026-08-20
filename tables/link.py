@@ -270,7 +270,7 @@ class SoftLink(linkextension.SoftLink, Link):
         # get attribute of the target node
         if not self._v_isopen:
             raise tb.ClosedNodeError("the node object is closed")
-        elif self.is_dangling():
+        if self.is_dangling():
             return None
         else:
             target_node = self.dereference()
