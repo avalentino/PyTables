@@ -304,8 +304,7 @@ class Group(hdf5extension.Group, Node):
 
         if child_cid in class_id_dict:
             return class_id_dict[child_cid]  # look up group class
-        else:
-            return Group  # default group class
+        return Group  # default group class
 
     def _g_get_child_leaf_class(
         self, childname: str, warn: bool = True
@@ -327,30 +326,27 @@ class Group(hdf5extension.Group, Node):
 
         if child_cid in class_id_dict:
             return class_id_dict[child_cid]  # look up leaf class
-        else:
-            # Unknown or no ``CLASS`` attribute, try a guess.
-            child_cid2 = utilsextension.which_class(
-                self._v_objectid, childname
-            )
-            if child_cid2 == "UNSUPPORTED":
-                if warn:
-                    if child_cid is None:
-                        warnings.warn(
-                            f"leaf ``{self._g_join(childname)}`` is of an "
-                            f"unsupported type; it will become an "
-                            "``UnImplemented`` node",
-                            stacklevel=2,
-                        )
-                    else:
-                        warnings.warn(
-                            f"leaf ``{self._g_join(childname)}`` has an "
-                            f"unknown class ID ``{child_cid}``; "
-                            "it will become an ``UnImplemented`` node",
-                            stacklevel=2,
-                        )
-                return UnImplemented
-            assert child_cid2 in class_id_dict
-            return class_id_dict[child_cid2]  # look up leaf class
+        # Unknown or no ``CLASS`` attribute, try a guess.
+        child_cid2 = utilsextension.which_class(self._v_objectid, childname)
+        if child_cid2 == "UNSUPPORTED":
+            if warn:
+                if child_cid is None:
+                    warnings.warn(
+                        f"leaf ``{self._g_join(childname)}`` is of an "
+                        f"unsupported type; it will become an "
+                        "``UnImplemented`` node",
+                        stacklevel=2,
+                    )
+                else:
+                    warnings.warn(
+                        f"leaf ``{self._g_join(childname)}`` has an "
+                        f"unknown class ID ``{child_cid}``; "
+                        "it will become an ``UnImplemented`` node",
+                        stacklevel=2,
+                    )
+            return UnImplemented
+        assert child_cid2 in class_id_dict
+        return class_id_dict[child_cid2]  # look up leaf class
 
     def _g_add_children_names(self) -> None:
         """Add children names to the group.
@@ -1207,7 +1203,7 @@ class RootGroup(Group):
                 # Default is a Group class
                 child_class = Group
             return child_class(self, childname, new=False)
-        elif node_type == "Leaf":
+        if node_type == "Leaf":
             child_class = self._g_get_child_leaf_class(childname, warn=True)
             # Building a leaf may still fail because of unsupported types
             # and other causes.

@@ -51,15 +51,14 @@ def correct_byteorder(ptype: str, byteorder: str) -> str:
     """Fix the byteorder depending on the PyTables types."""
     if ptype in ["string", "bool", "int8", "uint8", "object"]:
         return "irrelevant"
-    else:
-        return byteorder
+    return byteorder
 
 
 def is_idx(index: Any) -> bool:
     """Check if an object can work as an index or not."""
     if type(index) is int:
         return True
-    elif hasattr(index, "__index__"):
+    if hasattr(index, "__index__"):
         # Exclude the array([idx]) as working as an index.  Fixes #303.
         if hasattr(index, "shape") and index.shape != ():
             return False
@@ -95,8 +94,7 @@ def idx2long(index: int | float | np.ndarray) -> int:
     try:
         if hasattr(index, "item"):
             return index.item()
-        else:
-            return int(index)
+        return int(index)
     except Exception as exc:
         raise TypeError("not an integer type.") from exc
 
@@ -323,8 +321,7 @@ def string_to_classes(s: str) -> list[str]:
     """Return the list of tracked classes matching the input string."""
     if s == "*":
         return sorted(tracked_classes)
-    else:
-        return s.split()
+    return s.split()
 
 
 def fetch_logged_instances(classes: str = "*") -> list[tuple[str, int]]:

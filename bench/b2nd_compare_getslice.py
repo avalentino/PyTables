@@ -219,7 +219,7 @@ def time_slices(dset, idx):
         t = time() - t0
         size = r.size * dset.dtype.itemsize * len(idx)
         return t, size / (t * 2**20)
-    elif dset.ndim == 4:
+    if dset.ndim == 4:
         t0 = time()
         if ndim == 0:
             for i in idx:

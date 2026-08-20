@@ -176,7 +176,7 @@ def _equiv_expr_node(
         y, ne.expressions.ExpressionNode
     ):
         return x == y
-    elif (
+    if (
         type(x) is not type(y)
         or not isinstance(x, ne.expressions.ExpressionNode)
         or not isinstance(y, ne.expressions.ExpressionNode)

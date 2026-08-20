@@ -109,8 +109,7 @@ class Array(hdf5extension.Array, Leaf):
         """Return the number of rows in the array."""
         if self.shape == ():
             return SizeType(1)  # scalar case
-        else:
-            return self.shape[self.maindim]
+        return self.shape[self.maindim]
 
     @property
     def rowsize(self) -> int:
@@ -758,8 +757,7 @@ class Array(hdf5extension.Array, Leaf):
             # if the objects cannot be broadcast to a single shape.
             narr[...] = nparr
             return narr
-        else:
-            return nparr
+        return nparr
 
     def _read_slice(
         self,

@@ -146,8 +146,7 @@ def run_single_test(suite: unittest.TestSuite) -> tuple[str, FTTestResult]:
 def format_ns(duration: int) -> str:
     if duration < 1_000_000_000:
         return f"{duration / 1_000_000:.2f}ms"
-    else:
-        return f"{duration / 1_000_000_000:.3f}s"
+    return f"{duration / 1_000_000_000:.3f}s"
 
 
 @dataclass

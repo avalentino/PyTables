@@ -405,7 +405,7 @@ class Atom(metaclass=MetaAtom):
         if basedtype.kind == "S":  # can not reuse something like 'string80'
             itemsize = basedtype.itemsize
             return cls.from_kind("string", itemsize, shape, dflt)
-        elif basedtype.kind == "U":
+        if basedtype.kind == "U":
             # workaround for unicode type (standard string type in Python 3)
             warnings.warn(
                 "support for unicode type is very limited, and "

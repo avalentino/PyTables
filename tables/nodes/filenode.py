@@ -641,10 +641,9 @@ def open_node(node, mode="r"):
     """
     if mode == "r":
         return ROFileNode(node)
-    elif mode == "a+":
+    if mode == "a+":
         return RAFileNode(node, None)
-    else:
-        raise OSError(f"invalid mode: {mode}")
+    raise OSError(f"invalid mode: {mode}")
 
 
 def save_to_filenode(

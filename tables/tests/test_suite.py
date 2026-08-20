@@ -92,8 +92,7 @@ def test(verbose=False, heavy=False):
         ).run(suite())
         if result.wasSuccessful():
             return 0
-        else:
-            return 1
+        return 1
     finally:
         # common.verbose = oldverbose
         common.heavy = oldheavy  # there are pretty young heavies, too ;)

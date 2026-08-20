@@ -219,38 +219,35 @@ class HdfDict(dict):
                 return HdfDict(
                     self.hdf_file, hdf_dict=self.cur_dict[k], stack=new_stack
                 )
-            else:
-                new_stack = self.stack[:]
-                new_stack.append(k)
-                fileh = tb.open_file(
-                    self.hdf_file, root_uep="/".join(new_stack)
-                )
-                for table in fileh.root:
+            new_stack = self.stack[:]
+            new_stack.append(k)
+            fileh = tb.open_file(self.hdf_file, root_uep="/".join(new_stack))
+            for table in fileh.root:
+                try:
+                    for item in table["scalar"]:
+                        return item
+                except Exception:
+                    # otherwise they stored a list of data
                     try:
-                        for item in table["scalar"]:
-                            return item
+                        return list(table["col"])
                     except Exception:
-                        # otherwise they stored a list of data
-                        try:
-                            return list(table["col"])
-                        except Exception:
-                            cur_column = []
-                            total_columns = []
-                            col_num = 0
-                            cur_row = 0
-                            num_rows = 0
-                            for row in table:
-                                if not num_rows:
-                                    num_rows = row["col_depth"]
-                                if cur_row == num_rows:
-                                    cur_row = num_rows = 0
-                                    col_num += 1
-                                    total_columns.append(cur_column)
-                                    cur_column = []
-                                cur_column.append(row["col_" + str(col_num)])
-                                cur_row += 1
-                            total_columns.append(cur_column)
-                            return total_columns
+                        cur_column = []
+                        total_columns = []
+                        col_num = 0
+                        cur_row = 0
+                        num_rows = 0
+                        for row in table:
+                            if not num_rows:
+                                num_rows = row["col_depth"]
+                            if cur_row == num_rows:
+                                cur_row = num_rows = 0
+                                col_num += 1
+                                total_columns.append(cur_column)
+                                cur_column = []
+                            cur_column.append(row["col_" + str(col_num)])
+                            cur_row += 1
+                        total_columns.append(cur_column)
+                        return total_columns
         raise KeyError(k)
 
     def iterkeys(self):

@@ -184,8 +184,7 @@ class Node(metaclass=MetaNode):
         """
         if hasattr(self._v_attrs, "TITLE"):
             return self._v_attrs.TITLE
-        else:
-            return ""
+        return ""
 
     def _g_settitle(self, title: str) -> None:
         self._v_attrs.TITLE = title

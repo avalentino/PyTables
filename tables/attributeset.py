@@ -287,9 +287,9 @@ class AttributeSet(hdf5extension.AttributeSet):
         """
         if attrset == "user":
             return self._v_attrnamesuser[:]
-        elif attrset == "sys":
+        if attrset == "sys":
             return self._v_attrnamessys[:]
-        elif attrset == "all":
+        if attrset == "all":
             return self._v_attrnames[:]
         raise ValueError(f"Invalid 'attrset' parameter: {attrset}.")
 
@@ -730,8 +730,7 @@ class AttributeSet(hdf5extension.AttributeSet):
         if attrnames:
             rep = [f"{attr} := {getattr(self, attr)!r}" for attr in attrnames]
             return f"{self!s}:\n   [" + ",\n    ".join(rep) + "]"
-        else:
-            return str(self)
+        return str(self)
 
 
 class NotLoggedAttributeSet(AttributeSet):

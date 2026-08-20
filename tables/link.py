@@ -256,8 +256,7 @@ class SoftLink(linkextension.SoftLink, Link):
             if not self.target.startswith("/"):
                 target = self._v_parent._g_join(self.target)
             return self._v_file._get_node(target)
-        else:
-            return None
+        return None
 
     def __getattribute__(self, attrname: str) -> Any:
 
@@ -269,7 +268,7 @@ class SoftLink(linkextension.SoftLink, Link):
             return object.__getattribute__(self, attrname)
 
         # get attribute of the target node
-        elif not self._v_isopen:
+        if not self._v_isopen:
             raise tb.ClosedNodeError("the node object is closed")
         elif self.is_dangling():
             return None

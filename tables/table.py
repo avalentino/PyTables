@@ -190,10 +190,9 @@ def _table__where_indexed(
                 (seq >= start) & (seq < stop) & ((seq - start) % step == 0)
             ]
         return self.itersequence(seq)
-    else:
-        # No luck.  self._seqcache will be populated
-        # in the iterator if possible. (Row._finish_riterator)
-        self._seqcache_key = seqkey
+    # No luck.  self._seqcache will be populated
+    # in the iterator if possible. (Row._finish_riterator)
+    self._seqcache_key = seqkey
 
     # Compute the chunkmap for every index in indexed expression
     idxexprs = compiled.index_expressions
@@ -1003,9 +1002,8 @@ very small/large chunksize, you may want to increase/decrease it.""",
         key = dtype
         if key in self._empty_array_cache:
             return self._empty_array_cache[key]
-        else:
-            self._empty_array_cache[key] = arr = np.empty(shape=0, dtype=key)
-            return arr
+        self._empty_array_cache[key] = arr = np.empty(shape=0, dtype=key)
+        return arr
 
     def _get_container(self, shape: int) -> np.ndarray:
         """Get the appropriate buffer for data depending on table nestedness."""
@@ -1782,11 +1780,10 @@ very small/large chunksize, you may want to increase/decrease it.""",
                     "in table `{self}`, but the existing one is not. "
                 )
             return icol.index
-        else:
-            raise ValueError(
-                f"Field `{sortby}` must have associated a 'full' index "
-                f"in table `{self}`."
-            )
+        raise ValueError(
+            f"Field `{sortby}` must have associated a 'full' index "
+            f"in table `{self}`."
+        )
 
     def itersorted(
         self,
@@ -2008,8 +2005,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
 
         if select_field:
             return result[select_field]
-        else:
-            return result
+        return result
 
     def read(
         self,
@@ -2237,16 +2233,15 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 key += self.nrows
             start, stop, step = self._process_range(key, key + 1, 1)
             return self.read(start, stop, step)[0]
-        elif isinstance(key, slice):
+        if isinstance(key, slice):
             start, stop, step = self._process_range(
                 key.start, key.stop, key.step
             )
             return self.read(start, stop, step)
         # Try with a boolean or point selection
-        elif type(key) in (list, tuple) or isinstance(key, np.ndarray):
+        if type(key) in (list, tuple) or isinstance(key, np.ndarray):
             return self._read_coordinates(key, None)
-        else:
-            raise IndexError(f"Invalid index or slice: {key!r}")
+        raise IndexError(f"Invalid index or slice: {key!r}")
 
     def __setitem__(
         self,
@@ -2312,16 +2307,15 @@ very small/large chunksize, you may want to increase/decrease it.""",
                 # To support negative values
                 key += self.nrows
             return self.modify_rows(key, key + 1, 1, [value])
-        elif isinstance(key, slice):
+        if isinstance(key, slice):
             start, stop, step = self._process_range(
                 key.start, key.stop, key.step
             )
             return self.modify_rows(start, stop, step, value)
         # Try with a boolean or point selection
-        elif type(key) in (list, tuple) or isinstance(key, np.ndarray):
+        if type(key) in (list, tuple) or isinstance(key, np.ndarray):
             return self.modify_coordinates(key, value)
-        else:
-            raise IndexError(f"Invalid index or slice: {key!r}")
+        raise IndexError(f"Invalid index or slice: {key!r}")
 
     def _save_buffered_rows(self, wbuf_ra: np.ndarray, lenrows: int) -> None:
         """Update the indexes after a flushing of rows."""
@@ -3247,8 +3241,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
   chunkshape := {self.chunkshape!r}
   autoindex := {self.autoindex!r}
   colindexes := {_ColIndexes(self.colindexes)!r}"""
-        else:
-            return f"""\
+        return f"""\
 {self}
   description := {self.description!r}
   byteorder := {self.byteorder!r}
@@ -3407,24 +3400,20 @@ class Cols:
             colgroup = self._v_desc._v_pathname
             if colgroup == "":  # The root group
                 return table.read(start, stop, step)[0]
-            else:
-                crecord = table.read(start, stop, step)[0]
-                return crecord[colgroup]
-        elif isinstance(key, slice):
+            crecord = table.read(start, stop, step)[0]
+            return crecord[colgroup]
+        if isinstance(key, slice):
             start, stop, step = table._process_range(
                 key.start, key.stop, key.step
             )
             colgroup = self._v_desc._v_pathname
             if colgroup == "":  # The root group
                 return table.read(start, stop, step)
-            else:
-                crecarray = table.read(start, stop, step)
-                if hasattr(crecarray, "field"):
-                    return crecarray.field(colgroup)  # RecArray case
-                else:
-                    return get_nested_field(crecarray, colgroup)  # numpy case
-        else:
-            raise TypeError(f"invalid index or slice: {key!r}")
+            crecarray = table.read(start, stop, step)
+            if hasattr(crecarray, "field"):
+                return crecarray.field(colgroup)  # RecArray case
+            return get_nested_field(crecarray, colgroup)  # numpy case
+        raise TypeError(f"invalid index or slice: {key!r}")
 
     def __setitem__(self, key: int | slice, value: Any) -> None:
         """Set a row or a range of rows in a table or nested column.
@@ -3706,13 +3695,12 @@ class Column:
                 key += table.nrows
             start, stop, step = table._process_range(key, key + 1, 1)
             return table.read(start, stop, step, self.pathname)[0]
-        elif isinstance(key, slice):
+        if isinstance(key, slice):
             start, stop, step = table._process_range(
                 key.start, key.stop, key.step
             )
             return table.read(start, stop, step, self.pathname)
-        else:
-            raise TypeError(f"'{key}' key type is not valid in this context")
+        raise TypeError(f"'{key}' key type is not valid in this context")
 
     def __iter__(self) -> Generator[np.ndarray]:
         """Iterate through all items in the column."""
@@ -3779,13 +3767,12 @@ class Column:
             return table.modify_column(
                 key, key + 1, 1, [[value]], self.pathname
             )
-        elif isinstance(key, slice):
+        if isinstance(key, slice):
             start, stop, step = table._process_range(
                 key.start, key.stop, key.step
             )
             return table.modify_column(start, stop, step, value, self.pathname)
-        else:
-            raise ValueError(f"Non-valid index or slice: {key}")
+        raise ValueError(f"Non-valid index or slice: {key}")
 
     def create_index(
         self,
@@ -3926,8 +3913,7 @@ class Column:
                     kind=kind, optlevel=optlevel, filters=filters
                 )
             )
-        else:
-            return SizeType(0)  # The column is not intended for indexing
+        return SizeType(0)  # The column is not intended for indexing
 
     def reindex(self) -> None:
         """Recompute the index associated with this column.
@@ -4025,8 +4011,7 @@ class ColumnAttributeSet:
         """Retrieve a PyTables attribute for this column."""
         if not self.issystemcolumnname(key):
             return getattr(self._v_tableattrs, self._prefix(key))
-        else:
-            return super().__getattr__(key)
+        return super().__getattr__(key)
 
     def __setattr__(self, key: str, val: Any) -> Any:
         """Set a PyTables attribute for this column."""
@@ -4039,8 +4024,7 @@ class ColumnAttributeSet:
         """Dictionary-like interface for __getattr__."""
         if not self.issystemcolumnname(key):
             return self._v_tableattrs[self._prefix(key)]
-        else:
-            return self[key]
+        return self[key]
 
     def __setitem__(self, key: str, value: Any) -> None:
         """Dictionary-like interface for __setattr__."""

@@ -210,8 +210,7 @@ class HDF5ExtError(RuntimeError):
 
         if backtrace is None:
             return "No HDF5 back trace available"
-        else:
-            return "".join(traceback.format_list(backtrace))
+        return "".join(traceback.format_list(backtrace))
 
 
 # Initialize the policy for HDF5 back trace handling

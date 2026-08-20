@@ -601,9 +601,8 @@ value of dimensions that are orthogonal (and preferably close) to the
                 o_stop,
                 o_step,
             )
-        else:
-            # For itermode, we don't need the out info
-            return (i_nrows, slice_pos, start, stop, step, nrowsinbuf)
+        # For itermode, we don't need the out info
+        return (i_nrows, slice_pos, start, stop, step, nrowsinbuf)
 
     def eval(self) -> ContainerType:  # noqa: A003
         """Evaluate the expression and return the outcome.
@@ -657,8 +656,7 @@ value of dimensions that are orthogonal (and preferably close) to the
             # No elements to compute
             if start >= stop and self.start is not None:
                 return out
-            else:
-                return self._single_row_out
+            return self._single_row_out
 
         # Create a key that selects every element in inputs and output
         # (including the main dimension)

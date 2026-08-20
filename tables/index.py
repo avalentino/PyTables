@@ -2091,7 +2091,7 @@ class Index(NotLoggedMixin, Group, indexesextension.Index):
                 # To support negative values
                 key += self.nelements
             return self.read_indices(key, key + 1, 1)[0]
-        elif isinstance(key, slice):
+        if isinstance(key, slice):
             return self.read_indices(key.start, key.stop, key.step)
         raise IndexError(f"Invalid index: {key}")
 

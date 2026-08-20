@@ -181,21 +181,19 @@ def allequal(a, b, flavor="numpy"):
     if len(a.shape) == 0:
         if a[()] == b[()]:
             return 1
-        else:
-            if verbose:
-                print("Shape is not equal:", a.shape, "!=", b.shape)
-            return 0
+        if verbose:
+            print("Shape is not equal:", a.shape, "!=", b.shape)
+        return 0
 
     # null arrays
     if a.size == 0:  # len(a) is not correct for generic shapes
         if b.size == 0:
             return 1
-        else:
-            if verbose:
-                print("length is not equal")
-                print("len(a.data) ==>", len(a.data))
-                print("len(b.data) ==>", len(b.data))
-            return 0
+        if verbose:
+            print("length is not equal")
+            print("len(a.data) ==>", len(a.data))
+            print("len(b.data) ==>", len(b.data))
+        return 0
 
     # Multidimensional case
     result = a == b

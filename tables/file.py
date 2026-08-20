@@ -422,12 +422,11 @@ class NodeManager:
             if node._v_isopen:
                 self.cache_node(node, key)
                 return node
-            else:
-                # this should not happen
-                warnings.warn(
-                    f"a closed node found in the cache: ``{key}``",
-                    stacklevel=2,
-                )
+            # this should not happen
+            warnings.warn(
+                f"a closed node found in the cache: ``{key}``",
+                stacklevel=2,
+            )
 
         if key in self.registry:
             node = self.registry[key]
@@ -904,8 +903,7 @@ class File(hdf5extension.File):
         if create:
             path = path._v_pathname if hasattr(path, "_v_pathname") else path
             return self._create_path(path)
-        else:
-            return self.get_node(path)
+        return self.get_node(path)
 
     def _create_path(self, path: str) -> Group:
         """Create the groups needed for the `path` to exist.
@@ -1945,10 +1943,7 @@ class File(hdf5extension.File):
                     npobj, overwrite=overwrite, recursive=recursive, **kwargs
                 )
                 return npobj
-            else:
-                raise OSError(
-                    "You cannot copy a root group over the same file"
-                )
+            raise OSError("You cannot copy a root group over the same file")
         return obj._f_copy(
             newparent, newname, overwrite, recursive, createparents, **kwargs
         )
@@ -2659,7 +2654,7 @@ class File(hdf5extension.File):
             # The required mark is beyond the end of the action log
             # The final action is the last row
             return self._actionlog.nrows
-        elif markid <= 0:
+        if markid <= 0:
             # The required mark is the first one
             # return the first row
             return 0

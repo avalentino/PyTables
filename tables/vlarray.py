@@ -681,17 +681,16 @@ class VLArray(hdf5extension.VLArray, Leaf):
                 key += self.nrows
             start, stop, step = self._process_range(key, key + 1, 1)
             return self.read(start, stop, step)[0]
-        elif isinstance(key, slice):
+        if isinstance(key, slice):
             start, stop, step = self._process_range(
                 key.start, key.stop, key.step
             )
             return self.read(start, stop, step)
         # Try with a boolean or point selection
-        elif type(key) in (list, tuple) or isinstance(key, np.ndarray):
+        if type(key) in (list, tuple) or isinstance(key, np.ndarray):
             coords = self._point_selection(key)
             return self._read_coordinates(coords)
-        else:
-            raise IndexError(f"Invalid index or slice: {key!r}")
+        raise IndexError(f"Invalid index or slice: {key!r}")
 
     def _assign_values(self, coords: Sequence[int], values: Sequence) -> None:
         """Assign the `values` to the positions stated in `coords`."""

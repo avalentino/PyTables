@@ -212,9 +212,9 @@ def calcoptlevels(
     """
     if indsize == 2:  # light
         return col_light(nblocks, optlevel)
-    elif indsize == 4:  # medium
+    if indsize == 4:  # medium
         return col_medium(nblocks, optlevel)
-    elif indsize == 8:  # full
+    if indsize == 8:  # full
         return col_full(nblocks, optlevel)
     raise ValueError(f"Invalid 'indsize' value: {indsize}.")
 
@@ -374,8 +374,7 @@ def inftype(
     if dtype.kind == "S":
         if sign < 0:
             return b"\x00" * itemsize
-        else:
-            return b"\xff" * itemsize
+        return b"\xff" * itemsize
     try:
         return infinitymap[dtype.name][sign >= 0]
     except KeyError as exc:
@@ -431,15 +430,12 @@ def int_type_next_after(
     if direction < 0:
         if isinstance(x, int):
             return x - 1
-        else:
-            # return int(PyNextAfter(x, x - 1))
-            return int(np.nextafter(x, x - 1))
-    else:
-        if isinstance(x, int):
-            return x + 1
-        else:
-            # return int(PyNextAfter(x,x + 1)) + 1
-            return int(np.nextafter(x, x + 1)) + 1
+        # return int(PyNextAfter(x, x - 1))
+        return int(np.nextafter(x, x - 1))
+    if isinstance(x, int):
+        return x + 1
+    # return int(PyNextAfter(x,x + 1)) + 1
+    return int(np.nextafter(x, x + 1)) + 1
 
 
 def bool_type_next_after(
@@ -470,13 +466,12 @@ def nextafter(
 
     if dtype.kind in ["b"]:
         return bool_type_next_after(x, direction, itemsize)
-    elif dtype.kind in ["i", "u"]:
+    if dtype.kind in ["i", "u"]:
         return int_type_next_after(x, direction, itemsize)
-    elif dtype.kind == "f":
+    if dtype.kind == "f":
         if direction < 0:
             return np.nextafter(x, x - 1)
-        else:
-            return np.nextafter(x, x + 1)
+        return np.nextafter(x, x + 1)
 
     # elif dtype.name == "float32":
     #    if direction < 0:
