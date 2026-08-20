@@ -996,7 +996,7 @@ class Leaf(Node):
         chunk = self._g_read_chunk(coords, out)
         if chunk is None:
             raise NoSuchChunkError(
-                f"Can't read missing chunk at coordinates " f"{tuple(coords)}"
+                f"Can't read missing chunk at coordinates {tuple(coords)}"
             )
         return chunk.tobytes() if out is None else memoryview(out)
 

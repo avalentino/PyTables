@@ -44,11 +44,9 @@ def pre_allocated_read(array_size):
 
 
 if __name__ == "__main__":
-
     array_num_bytes = [10**5, 10**6, 10**7, 10**8]
 
     for array_bytes in array_num_bytes:
-
         array_size = array_bytes // 8
 
         create_file(array_size)

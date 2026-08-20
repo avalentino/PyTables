@@ -579,7 +579,6 @@ class Basic32DTestCase(BasicTestCase):
 
 
 class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self.size = 1000
@@ -659,7 +658,6 @@ class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
 class SizeOnDiskInMemoryPropertyTestCase(
     common.TempFileMixin, common.PyTablesTestCase
 ):
-
     def setUp(self):
         super().setUp()
         self.array_size = (10, 10)
@@ -1047,7 +1045,6 @@ class GroupsArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01_copy(self):
         """Checking Array.copy() method."""
 
@@ -1233,7 +1230,6 @@ class OpenCopyTestCase(CopyTestCase):
 
 
 class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01_index(self):
         """Checking Array.copy() method with indexes."""
 
@@ -1383,7 +1379,6 @@ class CopyIndex12TestCase(CopyIndexTestCase):
 
 
 class GetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00_single(self):
         """Single element access (character types)"""
 
@@ -1635,7 +1630,6 @@ class GI2NACloseTestCase(GI2NATestCase):
 
 
 class SetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00_single(self):
         """Single element update (character types)"""
 
@@ -1967,7 +1961,6 @@ class SI2NACloseTestCase(SI2NATestCase):
 
 
 class GeneratorTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00a_single(self):
         """Testing generator access to Arrays, single elements (char)"""
 
@@ -2134,7 +2127,6 @@ class TruncateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class PointSelectionTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         # Limits for selections
@@ -2347,7 +2339,6 @@ class PointSelection4(PointSelectionTestCase):
 
 
 class FancySelectionTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 
@@ -2516,7 +2507,6 @@ class FancySelection4(FancySelectionTestCase):
 
 
 class CopyNativeHDF5MDAtom(common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         filename = common.test_filename("array_mdatom.h5")
@@ -2549,7 +2539,6 @@ class CopyNativeHDF5MDAtom(common.PyTablesTestCase):
 
 
 class AccessClosedTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 
@@ -2570,7 +2559,6 @@ class AccessClosedTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class BroadcastTest(common.TempFileMixin, common.PyTablesTestCase):
-
     def test(self):
         """Test correct broadcasting when the array atom is not scalar."""
 

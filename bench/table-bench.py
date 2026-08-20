@@ -384,8 +384,7 @@ if __name__ == "__main__":
             import profile as prof
 
             prof.run(
-                "(rowsw, rowsz) = createFile(file, nrows, filters, "
-                "recsize)",
+                "(rowsw, rowsz) = createFile(file, nrows, filters, recsize)",
                 "table-bench.prof",
             )
             stats = pstats.Stats("table-bench.prof")

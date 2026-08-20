@@ -129,7 +129,6 @@ def check_open_leaf():
 
 
 if __name__ == "__main__":
-
     usage = f"""usage: {sys.argv[0]} [-v] [-p] [-n niter] [-O] [-o] [-B] [-b] [-g] [-l] [-A] [-a] [-E] [-S] datafile
               -v verbose  (total dump of profiling)
               -p do profiling

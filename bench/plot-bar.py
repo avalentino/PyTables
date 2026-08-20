@@ -78,7 +78,6 @@ def show_plot(bars, filenames, tit):
 
 
 if __name__ == "__main__":
-
     import sys
     import getopt
 

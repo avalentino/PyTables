@@ -6,7 +6,6 @@ import tables as tb
 
 
 class PyTablesDB(DB):
-
     def __init__(
         self,
         nrows,

@@ -355,7 +355,7 @@ class Atom(metaclass=MetaAtom):
         this is only viable for strings that are castable as ascii, a
         warning is issued.
 
-            >>> Atom.from_dtype(np.dtype('U20')) # doctest: +SKIP
+            >>> Atom.from_dtype(np.dtype("U20"))  # doctest: +SKIP
             Atom.py:392: FlavorWarning: support for unicode type is very
                 limited, and only works for strings that can be cast as ascii
             StringAtom(itemsize=20, shape=(), dflt=b'')
@@ -676,9 +676,7 @@ class IntAtom(Atom):  # type: ignore[misc]
     signed: bool = True
     _deftype = "int32"
     _defvalue = 0
-    __init__ = _abstract_atom_init(
-        _deftype, _defvalue
-    )  # type: ignore[assignment]
+    __init__ = _abstract_atom_init(_deftype, _defvalue)  # type: ignore[assignment]
 
 
 class UIntAtom(Atom):  # type: ignore[misc]
@@ -688,9 +686,7 @@ class UIntAtom(Atom):  # type: ignore[misc]
     signed: bool = False
     _deftype = "uint32"
     _defvalue = 0
-    __init__ = _abstract_atom_init(
-        _deftype, _defvalue
-    )  # type: ignore[assignment]
+    __init__ = _abstract_atom_init(_deftype, _defvalue)  # type: ignore[assignment]
 
 
 class FloatAtom(Atom):  # type: ignore[misc]
@@ -699,9 +695,7 @@ class FloatAtom(Atom):  # type: ignore[misc]
     kind: str = "float"
     _deftype = "float64"
     _defvalue = 0.0
-    __init__ = _abstract_atom_init(
-        _deftype, _defvalue
-    )  # type: ignore[assignment]
+    __init__ = _abstract_atom_init(_deftype, _defvalue)  # type: ignore[assignment]
 
 
 class Int8Atom(IntAtom):  # type: ignore[misc]
@@ -919,9 +913,7 @@ class TimeAtom(Atom):  # type: ignore[misc]
     kind: str = "time"
     _deftype = "time32"
     _defvalue: int | float = 0
-    __init__ = _abstract_atom_init(
-        _deftype, _defvalue
-    )  # type: ignore[assignment]
+    __init__ = _abstract_atom_init(_deftype, _defvalue)  # type: ignore[assignment]
 
 
 class Time32Atom(TimeAtom):  # type: ignore[misc]
@@ -1049,8 +1041,7 @@ class EnumAtom(Atom):
         """Check the `base` storage atom."""
         if base.kind == "enum":
             raise TypeError(
-                "can not use an enumerated atom "
-                f"as a storage atom: {base!r}"
+                f"can not use an enumerated atom as a storage atom: {base!r}"
             )
 
         # Check whether the storage atom can represent concrete values

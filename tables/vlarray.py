@@ -126,13 +126,14 @@ class VLArray(hdf5extension.VLArray, Leaf):
         import tables as tb
 
         # Create a VLArray:
-        fileh = tb.open_file('vlarray1.h5', mode='w')
+        fileh = tb.open_file("vlarray1.h5", mode="w")
         vlarray = fileh.create_vlarray(
             fileh.root,
-            'vlarray1',
+            "vlarray1",
             tb.Int32Atom(shape=()),
             "ragged array of ints",
-            filters=tb.Filters(1))
+            filters=tb.Filters(1),
+        )
 
         # Append some (variable length) rows:
         vlarray.append(np.array([5, 6]))
@@ -140,24 +141,25 @@ class VLArray(hdf5extension.VLArray, Leaf):
         vlarray.append([5, 6, 9, 8])
 
         # Now, read it through an iterator:
-        print('-->', vlarray.title)
+        print("-->", vlarray.title)
         for x in vlarray:
             print(f"{vlarray.name}[{vlarray.nrow}]--> {x}")
 
         # Now, do the same with native Python strings.
         vlarray2 = fileh.create_vlarray(
             fileh.root,
-            'vlarray2',
+            "vlarray2",
             tb.StringAtom(itemsize=2),
             "ragged array of strings",
-            filters=tb.Filters(1))
-        vlarray2.flavor = 'python'
+            filters=tb.Filters(1),
+        )
+        vlarray2.flavor = "python"
 
         # Append some (variable length) rows:
-        print('-->', vlarray2.title)
-        vlarray2.append(['5', '66'])
-        vlarray2.append(['5', '6', '77'])
-        vlarray2.append(['5', '6', '9', '88'])
+        print("-->", vlarray2.title)
+        vlarray2.append(["5", "66"])
+        vlarray2.append(["5", "6", "77"])
+        vlarray2.append(["5", "6", "9", "88"])
 
         # Now, read it through an iterator:
         for x in vlarray2:
@@ -662,9 +664,9 @@ class VLArray(hdf5extension.VLArray, Leaf):
 
             a_row = vlarray[4]
             a_list = vlarray[4:1000:2]
-            a_list2 = vlarray[[0,2]]   # get list of coords
-            a_list3 = vlarray[[0,-2]]  # negative values accepted
-            a_list4 = vlarray[np.array([True,...,False])]  # array of bools
+            a_list2 = vlarray[[0, 2]]  # get list of coords
+            a_list3 = vlarray[[0, -2]]  # negative values accepted
+            a_list4 = vlarray[np.array([True, ..., False])]  # array of bools
 
         """
         self._g_check_open()
@@ -775,7 +777,7 @@ class VLArray(hdf5extension.VLArray, Leaf):
             # Negative values for the index are supported.
             vlarray[-99] = vlarray[5] * 2 + 3
             vlarray[1:30:2] = list_of_rows
-            vlarray[[1,3]] = new_1_and_3_rows
+            vlarray[[1, 3]] = new_1_and_3_rows
 
         """
         self._g_check_open()

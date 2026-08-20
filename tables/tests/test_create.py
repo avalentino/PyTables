@@ -896,12 +896,10 @@ class CopyGroupTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # These lists should already be ordered
             if common.verbose:
                 print(
-                    f"srcattrskeys for node {srcnode._v_name}: "
-                    f"{srcattrskeys}"
+                    f"srcattrskeys for node {srcnode._v_name}: {srcattrskeys}"
                 )
                 print(
-                    f"dstattrskeys for node {dstnode._v_name}: "
-                    f"{dstattrskeys}"
+                    f"dstattrskeys for node {dstnode._v_name}: {dstattrskeys}"
                 )
             self.assertEqual(srcattrskeys, dstattrskeys)
             if common.verbose:
@@ -1264,12 +1262,10 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # These lists should already be ordered
             if common.verbose:
                 print(
-                    f"srcattrskeys for node {srcnode._v_name}: "
-                    f"{srcattrskeys}"
+                    f"srcattrskeys for node {srcnode._v_name}: {srcattrskeys}"
                 )
                 print(
-                    f"dstattrskeys for node {dstnode._v_name}: "
-                    f"{dstattrskeys}"
+                    f"dstattrskeys for node {dstnode._v_name}: {dstattrskeys}"
                 )
             self.assertEqual(srcattrskeys, dstattrskeys)
             if common.verbose:
@@ -1320,12 +1316,10 @@ class CopyFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # These lists should already be ordered
             if common.verbose:
                 print(
-                    f"srcattrskeys for node {srcnode._v_name}: "
-                    f"{srcattrskeys}"
+                    f"srcattrskeys for node {srcnode._v_name}: {srcattrskeys}"
                 )
                 print(
-                    f"dstattrskeys for node {dstnode._v_name}: "
-                    f"{dstattrskeys}"
+                    f"dstattrskeys for node {dstnode._v_name}: {dstattrskeys}"
                 )
 
             # Filters may differ, do not take into account
@@ -1396,7 +1390,6 @@ class CopyFileCase8(CopyFileTestCase):
 
 
 class CopyFileCase10(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01_notoverwrite(self):
         """Checking copy of a File (checking not overwriting)"""
 

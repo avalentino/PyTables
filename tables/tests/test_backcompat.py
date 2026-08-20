@@ -150,7 +150,6 @@ class OldFlavorsTestCase01(common.PyTablesTestCase):
         # Open the HDF5 with old numeric flavor
         h5fname = common.test_filename("oldflavor_numeric.h5")
         with tb.open_file(h5fname) as h5file:
-
             # Assert other properties in array
             self.assertEqual(h5file.root.array1.flavor, "numeric")
             self.assertEqual(h5file.root.array2.flavor, "python")

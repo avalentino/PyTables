@@ -167,13 +167,13 @@ class Enum:
         --------
         Let ``enum`` be an enumerated type defined as:
 
-        >>> enum = Enum({'T0': 0, 'T1': 2, 'T2': 5})
+        >>> enum = Enum({"T0": 0, "T1": 2, "T2": 5})
 
         then:
 
-        >>> enum['T1']
+        >>> enum["T1"]
         2
-        >>> enum['foo']
+        >>> enum["foo"]
         Traceback (most recent call last):
           ...
         KeyError: "no enumerated value with that name: 'foo'"
@@ -202,7 +202,7 @@ class Enum:
         --------
         Let ``enum`` be an enumerated type defined as:
 
-        >>> enum = Enum({'T0': 0, 'T1': 2, 'T2': 5})
+        >>> enum = Enum({"T0": 0, "T1": 2, "T2": 5})
 
         then:
 
@@ -240,13 +240,13 @@ class Enum:
         --------
         Let ``enum`` be an enumerated type defined as:
 
-        >>> enum = Enum({'T0': 0, 'T1': 2, 'T2': 5})
+        >>> enum = Enum({"T0": 0, "T1": 2, "T2": 5})
 
         then:
 
-        >>> 'T1' in enum
+        >>> "T1" in enum
         True
-        >>> 'foo' in enum
+        >>> "foo" in enum
         False
         >>> 0 in enum
         Traceback (most recent call last):
@@ -278,7 +278,7 @@ class Enum:
         --------
         Let ``enum`` be an enumerated type defined as:
 
-        >>> enum = Enum({'T0': 0, 'T1': 2, 'T2': 5})
+        >>> enum = Enum({"T0": 0, "T1": 2, "T2": 5})
 
         then:
 
@@ -320,7 +320,7 @@ class Enum:
 
         Examples
         --------
-        >>> enumvals = {'red': 4, 'green': 2, 'blue': 1}
+        >>> enumvals = {"red": 4, "green": 2, "blue": 1}
         >>> enum = Enum(enumvals)
         >>> enumdict = dict([(name, value) for (name, value) in enum])
         >>> enumvals == enumdict
@@ -339,12 +339,12 @@ class Enum:
         --------
         Let ``enum*`` be enumerated types defined as:
 
-        >>> enum1 = Enum({'T0': 0, 'T1': 2})
+        >>> enum1 = Enum({"T0": 0, "T1": 2})
         >>> enum2 = Enum(enum1)
-        >>> enum3 = Enum({'T1': 2, 'T0': 0})
-        >>> enum4 = Enum({'T0': 0, 'T1': 2, 'T2': 5})
-        >>> enum5 = Enum({'T0': 0})
-        >>> enum6 = Enum({'T0': 10, 'T1': 20})
+        >>> enum3 = Enum({"T1": 2, "T0": 0})
+        >>> enum4 = Enum({"T0": 0, "T1": 2, "T2": 5})
+        >>> enum5 = Enum({"T0": 0})
+        >>> enum6 = Enum({"T0": 10, "T1": 20})
 
         then:
 
@@ -362,9 +362,9 @@ class Enum:
         Comparing enumerated types with other kinds of objects produces
         a false result:
 
-        >>> enum1 == {'T0': 0, 'T1': 2}
+        >>> enum1 == {"T0": 0, "T1": 2}
         False
-        >>> enum1 == ['T0', 'T1']
+        >>> enum1 == ["T0", "T1"]
         False
         >>> enum1 == 2
         False
@@ -385,12 +385,12 @@ class Enum:
         --------
         Let ``enum*`` be enumerated types defined as:
 
-        >>> enum1 = Enum({'T0': 0, 'T1': 2})
+        >>> enum1 = Enum({"T0": 0, "T1": 2})
         >>> enum2 = Enum(enum1)
-        >>> enum3 = Enum({'T1': 2, 'T0': 0})
-        >>> enum4 = Enum({'T0': 0, 'T1': 2, 'T2': 5})
-        >>> enum5 = Enum({'T0': 0})
-        >>> enum6 = Enum({'T0': 10, 'T1': 20})
+        >>> enum3 = Enum({"T1": 2, "T0": 0})
+        >>> enum4 = Enum({"T0": 0, "T1": 2, "T2": 5})
+        >>> enum5 = Enum({"T0": 0})
+        >>> enum6 = Enum({"T0": 10, "T1": 20})
 
         then:
 
@@ -420,7 +420,7 @@ class Enum:
 
         Examples
         --------
-        >>> repr(Enum({'name': 10}))
+        >>> repr(Enum({"name": 10}))
         "Enum({'name': 10})"
 
         """

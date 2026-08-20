@@ -60,7 +60,6 @@ class StreamChar:
 
 
 class PostgresDB(DB):
-
     def __init__(self, nrows, rng, userandom):
         DB.__init__(self, nrows, rng, userandom)
         self.port = PORT

@@ -114,16 +114,22 @@ class Filters:
         import numpy as np
         import tables as tb
 
-        fileh = tb.open_file('test5.h5', mode='w')
+        fileh = tb.open_file("test5.h5", mode="w")
         atom = Float32Atom()
-        filters = Filters(complevel=1, complib='blosc', fletcher32=True)
-        arr = fileh.create_earray(fileh.root, 'earray', atom, (0,2),
-                                 "A growable array", filters=filters)
+        filters = Filters(complevel=1, complib="blosc", fletcher32=True)
+        arr = fileh.create_earray(
+            fileh.root,
+            "earray",
+            atom,
+            (0, 2),
+            "A growable array",
+            filters=filters,
+        )
 
         # Append several rows in only one call
-        arr.append(np.array([[1., 2.],
-                             [2., 3.],
-                             [3., 4.]], dtype=np.float32))
+        arr.append(
+            np.array([[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]], dtype=np.float32)
+        )
 
         # Print information on that enlargeable array
         print("Result Array:")
@@ -405,7 +411,7 @@ bitshuffle=False, fletcher32=True, least_significant_digit=None)
         args.append(f"bitshuffle={self.bitshuffle}")
         args.append(f"fletcher32={self.fletcher32}")
         args.append(f"least_significant_digit={self.least_significant_digit}")
-        return f'{self.__class__.__name__}({", ".join(args)})'
+        return f"{self.__class__.__name__}({', '.join(args)})"
 
     def __str__(self) -> str:
         return repr(self)

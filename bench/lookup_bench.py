@@ -26,7 +26,6 @@ def get_nrows(nrows_str):
 
 
 class DB:
-
     def __init__(
         self,
         nrows,

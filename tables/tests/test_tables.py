@@ -1583,21 +1583,21 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             table.append(
                 [
                     (
-                        f"Particle: {i+1:6d}",
+                        f"Particle: {i + 1:6d}",
                         i + 1,
                         10 - (i + 1),
                         float((i + 1) * (i + 1)),
                         float((i + 1) ** 2),
                     ),
                     (
-                        f"Particle: {i+2:6d}",
+                        f"Particle: {i + 2:6d}",
                         i + 2,
                         10 - (i + 2),
                         float((i + 2) * (i + 2)),
                         float((i + 2) ** 2),
                     ),
                     (
-                        f"Particle: {i+3:6d}",
+                        f"Particle: {i + 3:6d}",
                         i + 3,
                         10 - (i + 3),
                         float((i + 3) * (i + 3)),
@@ -1609,28 +1609,28 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             table.append(
                 [
                     (
-                        f"Particle: {i+4:6d}",
+                        f"Particle: {i + 4:6d}",
                         i + 4,
                         10 - (i + 4),
                         float((i + 4) * (i + 4)),
                         float((i + 4) ** 2),
                     ),
                     (
-                        f"Particle: {i+5:6d}",
+                        f"Particle: {i + 5:6d}",
                         i + 5,
                         10 - (i + 5),
                         float((i + 5) * (i + 5)),
                         float((i + 5) ** 2),
                     ),
                     (
-                        f"Particle: {i+6:6d}",
+                        f"Particle: {i + 6:6d}",
                         i + 6,
                         10 - (i + 6),
                         float((i + 6) * (i + 6)),
                         float((i + 6) ** 2),
                     ),
                     (
-                        f"Particle: {i+7:6d}",
+                        f"Particle: {i + 7:6d}",
                         i + 7,
                         10 - (i + 7),
                         float((i + 7) * (i + 7)),
@@ -1642,35 +1642,35 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             table.append(
                 [
                     (
-                        f"Particle: {i+8:6d}",
+                        f"Particle: {i + 8:6d}",
                         i + 8,
                         10 - (i + 8),
                         float((i + 8) * (i + 8)),
                         float((i + 8) ** 2),
                     ),
                     (
-                        f"Particle: {i+9:6d}",
+                        f"Particle: {i + 9:6d}",
                         i + 9,
                         10 - (i + 9),
                         float((i + 9) * (i + 9)),
                         float((i + 9) ** 2),
                     ),
                     (
-                        f"Particle: {i+10:6d}",
+                        f"Particle: {i + 10:6d}",
                         i + 10,
                         10 - (i + 10),
                         float((i + 10) * (i + 10)),
                         float((i + 10) ** 2),
                     ),
                     (
-                        f"Particle: {i+11:6d}",
+                        f"Particle: {i + 11:6d}",
                         i + 11,
                         10 - (i + 11),
                         float((i + 11) * (i + 11)),
                         float((i + 11) ** 2),
                     ),
                     (
-                        f"Particle: {i+12:6d}",
+                        f"Particle: {i + 12:6d}",
                         i + 12,
                         10 - (i + 12),
                         float((i + 12) * (i + 12)),
@@ -2192,21 +2192,21 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             table.append(
                 [
                     (
-                        f"Particle: {i+1:6d}",
+                        f"Particle: {i + 1:6d}",
                         i + 1,
                         10 - (i + 1),
                         float((i + 1) * (i + 1)),
                         float((i + 1) ** 2),
                     ),
                     (
-                        f"Particle: {i+2:6d}",
+                        f"Particle: {i + 2:6d}",
                         i + 2,
                         10 - (i + 2),
                         float((i + 2) * (i + 2)),
                         float((i + 2) ** 2),
                     ),
                     (
-                        f"Particle: {i+3:6d}",
+                        f"Particle: {i + 3:6d}",
                         i + 3,
                         10 - (i + 3),
                         float((i + 3) * (i + 3)),
@@ -2218,28 +2218,28 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             table.append(
                 [
                     (
-                        f"Particle: {i+4:6d}",
+                        f"Particle: {i + 4:6d}",
                         i + 4,
                         10 - (i + 4),
                         float((i + 4) * (i + 4)),
                         float((i + 4) ** 2),
                     ),
                     (
-                        f"Particle: {i+5:6d}",
+                        f"Particle: {i + 5:6d}",
                         i + 5,
                         10 - (i + 5),
                         float((i + 5) * (i + 5)),
                         float((i + 5) ** 2),
                     ),
                     (
-                        f"Particle: {i+6:6d}",
+                        f"Particle: {i + 6:6d}",
                         i + 6,
                         10 - (i + 6),
                         float((i + 6) * (i + 6)),
                         float((i + 6) ** 2),
                     ),
                     (
-                        f"Particle: {i+7:6d}",
+                        f"Particle: {i + 7:6d}",
                         i + 7,
                         10 - (i + 7),
                         float((i + 7) * (i + 7)),
@@ -2251,35 +2251,35 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             table.append(
                 [
                     (
-                        f"Particle: {i+8:6d}",
+                        f"Particle: {i + 8:6d}",
                         i + 8,
                         10 - (i + 8),
                         float((i + 8) * (i + 8)),
                         float((i + 8) ** 2),
                     ),
                     (
-                        f"Particle: {i+9:6d}",
+                        f"Particle: {i + 9:6d}",
                         i + 9,
                         10 - (i + 9),
                         float((i + 9) * (i + 9)),
                         float((i + 9) ** 2),
                     ),
                     (
-                        f"Particle: {i+10:6d}",
+                        f"Particle: {i + 10:6d}",
                         i + 10,
                         10 - (i + 10),
                         float((i + 10) * (i + 10)),
                         float((i + 10) ** 2),
                     ),
                     (
-                        f"Particle: {i+11:6d}",
+                        f"Particle: {i + 11:6d}",
                         i + 11,
                         10 - (i + 11),
                         float((i + 11) * (i + 11)),
                         float((i + 11) ** 2),
                     ),
                     (
-                        f"Particle: {i+12:6d}",
+                        f"Particle: {i + 12:6d}",
                         i + 12,
                         10 - (i + 12),
                         float((i + 12) * (i + 12)),

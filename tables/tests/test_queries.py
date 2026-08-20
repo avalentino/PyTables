@@ -387,7 +387,7 @@ def create_test_method(type_, op, extracond, func=None):
     elif op == "~":  # unary
         cond = f"~({colname})"
     elif op == "<" and func is None:  # binary variable-constant
-        cond = f'{colname} {op} {_old_repr(condvars["bound"])}'
+        cond = f"{colname} {op} {_old_repr(condvars['bound'])}"
     elif isinstance(op, tuple):  # double binary variable-constant
         cond = f"(lbound {op[0]} {colname}) & ({colname} {op[1]} rbound)"
     elif func is not None:

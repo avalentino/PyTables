@@ -102,7 +102,6 @@ def show_plot(plots, yaxis, legends, gtitle):
 
 
 if __name__ == "__main__":
-
     import sys
     import getopt
 

@@ -10,7 +10,6 @@ from tables.tests import common
 
 # Test for hard links
 class HardLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self._createFile()
@@ -93,7 +92,6 @@ class HardLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 # Test for soft links
 class SoftLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self._createFile()
@@ -373,7 +371,6 @@ class SoftLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
     tb.file._FILE_OPEN_POLICY == "strict", 'FILE_OPEN_POLICY = "strict"'
 )
 class ExternalLinkTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 

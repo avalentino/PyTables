@@ -208,7 +208,7 @@ def bench_create(
     table.row["rowsecf"] = rowsecf
     print(f"Total file size: {(size1 + size2) / 1024 / 1024:.3f} MB", end=" ")
     print(f", Write KB/s (pure data): {rowsw * rowsz / (time1 * 1024):.0f}")
-    print(f"Rows indexed: {irows} (IMRows): {irows / 10 ** 6}")
+    print(f"Rows indexed: {irows} (IMRows): {irows / 10**6}")
     print(
         f"Time indexing rows: {time2:.3f} s (real) "
         f"{tcpu2:.3f} s (cpu)  {tcpu2 / time2:.0%}"
@@ -388,11 +388,11 @@ def bench_search(
             )
         rowsec1 = rowsr / treadrows
         row["rowsec1"] = rowsec1
-        print(f"Read Mrows/sec: {rowsec1 / 10 ** 6:.6f} (first time)", end=" ")
+        print(f"Read Mrows/sec: {rowsec1 / 10**6:.6f} (first time)", end=" ")
         if riter > 1:
             rowsec2 = rowsr / treadrows2
             row["rowsec2"] = rowsec2
-            print(f"{rowsec2 / 10 ** 6:.6f} (cache time)")
+            print(f"{rowsec2 / 10**6:.6f} (cache time)")
         else:
             print()
         # Append the info to the table

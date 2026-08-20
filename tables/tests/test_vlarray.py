@@ -4048,7 +4048,6 @@ class OpenCopyTestCase(CopyTestCase):
 
 
 class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01_index(self):
         """Checking VLArray.copy() method with indexes."""
 
@@ -4181,7 +4180,6 @@ class CopyIndex12TestCase(CopyIndexTestCase):
 
 
 class ChunkshapeTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         atom = tb.Int32Atom(shape=(2,))
@@ -4228,7 +4226,6 @@ class VLUEndianTestCase(common.PyTablesTestCase):
 
 
 class TruncateTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 
@@ -4350,7 +4347,6 @@ class TruncateCloseTestCase(TruncateTestCase):
 
 
 class PointSelectionTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 

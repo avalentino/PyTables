@@ -3,7 +3,6 @@ from tables.tests import common
 
 # Check indexes from PyTables version 2.0
 class IndexesTestCase(common.TestFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self.table1 = self.h5file.root.table1

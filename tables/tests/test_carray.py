@@ -1303,7 +1303,6 @@ class ComprTestCase(BasicTestCase):
 # this is a subset of the tests in test_array.py, mostly to verify that errors
 # are handled in the same way
 class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self.size = 1000
@@ -1352,7 +1351,6 @@ class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
 class SizeOnDiskInMemoryPropertyTestCase(
     common.TempFileMixin, common.PyTablesTestCase
 ):
-
     def setUp(self):
         super().setUp()
         self.array_size = (10_000, 10)
@@ -1590,7 +1588,6 @@ class OffsetStrideTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01a_copy(self):
         """Checking CArray.copy() method."""
 
@@ -2450,7 +2447,7 @@ class BigArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
             # This can't be avoided in 32-bit platforms.
             self.assertTrue(
                 self.shape[0] > np.iinfo(int).max,
-                "Array length overflowed but ``int`` " "is wide enough.",
+                "Array length overflowed but ``int`` is wide enough.",
             )
 
     def test01_shape_reopen(self):
@@ -2461,7 +2458,6 @@ class BigArrayTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 # Test for default values when creating arrays.
 class DfltAtomTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00_dflt(self):
         """Check that Atom.dflt is honored (string version)."""
 
@@ -2533,7 +2529,6 @@ class DfltAtomReopen(DfltAtomTestCase):
 
 # Test for representation of defaults in atoms. Ticket #212.
 class AtomDefaultReprTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00a_zeros(self):
         """Testing default values.  Zeros (scalar)."""
 
@@ -2650,7 +2645,6 @@ class TruncateTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 # Test for dealing with multidimensional atoms
 class MDAtomTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01a_assign(self):
         """Assign a row to a (unidimensional) CArray with a MD atom."""
 
@@ -2803,7 +2797,6 @@ class MDAtomReopen(MDAtomTestCase):
 
 # Test for building very large MD atoms without defaults.  Ticket #211.
 class MDLargeAtomTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01_create(self):
         """Create a CArray with a very large MD atom."""
 
@@ -2830,7 +2823,6 @@ class MDLargeAtomReopen(MDLargeAtomTestCase):
 
 
 class AccessClosedTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self.array = self.h5file.create_carray(

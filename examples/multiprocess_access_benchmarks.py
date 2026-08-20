@@ -37,7 +37,6 @@ def create_file(array_size):
 
 # process to receive an array using a multiprocessing.Pipe connection
 class PipeReceive(multiprocessing.Process):
-
     def __init__(self, receiver_pipe, result_send):
         super().__init__()
         self.receiver_pipe = receiver_pipe
@@ -81,7 +80,6 @@ def read_and_send_pipe(send_type, array_size):
 # for real use, this would require creating some protocol to specify the
 # array's data type and shape
 class MemmapReceive(multiprocessing.Process):
-
     def __init__(self, path_recv, result_send):
         super().__init__()
         self.path_recv = path_recv
@@ -133,7 +131,6 @@ def read_and_send_memmap(send_type, array_size):
 # for real use, this would require creating some protocol to specify the
 # array's data type and shape
 class SocketReceive(multiprocessing.Process):
-
     def __init__(self, socket_family, address, result_send, array_nbytes):
         super().__init__()
         self.socket_family = socket_family
@@ -223,7 +220,6 @@ def print_results(
 
 
 if __name__ == "__main__":
-
     random.seed(os.urandom(2))
     array_num_bytes = [10**5, 10**6, 10**7, 10**8]
 

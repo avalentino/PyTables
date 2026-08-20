@@ -107,14 +107,14 @@ class Group(hdf5extension.Group, Node):
         nchild = group._v_nchildren
 
         # Add a Table child called 'table' under 'group'.
-        h5file.create_table(group, 'table', myDescription)
-        table = group.table          # get the table child instance
-        group.table = 'foo'          # set a Python attribute
+        h5file.create_table(group, "table", myDescription)
+        table = group.table  # get the table child instance
+        group.table = "foo"  # set a Python attribute
 
         # (PyTables warns you here about using the name of a child node.)
-        foo = group.table            # get a Python attribute
-        del group.table              # delete a Python attribute
-        table = group.table          # get the table child instance again
+        foo = group.table    # get a Python attribute
+        del group.table      # delete a Python attribute
+        table = group.table  # get the table child instance again
 
     Additionally, on interactive python sessions you may get autocompletions
     of children named as *valid python identifiers* by pressing the  `[Tab]`
@@ -387,7 +387,6 @@ class Group(hdf5extension.Group, Node):
             (link_names, links),
             (unknown_names, unknown),
         ):
-
             for childname in childnames:
                 # See whether the name implies that the node is hidden.
                 # (Assigned values are entirely irrelevant.)
@@ -481,7 +480,7 @@ class Group(hdf5extension.Group, Node):
 
             # Recursively print all the arrays hanging from '/'
             print("Arrays in the object tree '/':")
-            for array in h5file.root._f_walknodes('Array', recursive=True):
+            for array in h5file.root._f_walknodes("Array", recursive=True):
                 print(array)
 
         """
@@ -1102,8 +1101,7 @@ class Group(hdf5extension.Group, Node):
 
         """
         return (
-            f"{self._v_pathname} ({self.__class__.__name__}) "
-            f"{self._v_title!r}"
+            f"{self._v_pathname} ({self.__class__.__name__}) {self._v_title!r}"
         )
 
     def __repr__(self) -> str:
@@ -1125,7 +1123,7 @@ class Group(hdf5extension.Group, Node):
             f"{childname!r} ({child.__class__.__name__})"
             for (childname, child) in self._v_children.items()
         ]
-        return f'{self!s}\n  children := [{", ".join(rep)}]'
+        return f"{self!s}\n  children := [{', '.join(rep)}]"
 
 
 # Special definition for group root

@@ -220,7 +220,7 @@ class WriteFileTestCase(TempFileMixin, TestCase):
         data = self.fnode.read(6)
         self.assertEqual(
             data,
-            b"3\0\0\0\0" b"4",
+            b"3\x00\x00\x00\x004",
             "Gap caused by forward seek was not properly filled.",
         )
 
@@ -949,7 +949,6 @@ class Version1TestCase(OldVersionTestCase):
 
 
 class DirectReadWriteTestCase(TempFileMixin, TestCase):
-
     datafname = "test_filenode.dat"
 
     def setUp(self):

@@ -339,7 +339,7 @@ _python_aliases: list[str] = [
     "VLString",
     "Object",
 ]
-_python_desc = "homogeneous list or tuple, " "integer, float, complex or bytes"
+_python_desc = "homogeneous list or tuple, integer, float, complex or bytes"
 
 
 def _is_python(array: Any) -> bool:

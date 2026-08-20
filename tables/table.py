@@ -1529,9 +1529,11 @@ very small/large chunksize, you may want to increase/decrease it.""",
         --------
         ::
 
-            passvalues = [ row['col3'] for row in
-                           table.where('(col1 > 0) & (col2 <= 20)', step=5)
-                           if your_function(row['col2']) ]
+            passvalues = [
+                row["col3"]
+                for row in table.where("(col1 > 0) & (col2 <= 20)", step=5)
+                if your_function(row["col2"])
+            ]
             print("Values that pass the cuts:", passvalues)
 
         .. note::
@@ -1883,8 +1885,11 @@ very small/large chunksize, you may want to increase/decrease it.""",
         --------
         ::
 
-            result = [ row['var2'] for row in table.iterrows(step=5)
-                                                    if row['var1'] <= 20 ]
+            result = [
+                row["var2"]
+                for row in table.iterrows(step=5)
+                if row["var1"] <= 20
+            ]
 
         .. versionchanged:: 3.0
            If the *start* parameter is provided and *stop* is None then the
@@ -1915,12 +1920,13 @@ very small/large chunksize, you may want to increase/decrease it.""",
         --------
         ::
 
-            result = [ row['var2'] for row in table if row['var1'] <= 20 ]
+            result = [row["var2"] for row in table if row["var1"] <= 20]
 
         Which is equivalent to::
 
-            result = [ row['var2'] for row in table.iterrows()
-                                                    if row['var1'] <= 20 ]
+            result = [
+                row["var2"] for row in table.iterrows() if row["var1"] <= 20
+            ]
 
         """
         return self.iterrows()
@@ -1942,9 +1948,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
                     select_field = field
                     field = None
                 else:
-                    raise KeyError(
-                        f"Field {field} not found in table " f"{self}"
-                    )
+                    raise KeyError(f"Field {field} not found in table {self}")
             else:
                 # The column hangs directly from the top
                 dtype_field = self.coldtypes[field]
@@ -2172,11 +2176,11 @@ very small/large chunksize, you may want to increase/decrease it.""",
         --------
         ::
 
-            narray = table.col('var2')
+            narray = table.col("var2")
 
         That statement is equivalent to::
 
-            narray = table.read(field='var2')
+            narray = table.read(field="var2")
 
         Here you can see how this method can be used as a shorthand for the
         :meth:`Table.read` method.
@@ -2207,14 +2211,14 @@ very small/large chunksize, you may want to increase/decrease it.""",
 
             record = table[4]
             recarray = table[4:1000:2]
-            recarray = table[[4,1000]]   # only retrieves rows 4 and 1000
+            recarray = table[[4, 1000]]  # only retrieves rows 4 and 1000
             recarray = table[[True, False, ..., True]]
 
         Those statements are equivalent to::
 
             record = table.read(start=4)[0]
             recarray = table.read(start=4, stop=1000, step=2)
-            recarray = table.read_coordinates([4,1000])
+            recarray = table.read_coordinates([4, 1000])
             recarray = table.read_coordinates([True, False, ..., True])
 
         Here, you can see how indexing can be used as a shorthand for the
@@ -2271,24 +2275,24 @@ very small/large chunksize, you may want to increase/decrease it.""",
         ::
 
             # Modify just one existing row
-            table[2] = [456,'db2',1.2]
+            table[2] = [456, "db2", 1.2]
 
             # Modify two existing rows
             rows = np.rec.array(
-                [[457,'db1',1.2],[6,'de2',1.3]], formats='i4,S3,f8'
+                [[457, "db1", 1.2], [6, "de2", 1.3]], formats="i4,S3,f8"
             )
-            table[1:30:2] = rows             # modify a table slice
-            table[[1,3]] = rows              # only modifies rows 1 and 3
-            table[[True,False,True]] = rows  # only modifies rows 0 and 2
+            table[1:30:2] = rows               # modify a table slice
+            table[[1, 3]] = rows               # only modifies rows 1 and 3
+            table[[True, False, True]] = rows  # only modifies rows 0 and 2
 
         Which is equivalent to::
 
-            table.modify_rows(start=2, rows=[456,'db2',1.2])
+            table.modify_rows(start=2, rows=[456, "db2", 1.2])
             rows = np.rec.array(
-                [[457,'db1',1.2],[6,'de2',1.3]], formats='i4,S3,f8'
+                [[457, "db1", 1.2], [6, "de2", 1.3]], formats="i4,S3,f8"
             )
             table.modify_rows(start=1, stop=3, step=2, rows=rows)
-            table.modify_coordinates([1,3,2], rows)
+            table.modify_coordinates([1, 3, 2], rows)
             table.modify_coordinates([True, False, True], rows)
 
         Here, you can see how indexing can be used as a shorthand for the
@@ -2351,21 +2355,28 @@ very small/large chunksize, you may want to increase/decrease it.""",
 
             import tables as tb
 
-            class Particle(tb.IsDescription):
-                name        = tb.StringCol(16, pos=1) # 16-character String
-                lati        = tb.IntCol(pos=2)        # integer
-                longi       = tb.IntCol(pos=3)        # integer
-                pressure    = tb.Float32Col(pos=4)  # float  (single-precision)
-                temperature = tb.FloatCol(pos=5)    # double (double-precision)
 
-            fileh = tb.open_file('test4.h5', mode='w')
-            table = fileh.create_table(fileh.root, 'table', Particle,
-                                       "A table")
+            class Particle(tb.IsDescription):
+                name = tb.StringCol(16, pos=1)    # 16-character String
+                lati = tb.IntCol(pos=2)           # integer
+                longi = tb.IntCol(pos=3)          # integer
+                pressure = tb.Float32Col(pos=4)   # float  (single-precision)
+                temperature = tb.FloatCol(pos=5)  # double (double-precision)
+
+
+            fileh = tb.open_file("test4.h5", mode="w")
+            table = fileh.create_table(
+                fileh.root, "table", Particle, "A table"
+            )
 
             # Append several rows in only one call
-            table.append([("Particle:     10", 10, 0, 10 * 10, 10**2),
-                          ("Particle:     11", 11, -1, 11 * 11, 11**2),
-                          ("Particle:     12", 12, -2, 12 * 12, 12**2)])
+            table.append(
+                [
+                    ("Particle:     10", 10, 0, 10 * 10, 10**2),
+                    ("Particle:     11", 11, -1, 11 * 11, 11**2),
+                    ("Particle:     12", 12, -2, 12 * 12, 12**2),
+                ]
+            )
             fileh.close()
 
         """
@@ -3378,7 +3389,7 @@ class Cols:
         Those statements are equivalent to::
 
             nrecord = table.read(start=4)[0]
-            nrecarray = table.read(start=4, stop=1000, step=2).field('Info')
+            nrecarray = table.read(start=4, stop=1000, step=2).field("Info")
 
         Here you can see how a mix of natural naming, indexing and slicing can
         be used as shorthands for the :meth:`Table.read` method.
@@ -3435,7 +3446,7 @@ class Cols:
         Those statements are equivalent to::
 
             table.modify_rows(4, rows=record)
-            table.modify_column(4, 1000, 2, colname='Info', column=recarray)
+            table.modify_column(4, 1000, 2, colname="Info", column=recarray)
 
         Here you can see how a mix of natural naming, indexing and slicing
         can be used as shorthands for the :meth:`Table.modify_rows` and
@@ -3654,8 +3665,10 @@ class Column:
                 print("Select table.cols.name[1]-->", table.cols.name[1])
                 print("Select table.cols.name[1:2]-->", table.cols.name[1:2])
                 print("Select table.cols.name[:]-->", table.cols.name[:])
-                print("Select table.cols._f_col('name')[:]-->",
-                                                table.cols._f_col('name')[:])
+                print(
+                    "Select table.cols._f_col('name')[:]-->",
+                    table.cols._f_col("name")[:],
+                )
 
         The output of this for a certain arbitrary table is::
 
@@ -3734,17 +3747,18 @@ class Column:
             table.cols.col1[1] = -1
 
             # Modify rows 1 and 3
-            table.cols.col1[1::2] = [2,3]
+            table.cols.col1[1::2] = [2, 3]
 
         Which is equivalent to::
 
             # Modify row 1
-            table.modify_columns(start=1, columns=[[-1]], names=['col1'])
+            table.modify_columns(start=1, columns=[[-1]], names=["col1"])
 
             # Modify rows 1 and 3
-            columns = np.rec.fromarrays([[2,3]], formats='i4')
-            table.modify_columns(start=1, step=2, columns=columns,
-                                 names=['col1'])
+            columns = np.rec.fromarrays([[2, 3]], formats="i4")
+            table.modify_columns(
+                start=1, step=2, columns=columns, names=["col1"]
+            )
 
         """
         table = self.table

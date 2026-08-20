@@ -162,7 +162,7 @@ class AttributeSet(hdf5extension.AttributeSet):
     read, assign or delete attributes on disk by just using the next
     constructs::
 
-        leaf.attrs.myattr = 'str attr'    # set a string (native support)
+        leaf.attrs.myattr = "str attr"    # set a string (native support)
         leaf.attrs.myattr2 = 3            # set an integer (native support)
         leaf.attrs.myattr3 = [3, (1, 2)]  # a generic object (Pickled)
         attrib = leaf.attrs.myattr        # get the attribute ``myattr``

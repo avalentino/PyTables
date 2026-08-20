@@ -144,7 +144,6 @@ def compute_tables(clib, clevel):
 
 
 if __name__ == "__main__":
-
     tb.print_versions()
 
     print(f"Total size for datasets: {2 * N * dtype.itemsize / MB:.1f} MB")

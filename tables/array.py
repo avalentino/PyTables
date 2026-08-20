@@ -652,7 +652,7 @@ class Array(hdf5extension.Array, Leaf):
             array1 = array[4]                       # simple selection
             array2 = array[4:1000:2]                # slice selection
             array3 = array[1, ..., ::2, 1:4, 4:]    # general slice selection
-            array4 = array[1, [1,5,10], ..., -1]    # fancy selection
+            array4 = array[1, [1, 5, 10], ..., -1]  # fancy selection
             array5 = array[np.where(array[:] > 4)]  # point selection
             array6 = array[array[:] > 4]            # boolean selection
 
@@ -701,16 +701,18 @@ class Array(hdf5extension.Array, Leaf):
         --------
         ::
 
-            a1[0] = 333        # assign an integer to an Integer Array row
-            a2[0] = 'b'        # assign a string to a string Array row
-            a3[1:4] = 5        # broadcast 5 to slice 1:4
-            a4[1:4:2] = 'xXx'  # broadcast 'xXx' to slice 1:4:2
+            a1[0] = 333  # assign an integer to an Integer Array row
+            a2[0] = "b"  # assign a string to a string Array row
+            a3[1:4] = 5  # broadcast 5 to slice 1:4
+            a4[1:4:2] = "xXx"  # broadcast 'xXx' to slice 1:4:2
 
             # General slice update (a5.shape = (4,3,2,8,5,10).
-            a5[1, ..., ::2, 1:4, 4:] = numpy.arange(1728, shape=(4,3,2,4,3,6))
-            a6[1, [1,5,10], ..., -1] = arr    # fancy selection
-            a7[np.where(a6[:] > 4)] = 4       # point selection + broadcast
-            a8[arr > 4] = arr2                # boolean selection
+            a5[1, ..., ::2, 1:4, 4:] = numpy.arange(
+                1728, shape=(4, 3, 2, 4, 3, 6)
+            )
+            a6[1, [1, 5, 10], ..., -1] = arr  # fancy selection
+            a7[np.where(a6[:] > 4)] = 4  # point selection + broadcast
+            a8[arr > 4] = arr2  # boolean selection
 
         """
         self._g_check_open()

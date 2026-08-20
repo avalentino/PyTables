@@ -180,7 +180,7 @@ class EArray(CArray):
                 self.extdim = list(self.shape).index(0)
             else:
                 raise NotImplementedError(
-                    "Multiple enlargeable (0-)dimensions are not " "supported."
+                    "Multiple enlargeable (0-)dimensions are not supported."
                 )
         else:
             raise ValueError(

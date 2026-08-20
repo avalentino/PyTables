@@ -33,7 +33,7 @@ if 1:
         table.append(a)
     # table.append(a[1:-1])
     table.flush()
-    print(f"Time for storing: {time() - t0 : .3f}s")
+    print(f"Time for storing: {time() - t0: .3f}s")
 
     output_file.close()
 
@@ -49,7 +49,7 @@ result = 0
 # for row in table:
 #     result += row['int32']
 b = table[:]
-print(f"Time for reading: {time() - t0 : .3f}s")
+print(f"Time for reading: {time() - t0: .3f}s")
 print("result:", result)
 
 output_file.close()

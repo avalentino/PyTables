@@ -76,7 +76,6 @@ class OpenFileFailureTestCase(common.PyTablesTestCase):
 
 
 class OpenFileTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self.populateFile()
@@ -2085,7 +2084,6 @@ class UnicodeFilename(common.TempFileMixin, common.PyTablesTestCase):
     sys.version_info < (3, 6), "PEP 519 was implemented in Python 3.6"
 )
 class PathLikeFilename(common.TempFileMixin, common.PyTablesTestCase):
-
     def _getTempFileName(self):
         from pathlib import Path
 
@@ -2268,7 +2266,7 @@ def _worker(fn, qout=None):
 )
 @common.unittest.skipIf(
     platform.system().lower() in ("gnu", "gnu/kfreebsd"),
-    "multiprocessing module is not " "supported on Hurd/kFreeBSD",
+    "multiprocessing module is not supported on Hurd/kFreeBSD",
 )
 @common.unittest.skipIf(not common.blosc_avail, "Blosc not available")
 class BloscSubprocess(common.PyTablesTestCase):

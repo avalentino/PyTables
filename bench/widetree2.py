@@ -13,7 +13,6 @@ class Test(tb.IsDescription):
 
 
 class WideTreeTestCase(unittest.TestCase):
-
     def test00_leafs(self):
 
         # Open a new empty HDF5 file

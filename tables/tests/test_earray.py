@@ -1363,7 +1363,6 @@ class StringComprTestCase(BasicTestCase):
 class SizeOnDiskInMemoryPropertyTestCase(
     common.TempFileMixin, common.PyTablesTestCase
 ):
-
     def setUp(self):
         super().setUp()
 
@@ -1832,7 +1831,6 @@ class OffsetStrideTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class CopyTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01_copy(self):
         """Checking EArray.copy() method."""
 
@@ -2414,7 +2412,6 @@ class CopyIndex12TestCase(CopyIndexTestCase):
 
 
 class TruncateTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 
@@ -2653,7 +2650,6 @@ class ZeroSizedTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 # Test for dealing with multidimensional atoms
 class MDAtomTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test01a_append(self):
         """Append a row to a (unidimensional) EArray with a MD tables.Atom."""
 
@@ -2813,7 +2809,6 @@ class MDAtomReopen(MDAtomTestCase):
 
 
 class AccessClosedTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self.array = self.h5file.create_earray(

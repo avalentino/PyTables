@@ -296,7 +296,7 @@ if __name__ == "__main__":
             "--nchildren",
             type=int,
             default=1000,
-            help="number of children (%(default)d is the " "default)",
+            help="number of children (%(default)d is the default)",
         )
         parser.add_argument(
             "-i",

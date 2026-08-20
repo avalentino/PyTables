@@ -136,7 +136,6 @@ def demo_manyops():
 
 
 if __name__ == "__main__":
-
     # run demos
     demo_6times3marks()
     demo_manyops()

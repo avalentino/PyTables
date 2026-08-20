@@ -59,13 +59,13 @@ def check_attribute_name(name: str) -> None:
     `NaturalNameWarning` is issued.
 
     >>> warnings.simplefilter("ignore")
-    >>> check_attribute_name('a')
-    >>> check_attribute_name('a_b')
-    >>> check_attribute_name('a:b')         # NaturalNameWarning
-    >>> check_attribute_name('/a/b')        # NaturalNameWarning
-    >>> check_attribute_name('/')           # NaturalNameWarning
-    >>> check_attribute_name('.')           # NaturalNameWarning
-    >>> check_attribute_name('__members__')
+    >>> check_attribute_name("a")
+    >>> check_attribute_name("a_b")
+    >>> check_attribute_name("a:b")   # NaturalNameWarning
+    >>> check_attribute_name("/a/b")  # NaturalNameWarning
+    >>> check_attribute_name("/")     # NaturalNameWarning
+    >>> check_attribute_name(".")     # NaturalNameWarning
+    >>> check_attribute_name("__members__")
     Traceback (most recent call last):
      ...
     ValueError: ``__members__`` is not allowed as an object name
@@ -73,7 +73,7 @@ def check_attribute_name(name: str) -> None:
     Traceback (most recent call last):
      ...
     TypeError: object name is not a string: 1
-    >>> check_attribute_name('')
+    >>> check_attribute_name("")
     Traceback (most recent call last):
      ...
     ValueError: the empty string is not allowed as an object name
@@ -126,18 +126,18 @@ def check_name_validity(name: str) -> None:
     `NaturalNameWarning` is issued.
 
     >>> warnings.simplefilter("ignore")
-    >>> check_name_validity('a')
-    >>> check_name_validity('a_b')
-    >>> check_name_validity('a:b')          # NaturalNameWarning
-    >>> check_name_validity('/a/b')
+    >>> check_name_validity("a")
+    >>> check_name_validity("a_b")
+    >>> check_name_validity("a:b")  # NaturalNameWarning
+    >>> check_name_validity("/a/b")
     Traceback (most recent call last):
      ...
     ValueError: the ``/`` character is not allowed in object names: '/a/b'
-    >>> check_name_validity('.')
+    >>> check_name_validity(".")
     Traceback (most recent call last):
      ...
     ValueError: ``.`` is not allowed as an object name
-    >>> check_name_validity('')
+    >>> check_name_validity("")
     Traceback (most recent call last):
      ...
     ValueError: the empty string is not allowed as an object name
@@ -151,7 +151,7 @@ def check_name_validity(name: str) -> None:
         raise ValueError("``.`` is not allowed as an object name")
     elif "/" in name:
         raise ValueError(
-            "the ``/`` character is not allowed " f"in object names: {name!r}"
+            f"the ``/`` character is not allowed in object names: {name!r}"
         )
 
 
@@ -161,13 +161,13 @@ def join_path(parentpath: str, name: str) -> str:
     .. versionchanged:: 3.0
        The *parentPath* parameter has been renamed into *parentpath*.
 
-    >>> join_path('/', 'foo')
+    >>> join_path("/", "foo")
     '/foo'
-    >>> join_path('/foo', 'bar')
+    >>> join_path("/foo", "bar")
     '/foo/bar'
-    >>> join_path('/foo', '/foo2/bar')
+    >>> join_path("/foo", "/foo2/bar")
     '/foo/foo2/bar'
-    >>> join_path('/foo', '/')
+    >>> join_path("/foo", "/")
     '/foo'
 
     """
@@ -188,9 +188,9 @@ def split_path(path: str) -> (str, str):
     The result is returned as a tuple.  The parent path does not
     include a trailing slash.
 
-    >>> split_path('/')
+    >>> split_path("/")
     ('/', '')
-    >>> split_path('/foo/bar')
+    >>> split_path("/foo/bar")
     ('/foo', 'bar')
 
     """

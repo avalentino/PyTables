@@ -751,7 +751,6 @@ class DictCacheCloseCreate(CreateTestCase):
 
 
 class TypesTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         self.open_kwargs = {"allow_padding": self.allow_padding}
         super().setUp()
@@ -1900,7 +1899,6 @@ class PicklePy2UnpicklePy3TestCase(
 
 
 class SegFaultPythonTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00_segfault(self):
         """Checking workaround for Python unpickle problem (see #253)."""
 
@@ -1993,7 +1991,6 @@ class UnsupportedAttrTypeTestCase(
 
 # Test for specific system attributes
 class SpecificAttrsTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00_earray(self):
         """Testing EArray specific attrs (create)."""
 

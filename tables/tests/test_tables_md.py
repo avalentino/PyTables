@@ -1089,7 +1089,6 @@ class Rec(tb.IsDescription):
 
 
 class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00(self):
         """Checking saving a normal recarray"""
 
@@ -1364,7 +1363,6 @@ class RecArrayIO(common.TempFileMixin, common.PyTablesTestCase):
 
 
 class DefaultValues(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00(self):
         """Checking saving a Table MD with default values"""
 
@@ -1445,7 +1443,6 @@ class RecordT(tb.IsDescription):
 
 
 class ShapeTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
         self.populateFile()
@@ -1527,7 +1524,6 @@ class ShapeTestCase2(ShapeTestCase):
 
 
 class SetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 
@@ -1968,7 +1964,6 @@ class SetItemTestCase4(SetItemTestCase):
 
 
 class UpdateRowTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def setUp(self):
         super().setUp()
 

@@ -325,7 +325,7 @@ def read_file(dbfile, nrows, indexmode, heavy, dselect, bfile, riter):
         print(f"Query time: {t1:.5f}, cached time: {t2:.5f}")
         print(f"MRows/s: {nrows / 1_000_000 / t1:.3f}", end=" ")
         if t2 > 0:
-            print(f", cached MRows/s: {nrows / 10 ** 6 / t2:.3f}")
+            print(f", cached MRows/s: {nrows / 10**6 / t2:.3f}")
         else:
             print()
 

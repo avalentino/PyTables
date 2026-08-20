@@ -728,22 +728,22 @@ class ReadTestCase(common.TempFileMixin, common.PyTablesTestCase):
         tblrepr = repr(tbl)
         # Remove the platform-dependent information (i.e. byteorder)
         tblrepr = "\n".join(tblrepr.split("\n")[:-2]) + "\n"
-        template = f"""/test (Table({np.int64(2)!r},)) {np.str_('test00')!r}
+        template = f"""/test (Table({np.int64(2)!r},)) {np.str_("test00")!r}
   description := {{{{
   "x": Int32Col(shape=({np.int64(2)!r},), dflt={np.int32(0)!r}, pos=0),
   "Info": {{{{
     "value": ComplexCol(itemsize=16, shape=(), dflt={np.complex128(0j)!r}, pos=0),
     "y2": Float64Col(shape=(), dflt={np.float64(1.0)!r}, pos=1),
     "Info2": {{{{
-      "name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b'')!r}, pos=0),
+      "name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b"")!r}, pos=0),
       "value": ComplexCol(itemsize=16, shape=({np.int64(2)!r},), dflt={np.complex128(0j)!r}, pos=1),
       "y3": Time64Col(shape=({np.int64(2)!r},), dflt={np.float64(1.0)!r}, pos=2),
       "z3": EnumCol(enum=Enum({{{{{{value}}}}}}), dflt='{{default}}', base=Int32Atom(shape=(), dflt={np.int32(0)!r}), shape=({np.int64(2)!r},), pos=3)}}}},
-    "name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b'')!r}, pos=3),
+    "name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b"")!r}, pos=3),
     "z2": UInt8Col(shape=(), dflt={np.uint8(1)!r}, pos=4)}}}},
-  "color": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b' ')!r}, pos=2),
+  "color": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b" ")!r}, pos=2),
   "info": {{{{
-    "Name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b'')!r}, pos=0),
+    "Name": StringCol(itemsize=2, shape=(), dflt={np.bytes_(b"")!r}, pos=0),
     "Value": ComplexCol(itemsize=16, shape=(), dflt={np.complex128(0j)!r}, pos=1)}}}},
   "y": Float64Col(shape=({np.int64(2)!r}, {np.int64(2)!r}), dflt={np.float64(1.0)!r}, pos=4),
   "z": UInt8Col(shape=(), dflt={np.uint8(1)!r}, pos=5)}}}}

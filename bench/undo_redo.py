@@ -11,7 +11,6 @@ verbose = 0
 
 
 class BasicBenchmark:
-
     def __init__(self, filename, testname, vecsize, nobjects, niter):
 
         self.file = filename

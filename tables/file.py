@@ -410,8 +410,7 @@ class NodeManager:
             oldnode = self.cache.pop(key)
             if oldnode is not node and oldnode._v_isopen:
                 raise RuntimeError(
-                    "trying to cache a node with an "
-                    f"existing key: ``{key}``"
+                    f"trying to cache a node with an existing key: ``{key}``"
                 )
 
         self.cache[key] = node
@@ -433,7 +432,7 @@ class NodeManager:
                 # this should not happen since WeakValueDictionary drops all
                 # dead weakrefs
                 warnings.warn(
-                    "None is stored in the registry for key: " f"``{key}``"
+                    f"None is stored in the registry for key: ``{key}``"
                 )
             elif node._v_isopen:
                 self.cache_node(node, key)
@@ -441,7 +440,7 @@ class NodeManager:
             else:
                 # this should not happen
                 warnings.warn(
-                    "a closed node found in the registry: " f"``{key}``"
+                    f"a closed node found in the registry: ``{key}``"
                 )
                 del self.registry[key]
                 node = None
@@ -485,8 +484,7 @@ class NodeManager:
             # method is called for object that are still alive when the
             # interpreter is shut down
             warnings.warn(
-                "dropping a node that is not in the registry: "
-                f"``{nodepath}``"
+                f"dropping a node that is not in the registry: ``{nodepath}``"
             )
 
             node._g_pre_kill_hook()
@@ -776,7 +774,7 @@ class File(hdf5extension.File):
         # Update them with possible keyword arguments
         if [k for k in kwargs if k.isupper()]:
             warnings.warn(
-                "The use of uppercase keyword parameters is " "deprecated",
+                "The use of uppercase keyword parameters is deprecated",
                 DeprecationWarning,
             )
 
@@ -1465,7 +1463,7 @@ class File(hdf5extension.File):
 
             if shape is not None and shape != earray_shape:
                 raise TypeError(
-                    "the shape parameter is not compatible " "with obj.shape."
+                    "the shape parameter is not compatible with obj.shape."
                 )
             else:
                 shape = earray_shape
@@ -2239,7 +2237,7 @@ class File(hdf5extension.File):
         ::
 
             # Recursively list all the nodes in the object tree.
-            h5file = tables.open_file('vlarray1.h5')
+            h5file = tables.open_file("vlarray1.h5")
             print("All nodes in the object tree:")
             for node in h5file:
                 print(node)
@@ -2275,7 +2273,7 @@ class File(hdf5extension.File):
 
             # Recursively print all the nodes hanging from '/detector'.
             print("Nodes hanging from group '/detector':")
-            for node in h5file.walk_nodes('/detector', classname='EArray'):
+            for node in h5file.walk_nodes("/detector", classname="EArray"):
                 print(node)
 
         """
@@ -2611,7 +2609,7 @@ class File(hdf5extension.File):
             arg2 = args[1]
         else:  # INTERNAL
             raise UndoRedoError(
-                "Too many parameters for action log: " "%r"
+                "Too many parameters for action log: %r"
             ).with_traceback(args)
         if len(arg1) > maxundo or len(arg2) > maxundo:  # INTERNAL
             raise UndoRedoError(

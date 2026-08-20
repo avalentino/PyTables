@@ -29,7 +29,6 @@ def make_file(file_path, n):
 # The write_queue is used for requests to modify the HDF5 file.
 # One end of a pipe (shutdown) is used to signal the process to terminate.
 class FileAccess(multiprocessing.Process):
-
     def __init__(
         self, h5_path, read_queue, result_queues, write_queue, shutdown
     ):
@@ -46,7 +45,6 @@ class FileAccess(multiprocessing.Process):
         self.array = self.h5_file.get_node("/array")
         another_loop = True
         while another_loop:
-
             # Check if the process has received the shutdown signal.
             if self.shutdown.poll():
                 another_loop = False
@@ -90,7 +88,6 @@ class FileAccess(multiprocessing.Process):
 # the result_queue.
 # Its actions are logged to a text file.
 class DataProcessor(multiprocessing.Process):
-
     def __init__(
         self,
         read_queue,

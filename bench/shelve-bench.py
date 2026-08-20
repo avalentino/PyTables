@@ -62,7 +62,6 @@ def create_file(filename, totalrows, recsize):
 
     # Open a 'n'ew file
     with shelve.open(filename, flag="n") as fileh:
-
         rowswritten = 0
         # Get the record object associated with the new table
         if recsize == "big":

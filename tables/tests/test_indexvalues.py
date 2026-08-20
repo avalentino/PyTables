@@ -3518,7 +3518,6 @@ class BuffersizeMultipleChunksize(
 
 # Test case for issue #441
 class SideEffectNumPyQuicksort(common.PyTablesTestCase):
-
     def test01(self):
         bug_file = common.test_filename("bug-idx.h5")
         tmp_file = tempfile.mktemp(".h5")

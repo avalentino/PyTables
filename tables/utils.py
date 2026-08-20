@@ -223,10 +223,9 @@ def lazyattr(fget: Callable[[Any], Any]) -> property:
     >>> class MyClass(object):
     ...     @lazyattr
     ...     def attribute(self):
-    ...         'Attribute description.'
-    ...         print('creating value')
+    ...         "Attribute description."
+    ...         print("creating value")
     ...         return 10
-    ...
     >>> type(MyClass.attribute)
     <class 'property'>
     >>> MyClass.attribute.__doc__

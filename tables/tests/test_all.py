@@ -24,7 +24,6 @@ def get_tuple_version(hexversion):
 
 
 if __name__ == "__main__":
-
     common.parse_argv(sys.argv)
 
     hdf5_version = get_tuple_version(tb.which_lib_version("hdf5")[0])

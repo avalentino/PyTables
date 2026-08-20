@@ -90,14 +90,15 @@ class CArray(Array):
         import numpy as np
         import tables as tb
 
-        fileName = 'carray1.h5'
+        fileName = "carray1.h5"
         shape = (200, 300)
         atom = tb.UInt8Atom()
-        filters = tb.Filters(complevel=5, complib='zlib')
+        filters = tb.Filters(complevel=5, complib="zlib")
 
-        h5f = tb.open_file(fileName, 'w')
-        ca = h5f.create_carray(h5f.root, 'carray', atom, shape,
-                               filters=filters)
+        h5f = tb.open_file(fileName, "w")
+        ca = h5f.create_carray(
+            h5f.root, "carray", atom, shape, filters=filters
+        )
 
         # Fill a hyperslab in ``ca``.
         ca[10:60, 20:70] = np.ones((50, 50))
@@ -214,7 +215,7 @@ class CArray(Array):
                     )
                 elif min(chunkshape) < 1:
                     raise ValueError(
-                        "chunkshape parameter cannot have " "zero-dimensions."
+                        "chunkshape parameter cannot have zero-dimensions."
                     )
                 self._v_chunkshape = tuple(SizeType(s) for s in chunkshape)
 

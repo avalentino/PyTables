@@ -20,7 +20,6 @@ CHUNKY = 30
 CHUNKX = 4320
 
 if __name__ == "__main__":
-
     # create dataset and add global attrs
     file_path = f"demofile_chunk{CHUNKY}x{CHUNKX}.h5"
 
@@ -30,7 +29,6 @@ if __name__ == "__main__":
         title="PyTables HDF5 In-memory example",
         driver="H5FD_CORE",
     ) as h5f:
-
         # dummy some data
         lats = np.empty([2160])
         lons = np.empty([4320])

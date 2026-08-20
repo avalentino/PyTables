@@ -104,7 +104,6 @@ class RangeTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
 # Check the dtype read-only attribute
 class DtypeTestCase(common.TempFileMixin, common.PyTablesTestCase):
-
     def test00a_table(self):
         """Check dtype accessor for Table objects."""
 

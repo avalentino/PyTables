@@ -50,7 +50,6 @@ def show_plot(plots, yaxis, legends, gtitle):
 
 
 if __name__ == "__main__":
-
     import sys
     import getopt
 
@@ -113,8 +112,7 @@ if __name__ == "__main__":
             table_size = 1
             yaxis = "Bytes/row"
             gtitle = (
-                "Disk space taken by a record (original record size: "
-                "16 bytes)"
+                "Disk space taken by a record (original record size: 16 bytes)"
             )
         elif option[0] == "--query":
             query = 1
@@ -127,8 +125,7 @@ if __name__ == "__main__":
             query_cache = 1
             yaxis = "MRows/s"
             gtitle = (
-                "Selecting with small (16 bytes) record size (file in "
-                "cache)"
+                "Selecting with small (16 bytes) record size (file in cache)"
             )
         elif option[0] == "--MB-units":
             mb_units = 1

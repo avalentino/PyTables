@@ -185,7 +185,6 @@ def get_tree_str(
     leaves = deque()
 
     while stack:
-
         node = stack.pop()
 
         if isinstance(node, tb.link.Link):
@@ -204,11 +203,9 @@ def get_tree_str(
             leaves.append(node)
 
         elif isinstance(node, tb.Leaf):
-
             # only count the size of a hardlinked leaf the first time it is
             # visited
             if ref_count[addr] == 1:
-
                 try:
                     m = node.size_in_memory
                     d = node.size_on_disk
@@ -235,7 +232,6 @@ def get_tree_str(
             leaves.append(node)
 
         elif isinstance(node, tb.Group):
-
             # don't recurse down the same hardlinked branch multiple times!
             if ref_count[addr] == 1:
                 stack.extend(list(node._v_children.values()))
@@ -257,7 +253,6 @@ def get_tree_str(
     stack = leaves
 
     while stack:
-
         node = stack.pop()
         path = node._v_pathname
 
@@ -273,7 +268,6 @@ def get_tree_str(
 
         # if we're deeper than the max recursion depth, we print nothing
         if not depth > max_depth:
-
             # create a PrettyTree representation of this node
             name = node._v_name
             if print_class:
@@ -297,7 +291,6 @@ def get_tree_str(
                 labels.append(f"hardlink --> {hl_targets[hl_addresses[path]]}")
 
             elif isinstance(node, (tb.Array, tb.Table)):
-
                 if print_size:
                     sizestr = (
                         f"mem={b2h(in_mem[path])}, disk={b2h(on_disk[path])}"
@@ -353,7 +346,6 @@ def get_tree_str(
             # exclude root node or we'll get infinite recursions (since '/' is
             # the parent of '/')
             if path != "/":
-
                 # create a PrettyTree for the parent of this node, if one
                 # doesn't exist already
                 if parent_path not in pretty:
