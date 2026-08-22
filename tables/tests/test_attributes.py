@@ -2028,11 +2028,14 @@ class MalformedHDF5RoorAttribute(common.PyTablesTestCase):
         return super().tearDown()
 
     def test_invalid_root_attribute(self):
-        with (
-            self.assertWarnsRegex(UserWarning, "PYTABLES_FORMAT_VERSION"),
-            self.assertRaisesRegex(HDF5ExtError, "Can't open the group: '/'"),
-        ):
-            tb.open_file(self.filename, mode="r")
+        with self.assertRaises(HDF5ExtError):
+            if Version(tb.hdf5_version) < Version("2.0"):
+                with self.assertWarnsRegex(
+                    UserWarning, "PYTABLES_FORMAT_VERSION"
+                ):
+                    tb.open_file(self.filename, mode="r")
+            else:
+                tb.open_file(self.filename, mode="r")
 
 
 def suite():
