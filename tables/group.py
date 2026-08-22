@@ -17,6 +17,7 @@ from .filters import Filters
 from .registry import class_id_dict, get_class_by_name
 from .exceptions import (
     NodeError,
+    HDF5ExtError,
     NoSuchNodeError,
     NaturalNameWarning,
     PerformanceWarning,
@@ -1164,7 +1165,12 @@ class RootGroup(Group):
         #   Update node attributes.
         self._g_new(ptfile, name, init=True)
         #   Open the node and get its object ID.
-        self._v_objectid = self._g_open()
+        self._v_objectid = None
+        try:
+            self._v_objectid = self._g_open()
+        except HDF5ExtError:
+            ptfile.close()
+            raise
 
         # Set disk attributes and read children names.
         #

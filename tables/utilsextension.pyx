@@ -1019,6 +1019,8 @@ def read_f_attr(hid_t file_id, str attr_name):
   if H5ATTRfind_attribute(file_id, c_attr_name):
     # Read the attr_name attribute
     size = H5ATTRget_attribute_string(file_id, c_attr_name, &attr_value, &cset)
+    if size >= <hsize_t>-1:
+      raise HDF5ExtError("unable to read attribute {c_attr_name}")
     if size == 0:
       if cset == H5T_CSET_UTF8:
         retvalue = np.str_("")
@@ -1067,7 +1069,7 @@ def get_type_enum(hid_t h5type):
 
   typeClass = H5Tget_class(h5type)
   if typeClass < 0:
-    raise HDF5ExtError("failed to get class of HDF5 type")
+    raise HDF5ExtError("unable to get class of HDF5 type")
 
   if typeClass == H5T_ENUM:
     # Get the native type (in order to do byteorder conversions automatically)

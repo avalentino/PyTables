@@ -252,9 +252,9 @@ hsize_t H5ATTRget_attribute_string( hid_t obj_id,
                                     int *cset )
 {
  /* identifiers */
- hid_t      attr_id;
- hid_t      attr_type;
- hid_t      space_id;
+ hid_t      attr_id = 0;
+ hid_t      attr_type = 0;
+ hid_t      space_id = 0;
  hsize_t    type_size = 0;
  htri_t     is_vlstr = 0;
 

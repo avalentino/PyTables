@@ -1,7 +1,9 @@
 """This test unit checks node attributes that are persistent (AttributeSet)."""
 
+import os
 import sys
 import datetime
+import tempfile
 import warnings
 
 import numpy as np
@@ -9,6 +11,7 @@ from packaging.version import Version
 
 import tables as tb
 from tables.tests import common
+from tables.exceptions import HDF5ExtError
 
 
 class Record(tb.IsDescription):
@@ -2008,6 +2011,30 @@ class SpecificAttrsTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.assertEqual(ea.attrs.EXTDIM, 0)
 
 
+# GHSA-jc4m-9v2h-9348
+class MalformedHDF5RoorAttribute(common.PyTablesTestCase):
+    def setUp(self):
+        data = bytes.fromhex(
+            "894844460d0a1a0a00000000000202000010400000000000ffffffff1800c3"
+        )
+        with tempfile.NamedTemporaryFile(
+            mode="wb", suffix="-poc.h5", delete=False
+        ) as fd:
+            fd.write(data)
+        self.filename = fd.name
+
+    def tearDown(self):
+        os.unlink(self.filename)
+        return super().tearDown()
+
+    def test_invalid_root_attribute(self):
+        with (
+            self.assertWarnsRegex(UserWarning, "PYTABLES_FORMAT_VERSION"),
+            self.assertRaisesRegex(HDF5ExtError, "Can't open the group: '/'"),
+        ):
+            tb.open_file(self.filename, mode="r")
+
+
 def suite():
     theSuite = common.unittest.TestSuite()
     niter = 1
@@ -2034,6 +2061,7 @@ def suite():
         theSuite.addTest(common.make_suite(VlenStrAttrTestCase))
         theSuite.addTest(common.make_suite(UnsupportedAttrTypeTestCase))
         theSuite.addTest(common.make_suite(SpecificAttrsTestCase))
+        theSuite.addTest(common.make_suite(MalformedHDF5RoorAttribute))
 
     return theSuite
 

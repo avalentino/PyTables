@@ -408,6 +408,9 @@ cdef object get_attribute_string_or_none(hid_t node_id, char* attr_name):
   retvalue = None   # Default value
   if H5ATTRfind_attribute(node_id, attr_name):
     size = H5ATTRget_attribute_string(node_id, attr_name, &attr_value, &cset)
+    if size >= <hsize_t>-1:
+      raise HDF5ExtError("unable to read attribute {attr_name}")
+
     if size == 0:
       if cset == H5T_CSET_UTF8:
         retvalue = np.str_("")
@@ -1268,10 +1271,11 @@ cdef class Group(Node):
   def _g_close_group(self):
     cdef int ret
 
-    ret = H5Gclose(self.group_id)
-    if ret < 0:
-      raise HDF5ExtError(f"Problems closing the Group {self.name}")
-    self.group_id = 0  # indicate that this group is closed
+    if self.group_id != 0:
+      ret = H5Gclose(self.group_id)
+      if ret < 0:
+        raise HDF5ExtError(f"Problems closing the Group {self.name}")
+      self.group_id = 0  # indicate that this group is closed
 
   def _g_move_node(self, hid_t oldparent, oldname, hid_t newparent, newname,
                    oldpathname, newpathname):

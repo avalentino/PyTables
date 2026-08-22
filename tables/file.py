@@ -49,6 +49,7 @@ from .vlarray import VLArray
 from .registry import get_class_by_name
 from .exceptions import (
     NodeError,
+    HDF5ExtError,
     FileModeError,
     UndoRedoError,
     ClosedFileError,
@@ -876,9 +877,14 @@ class File(hdf5extension.File):
         # Get format version *before* getting the object tree
         if not new:
             # Firstly, get the PyTables format version for this file
-            self.format_version = utilsextension.read_f_attr(
-                self._v_objectid, "PYTABLES_FORMAT_VERSION"
-            )
+            self.format_version = None
+            try:
+                self.format_version = utilsextension.read_f_attr(
+                    self._v_objectid, "PYTABLES_FORMAT_VERSION"
+                )
+            except HDF5ExtError as exc:
+                warnings.warn(str(exc), stacklevel=2)
+
             if not self.format_version:
                 # PYTABLES_FORMAT_VERSION attribute is not present
                 self.format_version = "unknown"
@@ -2885,7 +2891,8 @@ class File(hdf5extension.File):
             self._actionlog.attrs._g__setattr("CURACTION", self._curaction)
 
         # Close all loaded nodes.
-        self.root._f_close()
+        if hasattr(self, "root"):
+            self.root._f_close()
 
         self._node_manager.shutdown()
 
