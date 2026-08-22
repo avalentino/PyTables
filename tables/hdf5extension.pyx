@@ -1029,7 +1029,7 @@ cdef class AttributeSet:
             #   <char*>str_values[i] for i in range(nelements), "O8")
             retvalue = np.array(
               [<char*>str_values[i] for i in range(nelements)], "O8")
-          retvalue.shape = shape
+          retvalue = np.reshape(retvalue, shape, copy=False)
 
           # Important to release attr_value, because it has been malloc'ed!
           for i in range(nelements):

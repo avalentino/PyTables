@@ -85,7 +85,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             obj = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            obj.shape = self.rowshape
+            obj = obj.reshape(self.rowshape)
 
         if common.verbose:
             if self.flavor == "numpy":
@@ -152,7 +152,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            object_.shape = self.rowshape
+            object_ = object_.reshape(self.rowshape)
         object_ = object_.swapaxes(earray.extdim, 0)
 
         if self.obj is not None:
@@ -250,7 +250,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            object_.shape = self.rowshape
+            object_ = object_.reshape(self.rowshape)
         object_ = object_.swapaxes(earray.extdim, 0)
 
         if self.obj is not None:
@@ -339,7 +339,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            object_.shape = self.rowshape
+            object_ = object_.reshape(self.rowshape)
         object_ = object_.swapaxes(earray.extdim, 0)
 
         if self.obj is not None:
@@ -445,7 +445,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            object_.shape = self.rowshape
+            object_ = object_.reshape(self.rowshape)
         object_ = object_.swapaxes(earray.extdim, 0)
 
         if self.obj is not None:
@@ -567,7 +567,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            object_.shape = self.rowshape
+            object_ = object_.reshape(self.rowshape)
 
         object_ = object_.swapaxes(earray.extdim, 0)
 
@@ -676,7 +676,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=earray.atom.dtype.base)
-            object_.shape = self.rowshape
+            object_ = object_.reshape(self.rowshape)
 
         object_ = object_.swapaxes(earray.extdim, 0)
 
@@ -2256,8 +2256,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
             shape=(0, 2),
             title="title array1",
         )
-        r = np.arange(200, dtype="int32")
-        r.shape = (100, 2)
+        r = np.arange(200, dtype="int32").reshape((100, 2))
         array1.append(r)
 
         # Select a different buffer size:
@@ -2299,8 +2298,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
             shape=(0, 2),
             title="title array1",
         )
-        r = np.arange(200, dtype="int32")
-        r.shape = (100, 2)
+        r = np.arange(200, dtype="int32").reshape((100, 2))
         array1.append(r)
 
         # Select a different buffer size:

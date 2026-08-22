@@ -2600,7 +2600,7 @@ very small/large chunksize, you may want to increase/decrease it.""",
         column = column.squeeze()
         if column.shape == ():
             # Oops, stripped off too much dimensions
-            column.shape = (1,)
+            column = np.reshape(column, (1,), copy=False)
 
         if stop is None:
             # compute the stop value. start + len(rows)*step does not work

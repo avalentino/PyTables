@@ -154,8 +154,7 @@ class ReadFloatTestCase(common.TestFileMixin, common.PyTablesTestCase):
     def setUp(self):
         super().setUp()
         x = np.arange(self.ncols)
-        y = np.arange(self.nrows)
-        y.shape = (self.nrows, 1)
+        y = np.arange(self.nrows).reshape((self.nrows, 1))
         self.values = x + y
 
     def test01_read_float16(self):

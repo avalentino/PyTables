@@ -83,7 +83,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 )
             else:
                 obj = np.arange(self.objsize, dtype=carray.atom.dtype)
-                obj.shape = carray.shape
+                obj = obj.reshape(carray.shape)
         if common.verbose:
             print("Object to append -->", repr(obj))
 
@@ -142,7 +142,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 )
             else:
                 object_ = np.arange(self.objsize, dtype=carray.atom.dtype)
-                object_.shape = shape
+                object_ = object_.reshape(shape)
 
         stop = self.stop
         # stop == None means read only the element designed by start
@@ -207,7 +207,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
                 )
             else:
                 object_ = np.arange(self.objsize, dtype=carray.atom.dtype)
-                object_.shape = shape
+                object_ = object_.reshape(shape)
 
         stop = self.stop
         # stop == None means read only the element designed by start
@@ -278,7 +278,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=carray.atom.dtype)
-            object_.shape = shape
+            object_ = object_.reshape(shape)
 
         # do a copy() in order to ensure that len(object._data)
         # actually do a measure of its length
@@ -340,7 +340,7 @@ class BasicTestCase(common.TempFileMixin, common.PyTablesTestCase):
             )
         else:
             object_ = np.arange(self.objsize, dtype=carray.atom.dtype)
-            object_.shape = shape
+            object_ = object_.reshape(shape)
 
         # do a copy() in order to ensure that len(object._data)
         # actually do a measure of its length
@@ -2166,8 +2166,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
             title="title array1",
             chunkshape=(2, 2),
         )
-        r = np.arange(200, dtype="int32")
-        r.shape = shape
+        r = np.arange(200, dtype="int32").reshape(shape)
         array1[...] = r
 
         # Select a different buffer size:
@@ -2216,8 +2215,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
             title="title array1",
             chunkshape=(2, 2),
         )
-        r = np.arange(200, dtype="int32")
-        r.shape = shape
+        r = np.arange(200, dtype="int32").reshape(shape)
         array1[...] = r
 
         # Select a different buffer size:

@@ -221,7 +221,7 @@ class CompareTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         arr = np.array(arr)
         orig_val = np.arange(0, nrows * 2, dtype=np.int32) + 0.012
-        orig_val.shape = (nrows, 1, 2)
+        orig_val = orig_val.reshape((nrows, 1, 2))
         if common.verbose:
             print("Original values:", orig_val)
             print("Retrieved values:", arr)
@@ -295,7 +295,7 @@ class CompareTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Time64 column.
         orig_val = np.arange(0, nrows * 2, dtype=np.int32) + 0.012
-        orig_val.shape = (nrows, 2)
+        orig_val = orig_val.reshape((nrows, 2))
         if common.verbose:
             print("Original values:", orig_val)
             print("Retrieved values:", recarr["t64col"][:])
@@ -349,7 +349,7 @@ class CompareTestCase(common.TempFileMixin, common.PyTablesTestCase):
         self.h5file.close()
 
         orig_val = np.arange(0, nrows * 2, dtype=np.int32) + 0.012
-        orig_val.shape = (nrows, 2)
+        orig_val = orig_val.reshape((nrows, 2))
         if common.verbose:
             print("Original values:", orig_val)
             print("Retrieved values:", arr)
@@ -417,7 +417,7 @@ class UnalignedTestCase(common.TempFileMixin, common.PyTablesTestCase):
 
         # Time64 column.
         orig_val = np.arange(0, nrows * 2, dtype=np.int32) + 0.012
-        orig_val.shape = (nrows, 2)
+        orig_val = orig_val.reshape((nrows, 2))
         if common.verbose:
             print("Original values:", orig_val)
             print("Retrieved values:", recarr["t64col"][:])

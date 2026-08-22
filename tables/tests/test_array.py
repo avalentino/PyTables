@@ -36,8 +36,7 @@ class BasicTestCase(common.PyTablesTestCase):
 
                 # Create the array under root and name 'somearray'
                 if self.endiancheck and a.dtype.kind != "S":
-                    b = a.byteswap()
-                    b.dtype = a.dtype.newbyteorder()
+                    b = a.byteswap().view(dtype=a.dtype.newbyteorder())
                     a = b
 
                 fileh.create_array(root, "somearray", a, "Some array")
@@ -118,8 +117,7 @@ class BasicTestCase(common.PyTablesTestCase):
 
                 # Create the array under root and name 'somearray'
                 if self.endiancheck and a.dtype.kind != "S":
-                    b = a.byteswap()
-                    b.dtype = a.dtype.newbyteorder()
+                    b = a.byteswap().view(dtype=a.dtype.newbyteorder())
                     a = b
 
                 fileh.create_array(root, "somearray", a, "Some array")
@@ -176,8 +174,7 @@ class BasicTestCase(common.PyTablesTestCase):
 
                 # Create the array under root and name 'somearray'
                 if self.endiancheck and a.dtype.kind != "S":
-                    b = a.byteswap()
-                    b.dtype = a.dtype.newbyteorder()
+                    b = a.byteswap().view(dtype=a.dtype.newbyteorder())
                     if b.dtype.byteorder in (">", "<"):
                         byteorder = tb.utils.byteorders[b.dtype.byteorder]
                     a = b
@@ -544,10 +541,8 @@ class Basic1DThreeTestCase(BasicTestCase):
 class Basic2DOneTestCase(BasicTestCase):
     # 2D case
     title = "Rank-2 case 1"
-    tupleInt = np.array(np.arange((4) ** 2))
-    tupleInt.shape = (4,) * 2
-    tupleChar = np.array(["abc"] * 3**2, dtype="S3")
-    tupleChar.shape = (3,) * 2
+    tupleInt = np.array(np.arange((4) ** 2)).reshape((4,) * 2)
+    tupleChar = np.array(["abc"] * 3**2, dtype="S3").reshape((3,) * 2)
     endiancheck = True
 
 
@@ -562,20 +557,16 @@ class Basic2DTwoTestCase(BasicTestCase):
 class Basic10DTestCase(BasicTestCase):
     # 10D case
     title = "Rank-10 test"
-    tupleInt = np.array(np.arange((2) ** 10))
-    tupleInt.shape = (2,) * 10
-    tupleChar = np.array(["abc"] * 2**10, dtype="S3")
-    tupleChar.shape = (2,) * 10
+    tupleInt = np.array(np.arange((2) ** 10)).reshape((2,) * 10)
+    tupleChar = np.array(["abc"] * 2**10, dtype="S3").reshape((2,) * 10)
     endiancheck = True
 
 
 class Basic32DTestCase(BasicTestCase):
     # 32D case (maximum)
     title = "Rank-32 test"
-    tupleInt = np.array((32,))
-    tupleInt.shape = (1,) * 32
-    tupleChar = np.array(["121"], dtype="S3")
-    tupleChar.shape = (1,) * 32
+    tupleInt = np.array((32,)).reshape((1,) * 32)
+    tupleChar = np.array(["121"], dtype="S3").reshape((1,) * 32)
 
 
 class ReadOutArgumentTests(common.TempFileMixin, common.PyTablesTestCase):
@@ -759,48 +750,42 @@ class UnalignedAndComplexTestCase(
     def test03_byte_offset(self):
         """Checking an offset byte array"""
 
-        r = np.arange(100, dtype=np.int8)
-        r.shape = (10, 10)
+        r = np.arange(100, dtype=np.int8).reshape((10, 10))
         a = r[2]
         self.write_read(a)
 
     def test04_short_offset(self):
         """Checking an offset unsigned short int precision array"""
 
-        r = np.arange(100, dtype=np.uint32)
-        r.shape = (10, 10)
+        r = np.arange(100, dtype=np.uint32).reshape((10, 10))
         a = r[2]
         self.write_read(a)
 
     def test05_int_offset(self):
         """Checking an offset integer array"""
 
-        r = np.arange(100, dtype=np.int32)
-        r.shape = (10, 10)
+        r = np.arange(100, dtype=np.int32).reshape((10, 10))
         a = r[2]
         self.write_read(a)
 
     def test06_longlongint_offset(self):
         """Checking an offset long long integer array"""
 
-        r = np.arange(100, dtype=np.int64)
-        r.shape = (10, 10)
+        r = np.arange(100, dtype=np.int64).reshape((10, 10))
         a = r[2]
         self.write_read(a)
 
     def test07_float_offset(self):
         """Checking an offset single precision array"""
 
-        r = np.arange(100, dtype=np.float32)
-        r.shape = (10, 10)
+        r = np.arange(100, dtype=np.float32).reshape((10, 10))
         a = r[2]
         self.write_read(a)
 
     def test08_double_offset(self):
         """Checking an offset double precision array"""
 
-        r = np.arange(100, dtype=np.float64)
-        r.shape = (10, 10)
+        r = np.arange(100, dtype=np.float64).reshape((10, 10))
         a = r[2]
         self.write_read(a)
 
@@ -1238,8 +1223,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print(f"Running {self.__class__.__name__}.test01_index...")
 
         # Create a numpy
-        r = np.arange(200, dtype="int32")
-        r.shape = (100, 2)
+        r = np.arange(200, dtype="int32").reshape((100, 2))
         # Save it in an array:
         array1 = self.h5file.create_array(
             self.h5file.root, "array1", r, "title array1"
@@ -1273,8 +1257,7 @@ class CopyIndexTestCase(common.TempFileMixin, common.PyTablesTestCase):
             print(f"Running {self.__class__.__name__}.test02_indexclosef...")
 
         # Create a numpy
-        r = np.arange(200, dtype="int32")
-        r.shape = (100, 2)
+        r = np.arange(200, dtype="int32").reshape((100, 2))
         # Save it in an array:
         array1 = self.h5file.create_array(
             self.h5file.root, "array1", r, "title array1"
@@ -1715,7 +1698,7 @@ class SetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Modify elements of a and arr:
         s = slice(1, 3, None)
         rng = np.arange(a[s].size) * 2 + 3
-        rng.shape = a[s].shape
+        rng = rng.reshape(a[s].shape)
         a[s] = rng
         arr[s] = rng
 
@@ -1765,7 +1748,7 @@ class SetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Modify elements of a and arr:
         s = slice(1, 4, 2)
         rng = np.arange(a[s].size) * 2 + 3
-        rng.shape = a[s].shape
+        rng = rng.reshape(a[s].shape)
         a[s] = rng
         arr[s] = rng
 
@@ -1866,7 +1849,7 @@ class SetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
         # Modify elements of a and arr:
         s = slice(-3, -1, None)
         rng = np.arange(a[s].size) * 2 + 3
-        rng.shape = a[s].shape
+        rng = rng.reshape(a[s].shape)
         a[s] = rng
         arr[s] = rng
 
@@ -1893,10 +1876,10 @@ class SetItemTestCase(common.TempFileMixin, common.PyTablesTestCase):
         s = slice(1, a.shape[0] + 1, None)
         s2 = slice(1, 1000, None)
         rng = np.arange(a[s].size) * 2 + 3
-        rng.shape = a[s].shape
+        rng = rng.reshape(a[s].shape)
         a[s] = rng
         rng2 = np.arange(a[s2].size) * 2 + 3
-        rng2.shape = a[s2].shape
+        rng2 = rng2.reshape(a[s2].shape)
         arr[s2] = rng2
 
         # Get and compare an element

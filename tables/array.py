@@ -705,7 +705,7 @@ class Array(hdf5extension.Array, Leaf):
             a3[1:4] = 5  # broadcast 5 to slice 1:4
             a4[1:4:2] = "xXx"  # broadcast 'xXx' to slice 1:4:2
 
-            # General slice update (a5.shape = (4,3,2,8,5,10).
+            # General slice update (a5 = a5.reshape((4,3,2,8,5,10)).
             a5[1, ..., ::2, 1:4, 4:] = numpy.arange(
                 1728, shape=(4, 3, 2, 4, 3, 6)
             )

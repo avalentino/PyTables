@@ -63,7 +63,7 @@ Submitted by Kevin R. Thornton.
 
     if __name__ == '__main__':
         x = np.random.rand(100).reshape(50,2)
-        x.dtype = [('x',float), ('y',float)]
+        x = x.view(dtype=[('x',float), ('y',float)])
         h5file = tables.open_file('tester.hdf5', 'w')
         mtab = h5file.createDerivedFromTable(h5file.root, 'random', x)
 
