@@ -7,6 +7,7 @@ import locale
 import platform
 import tempfile
 import unittest
+import contextlib
 from time import perf_counter as clock
 from pathlib import Path
 
@@ -129,7 +130,7 @@ def print_versions():
     print(f"Detected cores:      {tb.utils.detect_number_of_cores()}")
     print(f"Default encoding:    {sys.getdefaultencoding()}")
     print(f"Default FS encoding: {sys.getfilesystemencoding()}")
-    print(f"Default locale:      {locale.getdefaultlocale()}")
+    print(f"Default locale:      {getdefaultlocale()}")
     print("-=" * 38)
 
     # This should improve readability when tests are run by CI tools
@@ -399,3 +400,20 @@ def first(iterable, default=_FIRST_MARKER):
             "and no default value was provided."
         )
     return default
+
+
+@contextlib.contextmanager
+def override_locale(category, locale_string):
+    prev_locale_string = locale.setlocale(category)
+    locale.setlocale(category, locale_string)
+    yield
+    locale.setlocale(category, prev_locale_string)
+
+
+# locale.getdefaultlocale()
+def getdefaultlocale():
+    """Replacement for the deprecated ``locale.getdefaultlocale()``."""
+    with override_locale(locale.LC_ALL, ""):
+        current_encoding = locale.getencoding()
+        current_locale = locale.setlocale(locale.LC_ALL)
+    return current_locale, current_encoding
