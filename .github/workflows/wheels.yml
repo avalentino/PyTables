@@ -177,7 +177,7 @@ jobs:
 
       - name: Install PyTables
         run: |
-          python -m tables.tests.test_all -v
+          python -Werror -m tables.tests.test_all -v
 
   twine_check:
     needs: [ build_sdist, build_wheels ]
