@@ -36,6 +36,10 @@ cxx-compiler = "*"
 pkg-config = "*"
 python-build = ">=1.6.1,<2"
 
+[feature.test.dependencies]
+pytest = ">=9.1.1,<10"
+pytest-doctestplus = ">=1.7.1,<2"
+
 [environments]
 default = { solve-group = "production" }
-dev = { features = ["build", "dev"], solve-group = "production" }
+dev = { features = ["build", "dev", "test"], solve-group = "production" }
