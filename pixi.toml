@@ -54,3 +54,25 @@ tables = { path = ".", editable = true }
 doctests = "python3 -m pytest --doctest-only --pyargs tables -k 'not AttributeSet'"
 unittests = "python3 -Werror -m tests"
 tests = { depends-on = ["doctests", "unittests"] }
+
+[environments.lint]
+no-default-feature = true
+
+[environments.lint.dependencies]
+packaging = ">=26.3,<27"
+flake8 = ">=7.4.1,<8"
+pydocstyle = ">=6.3.0,<7"
+isort = ">=9.0.2,<10"
+black = ">=26.5.1,<27"
+ruff = ">=0.17.0,<0.18"
+codespell = ">=2.4.3,<3"
+
+[environments.lint.tasks]
+check-requirements = "python3 ci/check_requirements_sync.py"
+flake8 = "python3 -m flake8 --count --statistics tables tests"
+pydocstyle = "python3 -m pydocstyle --count tables"
+isort = "python3 -m isort --check tables tests"
+black = "python3 -m black --check tables tests"
+ruff = "ruff check tables tests"
+codespell = "codespell"
+lint = { depends-on = ["check-requirements", "flake8", "pydocstyle", "isort", "black", "ruff", "codespell"] }
