@@ -43,10 +43,23 @@ pytest-doctestplus = "*"
 sphinx = ">=8"
 sphinx_rtd_theme = "*"
 ipython = "*"
+sphinxcontrib-spelling = "*"
 
 [environments]
 default = { solve-group = "default" }
-docs = { features = ["docs", "build", "dev"], no-default-feature = true }
+
+[environments.docs]
+features = ["docs", "build", "dev"]
+no-default-feature = true
+
+[environments.docs.tasks]
+html = "sphinx-build -M html doc/source doc/build"
+linkcheck = "sphinx-build -M linkcheck doc/source doc/build"
+docs-spellcheck = "sphinx-build -M spelling doc/source doc/build"
+build-docs = { depends-on = ["html", "linkcheck"] }
+
+[environments.docs.pypi-dependencies]
+tables = { path = ".", editable = true }
 
 [environments.dev]
 features = ["build", "dev", "test"]
