@@ -49,3 +49,8 @@ solve-group = "default"
 
 [environments.dev.pypi-dependencies]
 tables = { path = ".", editable = true }
+
+[environments.dev.tasks]
+doctests = "python3 -m pytest --doctest-only --pyargs tables -k 'not AttributeSet'"
+unittests = "python3 -Werror -m tests"
+tests = { depends-on = ["doctests", "unittests"] }
