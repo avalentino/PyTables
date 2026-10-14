@@ -30,7 +30,6 @@ numpy = ">=2"
 cython = ">=3.2"
 
 [feature.dev.dependencies]
-make = "*"
 c-compiler = "*"
 cxx-compiler = "*"
 pkg-config = "*"
