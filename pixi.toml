@@ -42,4 +42,10 @@ pytest-doctestplus = ">=1.7.1,<2"
 
 [environments]
 default = { solve-group = "default" }
-dev = { features = ["build", "dev", "test"], solve-group = "default" }
+
+[environments.dev]
+features = ["build", "dev", "test"]
+solve-group = "default"
+
+[environments.dev.pypi-dependencies]
+tables = { path = ".", editable = true }
