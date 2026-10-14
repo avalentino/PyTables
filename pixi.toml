@@ -40,8 +40,14 @@ python-build = ">=1.6.1,<2"
 pytest = ">=9.1.1,<10"
 pytest-doctestplus = ">=1.7.1,<2"
 
+[feature.docs.dependencies]
+sphinx = ">=8"
+sphinx_rtd_theme = "*"
+ipython = "*"
+
 [environments]
 default = { solve-group = "default" }
+docs = { features = ["docs", "build", "dev"], no-default-feature = true }
 
 [environments.dev]
 features = ["build", "dev", "test"]
