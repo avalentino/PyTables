@@ -12,8 +12,8 @@ description = "Hierarchical datasets for Python"
 python = ">=3.11"
 numpy = ">=2"
 numexpr = ">=2.6.2"
-packaging = ">=26.3,<27"
-py-cpuinfo = ">=9.0.0,<10"
+packaging = "*"
+py-cpuinfo = "*"
 
 [feature.build.dependencies]
 hdf5 = "*"
@@ -33,11 +33,11 @@ cython = ">=3.2"
 c-compiler = "*"
 cxx-compiler = "*"
 pkg-config = "*"
-python-build = ">=1.6.1,<2"
+python-build = "*"
 
 [feature.test.dependencies]
-pytest = ">=9.1.1,<10"
-pytest-doctestplus = ">=1.7.1,<2"
+pytest = "*"
+pytest-doctestplus = "*"
 
 [feature.docs.dependencies]
 sphinx = ">=8"
@@ -64,13 +64,13 @@ tests = { depends-on = ["doctests", "unittests"] }
 no-default-feature = true
 
 [environments.lint.dependencies]
-packaging = ">=26.3,<27"
-flake8 = ">=7.4.1,<8"
-pydocstyle = ">=6.3.0,<7"
-isort = ">=9.0.2,<10"
-black = ">=26.5.1,<27"
-ruff = ">=0.17.0,<0.18"
-codespell = ">=2.4.3,<3"
+packaging = "*"
+flake8 = "*"
+pydocstyle = "*"
+isort = "*"
+black = "*"
+ruff = "*"
+codespell = "*"
 
 [environments.lint.tasks]
 check-requirements = "python3 ci/check_requirements_sync.py"
